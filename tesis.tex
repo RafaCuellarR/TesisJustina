@@ -1,0 +1,68 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage[margin=1.5cm]{geometry}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+
+\begin{document}
+
+\thispagestyle{empty}
+
+% -------- HEADER: logo + university name
+\begin{minipage}[t]{20cm}
+  \includegraphics[height=3.0cm]{images/escudounam_negro.jpg}
+  \hspace{0.5cm}
+  \begin{minipage}[b]{14cm}
+    \centering
+    {\large \textbf{UNIVERSIDAD NACIONAL AUTÓNOMA DE MÉXICO}}\\[6pt]
+    \rule{0.9\linewidth}{2pt}\\[6pt]
+    {\large\textbf{FACULTAD DE INGENIERÍA}}
+  \end{minipage}
+\end{minipage}
+
+% -------- BODY: vertical bars + thesis title/info
+\begin{minipage}[t]{20cm}
+  \vspace{1cm}
+  \hspace{0.5cm} % adjust spacing as desired
+  \rule{3pt}{450pt}\hspace{15pt}\rule{3pt}{450pt}
+  \hspace{1cm} % adjust spacing as desired
+  \begin{minipage}[b]{15cm}
+    \centering
+    \Large\textbf{Rediseño e implementación de un robot de propósito general orientado a RoboCup@HOME}
+    \vspace{3cm}
+
+    \Large\textbf{TESIS}
+    
+    \large Que para obtener el título de
+    
+    \Large\textbf{Ingeniero Mecatrónico}
+    \vspace{2cm}
+    
+    \Large\textbf{P R E S E N T A N}
+    
+    \Large Rafael Cuéllar Ramírez
+    
+    \Large Marco Elian Soriano Pimentel
+    \vspace{2cm}
+    
+    \Large\textbf{DIRECTOR(A) DE TESIS}
+    
+    \Large Dr. Jesús Savage Carmona
+  \end{minipage}
+\end{minipage}
+
+\vspace{2cm}
+
+% -------- FOOTER: second logo + place/date
+\begin{minipage}[t]{4cm}
+  \includegraphics[height=3.3cm]{images/escudofi_negro.jpg}
+\end{minipage}
+\hspace{5cm}
+\begin{minipage}[t]{9cm}
+  \raggedleft
+  \textbf{Ciudad Universitaria, Cd. Mx., 2026}
+\end{minipage}
+
+\end{document}
