@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2025.9.9)  13 SEP 2025 00:39
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2025.9.29)  30 SEP 2025 08:51
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -6,19 +6,20 @@ entering extended mode
 (./tesis.tex
 LaTeX2e <2020-02-02> patch level 2
 L3 programming layer <2020-02-14>
-(/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
-Document Class: article 2019/12/20 v1.4l Standard LaTeX document class
+(/usr/share/texlive/texmf-dist/tex/latex/base/report.cls
+Document Class: report 2019/12/20 v1.4l Standard LaTeX document class
 (/usr/share/texlive/texmf-dist/tex/latex/base/size12.clo
 File: size12.clo 2019/12/20 v1.4l Standard LaTeX file (size option)
 )
 \c@part=\count167
-\c@section=\count168
-\c@subsection=\count169
-\c@subsubsection=\count170
-\c@paragraph=\count171
-\c@subparagraph=\count172
-\c@figure=\count173
-\c@table=\count174
+\c@chapter=\count168
+\c@section=\count169
+\c@subsection=\count170
+\c@subsubsection=\count171
+\c@paragraph=\count172
+\c@subparagraph=\count173
+\c@figure=\count174
+\c@table=\count175
 \abovecaptionskip=\skip47
 \belowcaptionskip=\skip48
 \bibindent=\dimen134
@@ -28,6 +29,31 @@ Package: inputenc 2018/08/11 v1.3c Input encoding file
 \inpenc@prehook=\toks14
 \inpenc@posthook=\toks15
 )
+(/usr/share/texlive/texmf-dist/tex/generic/babel/babel.sty
+Package: babel 2020/02/14 3.40 The Babel package
+
+(/usr/share/texlive/texmf-dist/tex/generic/babel/switch.def
+File: switch.def 2020/02/14 3.40 Babel switching mechanism
+)
+(/usr/share/texlive/texmf-dist/tex/generic/babel-spanish/spanish.ldf
+Language: spanish.ldf 2016/03/03 v5.0p Spanish support from the babel system
+
+(/usr/share/texlive/texmf-dist/tex/generic/babel/babel.def
+File: babel.def 2020/02/14 3.40 Babel common definitions
+\babel@savecnt=\count176
+\U@D=\dimen135
+
+(/usr/share/texlive/texmf-dist/tex/generic/babel/txtbabel.def)
+\bbl@readstream=\read2
+\bbl@dirlevel=\count177
+)
+\es@quottoks=\toks16
+\es@quotdepth=\count178
+Package babel Info: Making " an active character on input line 561.
+Package babel Info: Making . an active character on input line 662.
+Package babel Info: Making < an active character on input line 707.
+Package babel Info: Making > an active character on input line 707.
+))
 (/usr/share/texlive/texmf-dist/tex/latex/base/fontenc.sty
 Package: fontenc 2020/02/11 v2.0o Standard LaTeX package
 )
@@ -36,7 +62,7 @@ Package: graphicx 2019/11/30 v1.2a Enhanced LaTeX Graphics (DPC,SPQR)
 
 (/usr/share/texlive/texmf-dist/tex/latex/graphics/keyval.sty
 Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
-\KV@toks@=\toks16
+\KV@toks@=\toks17
 )
 (/usr/share/texlive/texmf-dist/tex/latex/graphics/graphics.sty
 Package: graphics 2019/11/30 v1.4a Standard LaTeX Graphics (DPC,SPQR)
@@ -52,8 +78,8 @@ Package graphics Info: Driver file: pdftex.def on input line 105.
 (/usr/share/texlive/texmf-dist/tex/latex/graphics-def/pdftex.def
 File: pdftex.def 2018/01/08 v1.0l Graphics/color driver for pdftex
 ))
-\Gin@req@height=\dimen135
-\Gin@req@width=\dimen136
+\Gin@req@height=\dimen136
+\Gin@req@width=\dimen137
 )
 (/usr/share/texlive/texmf-dist/tex/latex/geometry/geometry.sty
 Package: geometry 2020/01/02 v5.9 Page Geometry
@@ -64,28 +90,31 @@ Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
 (/usr/share/texlive/texmf-dist/tex/generic/iftex/iftex.sty
 Package: iftex 2019/11/07 v1.0c TeX engine tests
 ))
-\Gm@cnth=\count175
-\Gm@cntv=\count176
-\c@Gm@tempcnt=\count177
-\Gm@bindingoffset=\dimen137
-\Gm@wd@mp=\dimen138
-\Gm@odd@mp=\dimen139
-\Gm@even@mp=\dimen140
-\Gm@layoutwidth=\dimen141
-\Gm@layoutheight=\dimen142
-\Gm@layouthoffset=\dimen143
-\Gm@layoutvoffset=\dimen144
-\Gm@dimlist=\toks17
+\Gm@cnth=\count179
+\Gm@cntv=\count180
+\c@Gm@tempcnt=\count181
+\Gm@bindingoffset=\dimen138
+\Gm@wd@mp=\dimen139
+\Gm@odd@mp=\dimen140
+\Gm@even@mp=\dimen141
+\Gm@layoutwidth=\dimen142
+\Gm@layoutheight=\dimen143
+\Gm@layouthoffset=\dimen144
+\Gm@layoutvoffset=\dimen145
+\Gm@dimlist=\toks18
 )
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/helvet.sty
 Package: helvet 2005/04/12 PSNFSS-v9.2a (WaS) 
 )
 (/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-pdfmode.def
 File: l3backend-pdfmode.def 2020-02-03 L3 backend support: PDF mode
-\l__kernel_color_stack_int=\count178
+\l__kernel_color_stack_int=\count182
 \l__pdf_internal_box=\box45
 )
-(./tesis.aux)
+(./tesis.aux
+LaTeX Info: Redefining \. on input line 7.
+LaTeX Info: Redefining \% on input line 7.
+)
 \openout1 = `tesis.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 9.
@@ -102,24 +131,22 @@ LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 9.
 LaTeX Font Info:    ... okay on input line 9.
 LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 9.
 LaTeX Font Info:    ... okay on input line 9.
-LaTeX Font Info:    Trying to load font information for T1+phv on input line 9.
+LaTeX Info: Redefining \. on input line 9.
+LaTeX Info: Redefining \% on input line 9.
 
- (/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1phv.fd
-File: t1phv.fd 2001/06/04 scalable font definitions for T1/phv.
-)
 (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count179
-\scratchdimen=\dimen145
+\scratchcounter=\count183
+\scratchdimen=\dimen146
 \scratchbox=\box46
-\nofMPsegments=\count180
-\nofMParguments=\count181
-\everyMPshowfont=\toks18
-\MPscratchCnt=\count182
-\MPscratchDim=\dimen146
-\MPnumerator=\count183
-\makeMPintoPDFobject=\count184
-\everyMPtoPDFconversion=\toks19
+\nofMPsegments=\count184
+\nofMParguments=\count185
+\everyMPshowfont=\toks19
+\MPscratchCnt=\count186
+\MPscratchDim=\dimen147
+\MPnumerator=\count187
+\makeMPintoPDFobject=\count188
+\everyMPtoPDFconversion=\toks20
 ) (/usr/share/texlive/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
@@ -133,16 +160,16 @@ e
 *geometry* detected driver: pdftex
 *geometry* verbose mode - [ preamble ] result:
 * driver: pdftex
-* paper: a4paper
+* paper: <default>
 * layout: <same size as paper>
 * layoutoffset:(h,v)=(0.0pt,0.0pt)
-* modes: 
-* h-part:(L,W,R)=(42.67912pt, 512.14963pt, 42.67912pt)
-* v-part:(T,H,B)=(42.67912pt, 759.6886pt, 42.67912pt)
-* \paperwidth=597.50787pt
-* \paperheight=845.04684pt
-* \textwidth=512.14963pt
-* \textheight=759.6886pt
+* modes: twoside 
+* h-part:(L,W,R)=(42.67912pt, 528.93675pt, 42.67912pt)
+* v-part:(T,H,B)=(42.67912pt, 709.61174pt, 42.67912pt)
+* \paperwidth=614.295pt
+* \paperheight=794.96999pt
+* \textwidth=528.93675pt
+* \textheight=709.61174pt
 * \oddsidemargin=-29.59087pt
 * \evensidemargin=-29.59087pt
 * \topmargin=-66.59087pt
@@ -150,7 +177,7 @@ e
 * \headsep=25.0pt
 * \topskip=12.0pt
 * \footskip=30.0pt
-* \marginparwidth=35.0pt
+* \marginparwidth=95.0pt
 * \marginparsep=10.0pt
 * \columnsep=10.0pt
 * \skip\footins=10.8pt plus 4.0pt minus 2.0pt
@@ -158,56 +185,86 @@ e
 * \voffset=0.0pt
 * \mag=1000
 * \@twocolumnfalse
-* \@twosidefalse
-* \@mparswitchfalse
+* \@twosidetrue
+* \@mparswitchtrue
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
 <images/escudounam_negro.jpg, id=1, 79.7379pt x 94.4328pt>
 File: images/escudounam_negro.jpg Graphic file (type jpg)
 <use images/escudounam_negro.jpg>
-Package pdftex.def Info: images/escudounam_negro.jpg  used on input line 14.
+Package pdftex.def Info: images/escudounam_negro.jpg  used on input line 15.
 (pdftex.def)             Requested size: 72.07735pt x 85.35826pt.
 
-Overfull \hbox (74.5303pt too wide) in paragraph at lines 13--23
+Overfull \hbox (57.74318pt too wide) in paragraph at lines 14--24
 [][] 
  []
 
 
-Overfull \hbox (74.5303pt too wide) in paragraph at lines 25--54
+Overfull \hbox (57.74318pt too wide) in paragraph at lines 26--55
 [][] 
  []
 
 <images/escudofi_negro.jpg, id=2, 79.7379pt x 94.4328pt>
 File: images/escudofi_negro.jpg Graphic file (type jpg)
 <use images/escudofi_negro.jpg>
-Package pdftex.def Info: images/escudofi_negro.jpg  used on input line 59.
-(pdftex.def)             Requested size: 79.28508pt x 93.89418pt.
+Package pdftex.def Info: images/escudofi_negro.jpg  used on input line 60.
+(pdftex.def)             Requested size: 76.8821pt x 91.04872pt.
 
-Overfull \hbox (22.71277pt too wide) in paragraph at lines 58--66
+Overfull \hbox (6.05864pt too wide) in paragraph at lines 59--67
 [][]   [] 
  []
 
 [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map} <./images/escudounam_negro.
-jpg> <./images/escudofi_negro.jpg>] (./tesis.aux) ) 
+jpg> <./images/escudofi_negro.jpg>] (./tesis.toc
+LaTeX Info: Redefining \. on input line 1.
+LaTeX Info: Redefining \% on input line 1.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <12> on input line 3.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 3.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 3.
+)
+\tf@toc=\write3
+\openout3 = `tesis.toc'.
+
+ [2
+
+]
+Cap\'{\i }tulo 1.
+(./introduccion.tex) [3
+
+]
+Cap\'{\i }tulo 2.
+(./antecedentes.tex) [4
+
+] (./tesis.aux
+LaTeX Info: Redefining \. on input line 7.
+LaTeX Info: Redefining \% on input line 7.
+) ) 
 Here is how much of TeX's memory you used:
- 1958 strings out of 483183
- 27197 string characters out of 5966293
- 260277 words of memory out of 5000000
- 16986 multiletter control sequences out of 15000+600000
- 549106 words of font info for 37 fonts, out of 8000000 for 9000
- 14 hyphenation exceptions out of 8191
- 30i,6n,34p,217b,213s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texlive/texmf-di
-st/fonts/enc/dvips/base/8r.enc}</usr/share/texlive/texmf-dist/fonts/type1/urw/h
-elvetic/uhvb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvr
-8a.pfb>
-Output written on tesis.pdf (1 page, 350032 bytes).
+ 2950 strings out of 483121
+ 40640 string characters out of 5964354
+ 286763 words of memory out of 5000000
+ 17957 multiletter control sequences out of 15000+600000
+ 541248 words of font info for 41 fonts, out of 8000000 for 9000
+ 40 hyphenation exceptions out of 8191
+ 30i,6n,35p,217b,361s stack positions out of 5000i,500n,10000p,200000b,80000s
+ </home/rafael/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1200.6
+00pk> </home/rafael/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx2488
+.600pk> </home/rafael/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx12
+00.600pk> </home/rafael/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm
+1728.600pk> </home/rafael/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/ec
+rm1440.600pk> </home/rafael/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/
+ecbx1728.600pk> </home/rafael/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/e
+c/ecbx1440.600pk>
+Output written on tesis.pdf (4 pages, 395887 bytes).
 PDF statistics:
- 19 PDF objects out of 1000 (max. 8388607)
- 11 compressed objects within 1 object stream
+ 234 PDF objects out of 1000 (max. 8388607)
+ 38 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  11 words of extra memory for PDF output out of 10000 (max. 10000000)
 
