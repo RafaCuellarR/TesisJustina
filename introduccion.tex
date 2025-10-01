@@ -1,13 +1,27 @@
-Aquí empieza la introducci\'on del trabajo de tesis.
+El presente capítulo tiene por finalidad ofrecer una introducción general al trabajo de tesis, situando el contexto en el que se inscribe y los fundamentos que orientan su desarrollo. Se expone, en primera instancia, el problema que motiva la investigación; se fundamenta su relevancia y pertinencia; y se delimitan los alcances y limitaciones del estudio.
 
 \section{Definición del problema}
 
-Aq\'i se define el problema. Nice, s\'i se puede editar 7u7
+En las últimas décadas, la robótica de servicio se ha consolidado como un área de investigación y desarrollo en constante expansión. La competencia internacional RoboCup@HOME se fundó con el objetivo de evaluar anualmente las capacidades de la tecnología emergente en robótica de servicio, incluyendo, entre otras, la interacción y cooperación humano-máquina, la navegación en ambientes dinámicos y la manipulación de objetos~\cite{robocup_athome}. 
+
+El Laboratorio de Bio-Robótica de la UNAM, fundado en 1996, emprendió en 2005 el desarrollo de robots móviles destinados a ayudar a las personas en sus actividades cotidianas, en entornos domésticos, académicos, laborales y clínicos. El robot de servicio de propósito general \emph{Justina} es resultado de la evolución de otros robots creados en el laboratorio~\cite{justina_uv}.
+
+En la actualidad, \emph{Justina} cuenta con una cámara RGBD, un micrófono direccional, un torso telescópico, un sensor LiDAR, dos brazos manipuladores con siete grados de libertad cada uno y una base móvil FESTO \emph{Robotino 3}. No obstante, los brazos exhiben deficiencias críticas que impidieron la participación de \emph{Justina} en la RoboCup@HOME 2025. Los actuadores carecen de la capacidad de carga necesaria para las tareas de manipulación doméstica, los componentes estructurales presentan deformaciones permanentes por sobrecarga y el deterioro acumulado compromete el desempeño del robot. Asimismo, la capacidad de manipulación colaborativa entre ambos brazos aún no ha sido implementada, constituyendo un desafío técnico pendiente.
+
+En respuesta a esta problemática, el presente trabajo plantea el diseño y la implementación de mejoras integrales en los subsistemas mecánico, electrónico y de software que conforman los brazos manipuladores, con el propósito de fortalecer sus capacidades de manipulación de objetos y habilitar la capacidad de manipulación colaborativa.
 
 \section{Justificaci\'on}
 
-Por qué es necesario el trabajo.
+El diseño de los manipuladores de Justina responde a múltiples necesidades tanto del ámbito académico como del desarrollo tecnológico en robótica de servicio.
 
-\section{Alcance y limitaciones}
+En primer lugar, la participación competitiva en RoboCup@HOME constituye un motor fundamental para el avance tecnológico del laboratorio, ya que establece estándares internacionales de desempeño y permite la comparación directa con desarrollos de instituciones de investigación a nivel mundial. La imposibilidad de participar en ediciones recientes debido a fallas en los manipuladores representa una pérdida de oportunidades de evaluación, retroalimentación y visibilidad para el proyecto Justina.
+
+Desde una perspectiva técnica, los manipuladores constituyen uno de los subsistemas más críticos en robots de servicio, ya que determinan directamente las capacidades de interacción física con objetos y el entorno. Un diseño robusto y confiable es fundamental para ejecutar tareas de manipulación en escenarios domésticos, tales como asistencia en actividades de la vida diaria, apoyo en tareas de limpieza y organización, o colaboración en entornos de cuidado de personas.
+
+Adicionalmente, el desarrollo de capacidades de manipulación coolaborativa amplía significativamente el rango de tareas que Justina puede realizar, permitiendo la manipulación de objetos de mayor tamaño, peso o complejidad, así como la ejecución de operaciones que requieren coordinación simultánea de ambos brazos, como apertura de contenedores, ensamblaje de objetos o transporte colaborativo.
+
+Finalmente, este trabajo contribuye a la consolidación de una línea de investigación nacional en robótica de servicio, generando conocimiento técnico documentado sobre diseño mecatrónico de manipuladores y fortaleciendo las capacidades del Laboratorio de Bio-Robótica de la UNAM para futuros desarrollos en el área.
+
+\section{Alcance}
 
 Hasta dónde va a llegar el trabajo.

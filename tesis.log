@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2025.9.30)  30 SEP 2025 09:32
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2025.9.30)  30 SEP 2025 22:53
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -33,7 +33,7 @@ Package: inputenc 2021/02/14 v1.3d Input encoding file
 Package: babel 2024/01/07 v24.1 The Babel package
 \babel@savecnt=\count196
 \U@D=\dimen141
-\l@unhyphenated=\language8
+\l@unhyphenated=\language89
 
 (/usr/share/texlive/texmf-dist/tex/generic/babel/txtbabel.def)
 \bbl@readstream=\read2
@@ -104,6 +104,15 @@ Package: iftex 2022/02/03 v1.0f TeX engine tests
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/helvet.sty
 Package: helvet 2020/03/25 PSNFSS-v9.3 (WaS) 
 )
+(/usr/share/texlive/texmf-dist/tex/latex/cite/cite.sty
+LaTeX Info: Redefining \cite on input line 302.
+LaTeX Info: Redefining \nocite on input line 332.
+Package: cite 2015/02/27  v 5.5
+)
+(/usr/share/texlive/texmf-dist/tex/latex/url/url.sty
+\Urlmuskip=\muskip16
+Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
+)
 (/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2024-01-04 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count268
@@ -115,22 +124,22 @@ LaTeX Info: Redefining \% on input line 8.
 )
 \openout1 = `tesis.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 9.
-LaTeX Font Info:    ... okay on input line 9.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 9.
-LaTeX Font Info:    ... okay on input line 9.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 9.
-LaTeX Font Info:    ... okay on input line 9.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 9.
-LaTeX Font Info:    ... okay on input line 9.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 9.
-LaTeX Font Info:    ... okay on input line 9.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 9.
-LaTeX Font Info:    ... okay on input line 9.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 9.
-LaTeX Font Info:    ... okay on input line 9.
-LaTeX Info: Redefining \. on input line 9.
-LaTeX Info: Redefining \% on input line 9.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 11.
+LaTeX Font Info:    ... okay on input line 11.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 11.
+LaTeX Font Info:    ... okay on input line 11.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 11.
+LaTeX Font Info:    ... okay on input line 11.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 11.
+LaTeX Font Info:    ... okay on input line 11.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 11.
+LaTeX Font Info:    ... okay on input line 11.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 11.
+LaTeX Font Info:    ... okay on input line 11.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 11.
+LaTeX Font Info:    ... okay on input line 11.
+LaTeX Info: Redefining \. on input line 11.
+LaTeX Info: Redefining \% on input line 11.
 
 (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
@@ -191,32 +200,33 @@ e
 <images/escudounam_negro.jpg, id=1, 79.7379pt x 94.4328pt>
 File: images/escudounam_negro.jpg Graphic file (type jpg)
 <use images/escudounam_negro.jpg>
-Package pdftex.def Info: images/escudounam_negro.jpg  used on input line 15.
+Package pdftex.def Info: images/escudounam_negro.jpg  used on input line 17.
 (pdftex.def)             Requested size: 72.07735pt x 85.35826pt.
 
-Overfull \hbox (57.74318pt too wide) in paragraph at lines 14--24
+Overfull \hbox (57.74318pt too wide) in paragraph at lines 16--26
 [][] 
  []
 
 
-Overfull \hbox (57.74318pt too wide) in paragraph at lines 26--55
+Overfull \hbox (57.74318pt too wide) in paragraph at lines 28--57
 [][] 
  []
 
 <images/escudofi_negro.jpg, id=2, 79.7379pt x 94.4328pt>
 File: images/escudofi_negro.jpg Graphic file (type jpg)
 <use images/escudofi_negro.jpg>
-Package pdftex.def Info: images/escudofi_negro.jpg  used on input line 60.
+Package pdftex.def Info: images/escudofi_negro.jpg  used on input line 62.
 (pdftex.def)             Requested size: 76.8821pt x 91.04872pt.
 
-Overfull \hbox (6.05864pt too wide) in paragraph at lines 59--67
+Overfull \hbox (6.05864pt too wide) in paragraph at lines 61--69
 [][]   [] 
  []
 
 [1
 
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map} <./images/escudounam_negro.
-jpg> <./images/escudofi_negro.jpg>] (./tesis.toc
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}{/usr/share/texmf/fonts/enc/
+dvips/cm-super/cm-super-t1.enc} <./images/escudounam_negro.jpg> <./images/escud
+ofi_negro.jpg>] (./tesis.toc
 LaTeX Info: Redefining \. on input line 1.
 LaTeX Info: Redefining \% on input line 1.
 LaTeX Font Info:    External font `cmex10' loaded for size
@@ -233,11 +243,19 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 
 ]
 Cap\'{\i }tulo 1.
-(./introduccion.tex) [3
+(./introduccion.tex [3
+
+]) [4]
+Cap\'{\i }tulo 2.
+(./antecedentes.tex) (./tesis.bbl [5
 
 ]
-Cap\'{\i }tulo 2.
-(./antecedentes.tex) [4
+LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 5
+.
+
+(/usr/share/texlive/texmf-dist/tex/latex/base/t1cmtt.fd
+File: t1cmtt.fd 2023/04/13 v2.5m Standard LaTeX font definitions
+)) [6
 
 ] (./tesis.aux
 LaTeX Info: Redefining \. on input line 8.
@@ -249,24 +267,24 @@ L3 programming layer <2024-01-22>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 3610 strings out of 476120
- 57807 string characters out of 5793657
- 1925975 words of memory out of 5000000
- 25605 multiletter control sequences out of 15000+600000
- 566979 words of font info for 53 fonts, out of 8000000 for 9000
- 40 hyphenation exceptions out of 8191
- 57i,6n,65p,217b,365s stack positions out of 10000i,1000n,20000p,200000b,200000s
- </root/.texlive2023/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1200.600pk> </
-root/.texlive2023/texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx2488.600pk> </root/
-.texlive2023/texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx1200.600pk> </root/.texl
-ive2023/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1728.600pk> </root/.texlive20
-23/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1440.600pk> </root/.texlive2023/te
-xmf-var/fonts/pk/ljfour/jknappen/ec/ecbx1728.600pk> </root/.texlive2023/texmf-v
-ar/fonts/pk/ljfour/jknappen/ec/ecbx1440.600pk>
-Output written on tesis.pdf (4 pages, 396819 bytes).
+ 3830 strings out of 474222
+ 61302 string characters out of 5748733
+ 1930975 words of memory out of 5000000
+ 26054 multiletter control sequences out of 15000+600000
+ 567976 words of font info for 55 fonts, out of 8000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 57i,6n,65p,810b,365s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</usr/share/texmf/fonts/type1/public/cm-super/sfbx1200.pfb></usr/share/texmf/
+fonts/type1/public/cm-super/sfbx1440.pfb></usr/share/texmf/fonts/type1/public/c
+m-super/sfbx1728.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx2488.pfb
+></usr/share/texmf/fonts/type1/public/cm-super/sfrm1200.pfb></usr/share/texmf/f
+onts/type1/public/cm-super/sfrm1440.pfb></usr/share/texmf/fonts/type1/public/cm
+-super/sfrm1728.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfti1200.pfb>
+</usr/share/texmf/fonts/type1/public/cm-super/sftt1200.pfb>
+Output written on tesis.pdf (6 pages, 495390 bytes).
 PDF statistics:
- 237 PDF objects out of 1000 (max. 8388607)
- 38 compressed objects within 1 object stream
+ 71 PDF objects out of 1000 (max. 8388607)
+ 42 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  11 words of extra memory for PDF output out of 10000 (max. 10000000)
 
