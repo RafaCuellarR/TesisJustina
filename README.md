@@ -3,7 +3,7 @@ Este repositorio está dedicado al proyecto colaborativo en LaTeX de la tesis pa
 
 # Guía de configuración de Sublime Text para LaTeX con TeXLive
 
-Esta guía te ayudará a configurar Sublime Text para compilar el proyecto contenido en este repositorio utilizando TeXLive. Se asume que cuentas se realiza desde un equipo con Ubuntu como sistema operativo.
+Esta guía te ayudará a configurar Sublime Text para compilar el proyecto contenido en este repositorio utilizando TeXLive. Se asume que se realiza desde un equipo con Ubuntu como sistema operativo.
 
 ## 1. Instalar el Paquete LaTeXTools
 
@@ -31,7 +31,7 @@ Esta instalación suele tomar tiempo, pero provee la mayoría de paquetes e idio
 
 ## 3. Instalar un visualizador de PDF
 
-Para visualizar el PDF generado por el actual repositorio de recomienda utilizar `Zathura`. Para instalarlo basta con ejecutar  el siguiente comando desde terminal:
+Para visualizar el PDF generado por el actual repositorio de recomienda utilizar `Zathura`. Para instalarlo se ejecuta el siguiente comando desde terminal:
 
 ```bash
 sudo apt install zathura
@@ -81,5 +81,4 @@ LaTeXTools maneja esto automáticamente, pero verifica:
 ## Notas Importantes
 
 - **Nunca edites** el archivo "Settings - Default" - se sobrescribe cuando el paquete se actualiza
-- El archivo "Settings - User" (panel derecho) sobrescribe cualquier configuración predeterminada que desees cambiar
 - Solo necesitas agregar las configuraciones que quieras **modificar** de los valores predeterminados.
