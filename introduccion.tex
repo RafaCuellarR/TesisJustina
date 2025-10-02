@@ -1,27 +1,37 @@
-El presente capítulo tiene por finalidad ofrecer una introducción general al trabajo de tesis, situando el contexto en el que se inscribe y los fundamentos que orientan su desarrollo. Se expone, en primera instancia, el problema que motiva la investigación; se fundamenta su relevancia y pertinencia; y se delimitan los alcances y limitaciones del estudio.
+El presente capítulo tiene por finalidad ofrecer una introducción general al trabajo de tesis, situando el contexto en el que se inscribe y los principios que sustentan su enfoque. Se expone, en primera instancia, el problema que motiva la investigación; se fundamenta su relevancia y pertinencia; y se delimitan los alcances del estudio.
 
 \section{Definición del problema}
 
 En las últimas décadas, la robótica de servicio se ha consolidado como un área de investigación y desarrollo en constante expansión. La competencia internacional RoboCup@HOME se fundó con el objetivo de evaluar anualmente las capacidades de la tecnología emergente en robótica de servicio, incluyendo, entre otras, la interacción y cooperación humano-máquina, la navegación en ambientes dinámicos y la manipulación de objetos~\cite{robocup_athome}. 
 
-El Laboratorio de Bio-Robótica de la UNAM, fundado en 1996, emprendió en 2005 el desarrollo de robots móviles destinados a ayudar a las personas en sus actividades cotidianas, en entornos domésticos, académicos, laborales y clínicos. El robot de servicio de propósito general \emph{Justina} es resultado de la evolución de otros robots creados en el laboratorio~\cite{justina_uv}.
+El Laboratorio de Bio-Robótica de la UNAM, fundado en 1996, emprendió en 2005 la construcción de robots móviles destinados a ayudar a las personas en sus actividades cotidianas, en entornos domésticos, académicos, laborales y clínicos. El robot de servicio de propósito general \emph{Justina} es resultado de la evolución de otros robots creados en el laboratorio~\cite{justina_uv}.
 
-En la actualidad, \emph{Justina} cuenta con una cámara RGBD, un micrófono direccional, un torso telescópico, un sensor LiDAR, dos brazos manipuladores con siete grados de libertad cada uno y una base móvil FESTO \emph{Robotino 3}. No obstante, los manipuladores de \emph{Justina} exhiben deficiencias críticas que impidieron su participación en la RoboCup@HOME 2025. Los actuadores carecen de la capacidad de carga necesaria para las tareas de manipulación doméstica, los componentes estructurales presentan deformaciones permanentes por sobrecarga y el deterioro acumulado compromete el desempeño del sistema. Asimismo, si bien posee dos brazos, la manipulación colaborativa constituye un desafío técnico pendiente.
+En la actualidad, \emph{Justina} cuenta con una cámara RGBD, un micrófono direccional, un torso telescópico, un sensor LiDAR, dos brazos manipuladores con siete grados de libertad cada uno y una base móvil FESTO \emph{Robotino 3}. No obstante, los manipuladores de \emph{Justina} exhiben deficiencias críticas que impidieron su participación en la RoboCup@HOME 2025. Los actuadores carecen de la capacidad de carga necesaria para las tareas de manipulación doméstica, los componentes estructurales presentan deformaciones permanentes por sobrecarga y el deterioro acumulado del sistema compromete su desempeño. Asimismo, aunque posee dos brazos, la manipulación colaborativa constituye un desafío técnico pendiente.
 
-En respuesta a esta problemática, el presente trabajo plantea el rediseño e implementación integral de los subsistemas mecánico, electrónico y de software que conforman los brazos de \emph{Justina}, con el propósito de mejorar sus capacidades de manipulación de objetos y habilitar la manipulación colaborativa.
+En respuesta a esta problemática, el presente trabajo plantea el rediseño e implementación integral de los subsistemas mecánico, electrónico y de software que conforman los brazos de \emph{Justina}, con el propósito de superar las limitaciones actuales y habilitar la manipulación colaborativa.
 
 \section{Justificaci\'on}
 
-El rediseño de los manipuladores de \emph{Justina} responde a múltiples necesidades tanto del ámbito académico como del desarrollo tecnológico en robótica de servicio.
+El rediseño de los manipuladores de \emph{Justina} responde a múltiples necesidades del ámbito académico y del desarrollo tecnológico en robótica de servicio.
 
-En primer lugar, la participación competitiva en RoboCup@HOME constituye un motor fundamental para el avance tecnológico del laboratorio, ya que establece estándares internacionales de desempeño y permite la comparación directa con desarrollos de instituciones de investigación a nivel mundial. La imposibilidad de participar en ediciones recientes debido a fallas en los manipuladores representa una pérdida de oportunidades de evaluación, retroalimentación y visibilidad para el proyecto Justina.
+\emph{Justina} es un robot de servicio diseñado para operar en entornos domésticos, concebido como parte de una iniciativa para acercar la robótica a las personas y mejorar su calidad de vida. Sin embargo, la meta principal del proyecto es fomentar la formación científica e ingenieril de los estudiantes, brindándoles la oportunidad de aplicar sus conocimientos en escenarios prácticos utilizando tecnología de vanguardia\cite{BioRoboticsUNAM}. Los manipuladores son esenciales para estos fines, ya que constituyen la interfaz de interacción física con objetos y personas.  
 
-Desde una perspectiva técnica, los manipuladores constituyen uno de los subsistemas más críticos en robots de servicio, ya que determinan directamente las capacidades de interacción física con objetos y el entorno. Un diseño robusto y confiable es fundamental para ejecutar tareas de manipulación en escenarios domésticos, tales como asistencia en actividades de la vida diaria, apoyo en tareas de limpieza y organización, o colaboración en entornos de cuidado de personas.
+La integración de manipulación colaborativa amplía significativamente el rango de tareas que \emph{Justina} puede realizar, permitiendo manejar objetos de mayor tamaño, peso y complejidad, y coordinar actividades que requieren ambos brazos, como la apertura de contenedores o el ensamblaje de objetos.
 
-Adicionalmente, el desarrollo de capacidades de manipulación colaborativa amplía significativamente el rango de tareas que Justina puede realizar, permitiendo la manipulación de objetos de mayor tamaño, peso o complejidad, así como la ejecución de operaciones que requieren coordinación simultánea de ambos brazos, como apertura de contenedores, ensamblaje de objetos o transporte colaborativo.
+La participación en la RoboCup@HOME promueve el avance tecnológico del laboratorio al establecer estándares internacionales de desempeño y facilitar la comparación con otras instituciones académicas. No poder participar representa una pérdida de oportunidades de evaluación, retroalimentación y visibilidad.
 
-Finalmente, este trabajo contribuye a la consolidación de una línea de investigación nacional en robótica de servicio, generando conocimiento técnico documentado sobre diseño mecatrónico de manipuladores y fortaleciendo las capacidades del Laboratorio de Bio-Robótica de la UNAM para futuros desarrollos en el área.
+Finalmente, este trabajo fortalece las competencias del Laboratorio de Bio-Robótica de la UNAM. Introduce la manipulación colaborativa como línea de investigación y desarrollo, genera conocimiento técnico documentado sobre el diseño mecatrónico de manipuladores y proporciona un marco para futuros avances.
 
 \section{Alcance}
 
-Hasta dónde va a llegar el trabajo.
+El presente trabajo abarca el rediseño integral de los brazos manipuladores de \emph{Justina} en tres disciplinas:
+
+\begin{itemize}
+    \item \textbf{Mecánica:} diseño de manipuladores y efector finales, análisis por elemento finito y manufactura.
+    \item \textbf{Electrónica:} arquitectura del sistema de control, integración de sensores y administración de energía.
+    \item \textbf{Software:} desarrollo de nodos de control de los manipuladores y efectores finales e infraestructura para la manipulación colaborativa.
+\end{itemize}
+
+Se contempla además la validación experimental mediante pruebas de desempeño en tareas representativas de robótica de servicio.
+
+El alcance del proyecto no incluye modificaciones a otros subsistemas de \emph{Justina}. En cuanto a la manipulación colaborativa, se implementará la infraestructura y funcionalidad básica de coordinación, pero no se desarrollarán algoritmos avanzados de planificación, los cuales constituyen trabajo futuro.

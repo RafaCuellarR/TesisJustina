@@ -1,15 +1,20 @@
 \begin{thebibliography}{1}
 
 \bibitem{robocup_athome}
-{RoboCup Federation}, ``Robocup@home league.''
+{RoboCup Federation}, ``{RoboCup@Home League}.''
   \url{https://athome.robocup.org/}, 2025.
-\newblock Official website of the RoboCup@Home league for autonomous service
-  robots.
+\newblock {Official website of the RoboCup@Home league for autonomous service
+  robots}.
 
 \bibitem{justina_uv}
 C.~P. Vázquez, ``Justina, robot de servicio creado en la unam.''
   \url{https://www.uv.mx/prensa/ciencia/justina-robot-de-servicio-creado-en-la-unam/},
   mayo 2019.
 \newblock Accessed 2025-08-28.
+
+\bibitem{BioRoboticsUNAM}
+{BioRobotics Laboratory, UNAM}, ``{Pumas OPL (Justina Robot)}.'' [Online].
+  Available: \url{https://biorobotics.fi-p.unam.mx/robot-justina/}, 2025.
+\newblock Accessed: Oct. 1, 2025.
 
 \end{thebibliography}
