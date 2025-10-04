@@ -1,0 +1,40 @@
+# LaTeX auxiliary files
+*.aux
+*.log
+*.pdf
+
+# Other common LaTeX auxiliary files
+*.out
+*.toc
+*.lof
+*.lot
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.synctex.gz(busy)
+*.bbl
+*.blg
+*.bcf
+*.run.xml
+*.idx
+*.ilg
+*.ind
+*.nav
+*.snm
+*.vrb
+
+# BibTeX files
+*.bib.bak
+*.bib.sav
+
+# Build directories
+build/
+output/
+
+# Editor/IDE files
+*.swp
+*.swo
+*~
+.DS_Store
+.vscode/
+.idea/
