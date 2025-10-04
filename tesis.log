@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2025.9.30)  1 OCT 2025 18:13
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2025.10.2)  3 OCT 2025 23:07
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -124,22 +124,22 @@ LaTeX Info: Redefining \% on input line 8.
 )
 \openout1 = `tesis.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 11.
-LaTeX Font Info:    ... okay on input line 11.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 11.
-LaTeX Font Info:    ... okay on input line 11.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 11.
-LaTeX Font Info:    ... okay on input line 11.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 11.
-LaTeX Font Info:    ... okay on input line 11.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 11.
-LaTeX Font Info:    ... okay on input line 11.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 11.
-LaTeX Font Info:    ... okay on input line 11.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 11.
-LaTeX Font Info:    ... okay on input line 11.
-LaTeX Info: Redefining \. on input line 11.
-LaTeX Info: Redefining \% on input line 11.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Info: Redefining \. on input line 22.
+LaTeX Info: Redefining \% on input line 22.
 
 (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
@@ -166,6 +166,38 @@ e
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
 *geometry* verbose mode - [ preamble ] result:
+* driver: pdftex
+* paper: <default>
+* layout: <same size as paper>
+* layoutoffset:(h,v)=(0.0pt,0.0pt)
+* modes: twoside 
+* h-part:(L,W,R)=(85.35826pt, 443.57848pt, 85.35826pt)
+* v-part:(T,H,B)=(85.35826pt, 624.25346pt, 85.35826pt)
+* \paperwidth=614.295pt
+* \paperheight=794.96999pt
+* \textwidth=443.57848pt
+* \textheight=624.25346pt
+* \oddsidemargin=13.08827pt
+* \evensidemargin=13.08827pt
+* \topmargin=-23.91173pt
+* \headheight=12.0pt
+* \headsep=25.0pt
+* \topskip=12.0pt
+* \footskip=30.0pt
+* \marginparwidth=95.0pt
+* \marginparsep=10.0pt
+* \columnsep=10.0pt
+* \skip\footins=10.8pt plus 4.0pt minus 2.0pt
+* \hoffset=0.0pt
+* \voffset=0.0pt
+* \mag=1000
+* \@twocolumnfalse
+* \@twosidetrue
+* \@mparswitchtrue
+* \@reversemarginfalse
+* (1in=72.27pt=25.4mm, 1cm=28.453pt)
+
+*geometry* verbose mode - [ newgeometry ] result:
 * driver: pdftex
 * paper: <default>
 * layout: <same size as paper>
@@ -200,29 +232,30 @@ e
 <images/escudounam_negro.jpg, id=1, 79.7379pt x 94.4328pt>
 File: images/escudounam_negro.jpg Graphic file (type jpg)
 <use images/escudounam_negro.jpg>
-Package pdftex.def Info: images/escudounam_negro.jpg  used on input line 17.
+Package pdftex.def Info: images/escudounam_negro.jpg  used on input line 29.
 (pdftex.def)             Requested size: 72.07735pt x 85.35826pt.
 
-Overfull \hbox (57.74318pt too wide) in paragraph at lines 16--26
+Overfull \hbox (57.74318pt too wide) in paragraph at lines 28--38
 [][] 
  []
 
 
-Overfull \hbox (57.74318pt too wide) in paragraph at lines 28--57
+Overfull \hbox (57.74318pt too wide) in paragraph at lines 40--69
 [][] 
  []
 
 <images/escudofi_negro.jpg, id=2, 79.7379pt x 94.4328pt>
 File: images/escudofi_negro.jpg Graphic file (type jpg)
 <use images/escudofi_negro.jpg>
-Package pdftex.def Info: images/escudofi_negro.jpg  used on input line 62.
+Package pdftex.def Info: images/escudofi_negro.jpg  used on input line 74.
 (pdftex.def)             Requested size: 76.8821pt x 91.04872pt.
 
-Overfull \hbox (6.05864pt too wide) in paragraph at lines 61--69
+Overfull \hbox (6.05864pt too wide) in paragraph at lines 73--81
 [][]   [] 
  []
 
 [1
+
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}{/usr/share/texmf/fonts/enc/
 dvips/cm-super/cm-super-t1.enc} <./images/escudounam_negro.jpg> <./images/escud
@@ -241,21 +274,37 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 
  [2
 
+
 ]
 Cap\'{\i }tulo 1.
 (./introduccion.tex [3
 
-]) [4]
+]
+LaTeX Info: Redefining \. on input line 32.
+LaTeX Info: Redefining \% on input line 32.
+ [4])
+LaTeX Info: Redefining \. on input line 91.
+LaTeX Info: Redefining \% on input line 91.
+ [5]
+LaTeX Info: Redefining \. on input line 91.
+LaTeX Info: Redefining \% on input line 91.
+ [6]
 Cap\'{\i }tulo 2.
-(./antecedentes.tex) (./tesis.bbl [5
+(./antecedentes.tex) (./tesis.bbl [7
 
 ]
-LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 5
-.
+LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 2
+3.
 
 (/usr/share/texlive/texmf-dist/tex/latex/base/t1cmtt.fd
 File: t1cmtt.fd 2023/04/13 v2.5m Standard LaTeX font definitions
-)) [6
+)
+Underfull \hbox (badness 1454) in paragraph at lines 28--32
+\T1/cmtt/m/n/12 mx / prensa / ciencia / justina-[]robot-[]de-[]servicio-[]cread
+o-[]en-[]la-[]unam/$\T1/cmr/m/n/12 , ma-yo
+ []
+
+) [8
 
 ] (./tesis.aux
 LaTeX Info: Redefining \. on input line 8.
@@ -267,24 +316,25 @@ L3 programming layer <2024-01-22>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 3834 strings out of 474222
- 61382 string characters out of 5748733
- 1929975 words of memory out of 5000000
- 26058 multiletter control sequences out of 15000+600000
- 567976 words of font info for 55 fonts, out of 8000000 for 9000
+ 3853 strings out of 474222
+ 61684 string characters out of 5748733
+ 1931975 words of memory out of 5000000
+ 26076 multiletter control sequences out of 15000+600000
+ 568797 words of font info for 56 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 57i,6n,65p,779b,365s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 57i,6n,65p,1055b,365s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/texmf/fonts/type1/public/cm-super/sfbx1200.pfb></usr/share/texmf/
 fonts/type1/public/cm-super/sfbx1440.pfb></usr/share/texmf/fonts/type1/public/c
 m-super/sfbx1728.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx2488.pfb
 ></usr/share/texmf/fonts/type1/public/cm-super/sfrm1200.pfb></usr/share/texmf/f
 onts/type1/public/cm-super/sfrm1440.pfb></usr/share/texmf/fonts/type1/public/cm
--super/sfrm1728.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfti1200.pfb>
-</usr/share/texmf/fonts/type1/public/cm-super/sftt1200.pfb>
-Output written on tesis.pdf (6 pages, 498054 bytes).
+-super/sfrm1728.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfsl1200.pfb>
+</usr/share/texmf/fonts/type1/public/cm-super/sfti1200.pfb></usr/share/texmf/fo
+nts/type1/public/cm-super/sftt1200.pfb>
+Output written on tesis.pdf (8 pages, 535477 bytes).
 PDF statistics:
- 71 PDF objects out of 1000 (max. 8388607)
- 42 compressed objects within 1 object stream
+ 84 PDF objects out of 1000 (max. 8388607)
+ 51 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  11 words of extra memory for PDF output out of 10000 (max. 10000000)
 

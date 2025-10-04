@@ -5,14 +5,15 @@
 \usepackage{graphicx}
 \usepackage[margin=3cm]{geometry}
 \usepackage{helvet}
+\usepackage{cite}
 \usepackage{url}
 
 % -------- HEADER format: section + page number
 \makeatletter
-\def\@oddhead{\normalfont\small\textit{\leftmark}\hfill\thepage}
-\def\@evenhead{\normalfont\small\thepage\hfill\textit{\leftmark}}
-\def\@oddfoot{}
-\def\@evenfoot{}
+\def\@oddhead{\normalfont\small\leftmark}
+\def\@evenhead{\normalfont\small\hfill\leftmark}
+\def\@oddfoot{\normalfont\small\hfill\thepage}
+\def\@evenfoot{\normalfont\small\thepage}
 \makeatother
 
 % -------- Insert headings
@@ -82,9 +83,11 @@
 \newpage
 \tableofcontents
 
+% -------- INTRODUCTION
 \chapter{Introducci\'on}
 \input{introduccion}
 
+% ------- -BACKGROUND
 \chapter{Antecedentes}
 \input{antecedentes}
 

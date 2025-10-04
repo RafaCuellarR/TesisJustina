@@ -1,6 +1,11 @@
 \babel@toc {spanish}{}\relax 
 \contentsline {chapter}{\numberline {1}Introducci\'on}{3}{}%
-\contentsline {section}{\numberline {1.1}Definición del problema}{3}{}%
-\contentsline {section}{\numberline {1.2}Justificaci\'on}{3}{}%
-\contentsline {section}{\numberline {1.3}Alcance}{4}{}%
-\contentsline {chapter}{\numberline {2}Antecedentes}{5}{}%
+\contentsline {section}{\numberline {1.1}Robótica de servicio doméstico}{3}{}%
+\contentsline {section}{\numberline {1.2}Planteamiento del problema}{4}{}%
+\contentsline {section}{\numberline {1.3}Justificaci\'on}{4}{}%
+\contentsline {section}{\numberline {1.4}Alcance}{5}{}%
+\contentsline {section}{\numberline {1.5}Objetivos}{5}{}%
+\contentsline {subsection}{\numberline {1.5.1}Objetivos espec\'ificos}{5}{}%
+\contentsline {section}{\numberline {1.6}Organización del trabajo}{6}{}%
+\contentsline {chapter}{\numberline {2}Antecedentes}{7}{}%
+\contentsline {section}{\numberline {2.1}Estado del arte}{7}{}%
