@@ -3,14 +3,25 @@
 \usepackage[spanish]{babel}
 \usepackage[T1]{fontenc}
 \usepackage{graphicx}
-\usepackage[margin=1.5cm]{geometry}
+\usepackage[margin=3cm]{geometry}
 \usepackage{helvet}
-\usepackage{cite}
 \usepackage{url}
+
+% -------- HEADER format: section + page number
+\makeatletter
+\def\@oddhead{\normalfont\small\textit{\leftmark}\hfill\thepage}
+\def\@evenhead{\normalfont\small\thepage\hfill\textit{\leftmark}}
+\def\@oddfoot{}
+\def\@evenfoot{}
+\makeatother
+
+% -------- Insert headings
+\pagestyle{headings}
 
 \begin{document}
 
 \thispagestyle{empty}
+\newgeometry{top=1.5cm, bottom=1.5cm, left=1.5cm, right=1.5cm}
 
 % -------- HEADER: logo + university name
 \begin{minipage}[t]{20cm}
@@ -67,6 +78,7 @@
   \textbf{Ciudad Universitaria, Cd. Mx., 2026}
 \end{minipage}
 
+\restoregeometry
 \newpage
 \tableofcontents
 

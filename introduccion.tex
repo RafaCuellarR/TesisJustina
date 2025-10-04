@@ -1,8 +1,8 @@
 El presente capítulo tiene por finalidad ofrecer una introducción general al trabajo de tesis, situando el contexto en el que se inscribe y los principios que sustentan su enfoque. Se expone, en primera instancia, el problema que motiva la investigación; se fundamenta su relevancia y pertinencia; y se delimitan los alcances del estudio.
 
-\section{Definición del problema}
+En las últimas décadas, la robótica de servicio se ha consolidado como un área de investigación y desarrollo en constante expansión. La competencia internacional RoboCup@HOME se fundó con el objetivo de evaluar anualmente las capacidades de la tecnología emergente en robótica de servicio, incluyendo, entre otras, la interacción y cooperación humano-máquina, la navegación en ambientes dinámicos y la manipulación de objetos~\cite{robocup_athome}.
 
-En las últimas décadas, la robótica de servicio se ha consolidado como un área de investigación y desarrollo en constante expansión. La competencia internacional RoboCup@HOME se fundó con el objetivo de evaluar anualmente las capacidades de la tecnología emergente en robótica de servicio, incluyendo, entre otras, la interacción y cooperación humano-máquina, la navegación en ambientes dinámicos y la manipulación de objetos~\cite{robocup_athome}. 
+\section{Planteamiento del problema}
 
 El Laboratorio de Bio-Robótica de la UNAM, fundado en 1996, emprendió en 2005 la construcción de robots móviles destinados a ayudar a las personas en sus actividades cotidianas, en entornos domésticos, académicos, laborales y clínicos. El robot de servicio de propósito general \emph{Justina} es resultado de la evolución de otros robots creados en el laboratorio~\cite{justina_uv}.
 
@@ -35,3 +35,19 @@ El presente trabajo abarca el rediseño integral de los brazos manipuladores de 
 Se contempla además la validación experimental mediante pruebas de desempeño en tareas representativas de robótica de servicio.
 
 El alcance del proyecto no incluye modificaciones a otros subsistemas de \emph{Justina}. En cuanto a la manipulación colaborativa, se implementará la infraestructura y funcionalidad básica de coordinación, pero no se desarrollarán algoritmos avanzados de planificación, los cuales constituyen trabajo futuro.
+
+\section{Objetivos}
+
+Diseñar e implementar los subsistemas mecánico y electr\'onico de los brazos de un robot de servicio de prop\'osito general con el fin de manipular objetos de uso com\'un en un entorno dom\'estico, así como las interfaces para su integraci\'on en el \emph{stack} de software.
+
+\subsection{Objetivos espec\'ificos}
+
+\begin{itemize}
+    \item Diseñar y manufacturar dos manipuladores rob\'oticos.
+    \item Diseñar y manufacturar dos efectores finales (EOAT) para manipular objetos comunes de uso doméstico.
+    \item Implementar el nodo de control en ROS para resolver el modelo de la cinem\'atica directa e inversa de la posición de los manipuladores.
+    \item Implementar un nodo de control en ROS para tomar los objetos.
+    \item Actualizar el paquete de ROS con la descripci\'on del robot.
+\end{itemize}
+
+\section{Organización del trabajo}
