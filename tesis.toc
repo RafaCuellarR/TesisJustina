@@ -1,15 +1,9 @@
 \babel@toc {spanish}{}\relax 
 \contentsline {chapter}{\numberline {1}Introducci\'on}{3}{chapter.1}%
-\contentsline {section}{\numberline {1.1}Robótica de servicio doméstico}{3}{section.1.1}%
-\contentsline {section}{\numberline {1.2}Planteamiento del problema}{4}{section.1.2}%
-\contentsline {section}{\numberline {1.3}Justificaci\'on}{4}{section.1.3}%
+\contentsline {section}{\numberline {1.1}Robótica de servicio doméstico}{4}{section.1.1}%
+\contentsline {section}{\numberline {1.2}Justificación}{4}{section.1.2}%
+\contentsline {section}{\numberline {1.3}Planteamiento del problema}{5}{section.1.3}%
 \contentsline {section}{\numberline {1.4}Alcance}{5}{section.1.4}%
-\contentsline {section}{\numberline {1.5}Objetivos}{5}{section.1.5}%
-\contentsline {subsection}{\numberline {1.5.1}Objetivos espec\'ificos}{5}{subsection.1.5.1}%
+\contentsline {section}{\numberline {1.5}Objetivo}{6}{section.1.5}%
+\contentsline {subsection}{\numberline {1.5.1}Objetivos específicos}{6}{subsection.1.5.1}%
 \contentsline {section}{\numberline {1.6}Organización del trabajo}{6}{section.1.6}%
-\contentsline {chapter}{\numberline {2}Antecedentes}{7}{chapter.2}%
-\contentsline {section}{\numberline {2.1}Mecanismos y manipuladores robóticos}{7}{section.2.1}%
-\contentsline {section}{\numberline {2.2}Control de posición y trayectoria}{7}{section.2.2}%
-\contentsline {section}{\numberline {2.3}Medición de par y fuerza en robótica}{7}{section.2.3}%
-\contentsline {section}{\numberline {2.4}\emph {Robot Operating System}}{7}{section.2.4}%
-\contentsline {section}{\numberline {2.5}Robot \emph {Justina}}{7}{section.2.5}%

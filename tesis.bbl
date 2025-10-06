@@ -1,4 +1,4 @@
-\begin{thebibliography}{1}
+\begin{thebibliography}{10}
 
 \bibitem{robotics_handbook}
 B.~Siciliano and O.~Khatib, ``Robotics and the handbook,'' in {\em Handbook of
@@ -8,20 +8,34 @@ B.~Siciliano and O.~Khatib, ``Robotics and the handbook,'' in {\em Handbook of
 \bibitem{yazmin_intro}
 L.~E. Sucar~Succar, ``Introducción,'' in {\em Robótica de Servicio} (E.~Sucar
   and Y.~Hernández, eds.), ch.~1, pp.~1--5, Academia Mexicana de Computación,
-  A.C., 2nd~ed., 2019.
+  A.C., 2da~ed., 2019.
 
 \bibitem{yazmin_robotsServicio}
 J.~Savage~Carmona, ``Robots de servicio,'' in {\em Robótica de Servicio}
   (E.~Sucar and Y.~Hernández, eds.), ch.~2, pp.~7--23, Academia Mexicana de
-  Computación, A.C., 2nd~ed., 2019.
+  Computación, A.C., 2da~ed., 2019.
 
 \bibitem{bajd_introRobotics}
 T.~Bajd and M.~Mihelj, {\em Introduction to Robotics}.
-\newblock Springer, 1st~ed., 2013.
+\newblock Springer, 1ra~ed., 2013.
 
 \bibitem{arkin}
 R.~C. Arkin, {\em Behavior-Based Robotics}.
 \newblock MIT Press, 1ra~ed., 1998.
+
+\bibitem{gates_article}
+B.~Gates, ``A robot in every home,'' in {\em Scientific American, Inc.},
+  pp.~58--65, 2006.
+
+\bibitem{nimbro_manipulation}
+J.~Stückler and S.~Behnke, ``Integrating indoor mobility, object manipulation,
+  and intuitive interaction for domestic service tasks,'' in {\em 2009 9th
+  IEEE-RAS International Conference on Humanoid Robots}, pp.~506--513, 2009.
+
+\bibitem{robocup_history}
+{RoboCup Federation}, ``A brief history of {RoboCup}.''
+  \url{https://www.robocup.org/a_brief_history_of_robocup}, 2025.
+\newblock Accessed: 2025-10-06.
 
 \bibitem{robocup_athome}
 {RoboCup Federation}, ``{RoboCup@Home League}.''
@@ -29,11 +43,16 @@ R.~C. Arkin, {\em Behavior-Based Robotics}.
 \newblock {Official website of the RoboCup@Home league for autonomous service
   robots}.
 
-\bibitem{justina_uv}
-C.~P. Vázquez, ``Justina, robot de servicio creado en la unam.''
-  \url{https://www.uv.mx/prensa/ciencia/justina-robot-de-servicio-creado-en-la-unam/},
-  mayo 2019.
-\newblock Accessed 2025-08-28.
+\bibitem{bicchi_grasping}
+A.~Bicchi and V.~Kumar, ``Robot grasping and contact: A review,'' in {\em
+  Proceedings 2000 ICRA. Millennium Conference. IEEE International Conference
+  on Robotics and Automation. Symposia Proceedings}, pp.~348--353, 2000.
+
+\bibitem{jaume2_manipulation}
+M.~Prats, P.~J. Sanz, E.~Martínez, R.~Marín, and A.~P. del Pobil,
+  ``Manipulación autónoma multipropósito en el robot de servicios jaume-2,''
+  in {\em Revista Iberoamericana de Automática e Informática Industrial},
+  pp.~25--37, 2008.
 
 \bibitem{BioRoboticsUNAM}
 {BioRobotics Laboratory, UNAM}, ``{Pumas OPL (Justina Robot)}.'' [Online].

@@ -1,41 +1,40 @@
 En 1920, el término \textbf{robot}, derivado de la palabra eslava \emph{robota} que significa trabajo subordinado, fue introducido por el dramaturgo checo Karel Čapek en su obra \emph{Rossum's Universal Robot}~\cite{robotics_handbook}. Más adelante, en 1961, se inició la robótica como disciplina con la invención de los brazos autónomos para asistir a la manufactura en líneas de producción con el robot \emph{Unimate}~\cite{yazmin_intro}.
 
-% ------ Introducir cita de la ISO 8373 y la RIA
-Debido al reciente estudio y desarrollo en robótica, aún existen diversas definiciones de \textbf{robot}, que varían de acuerdo con el campo de aplicación y el área de investigación. Debido al enfoque industrial incial, las definiciones tanto de la \emph{International Standard Organization} en el estándar ISO 8373 como de la \emph{Robot Institute of America} reducen el término de robot a un manipulador~\cite{yazmin_robotsServicio}. Por otro lado, Bajd~\cite{bajd_introRobotics} amplía la definición de la robótica contemporánea como la rama de la ciencia que estudia a aquellos sistemas cuya principal característica es el movimiento.
+Debido al reciente estudio y desarrollo en robótica, aún existen diversas definiciones de \textbf{robot}, que varían de acuerdo con el campo de aplicación y el área de investigación. Debido al enfoque industrial inicial, las definiciones tanto de la \emph{International Standard Organization} en el estándar ISO 8373 como de la \emph{Robot Institute of America} reducen el término de robot a un manipulador\footnote{El estándar ISO 8373 define robot como: ``Un manipulador automáticamente controlado, reprogramable, multiuso, programable en tres o más ejes, que pueden estar fijos en un lugar o movilizarse para ser usado en aplicaciones de automatización industrial''; mientras que la  RIA considera a un robot como ``un manipulador multifuncional reprogramable diseñado para mover materiales, partes, herramientas o dispositivos especializados a través de diversos movimientos programados para la realización de diversas tareas''.}~\cite{yazmin_robotsServicio}. Por otro lado, Bajd~\cite{bajd_introRobotics} amplía la definición de la robótica contemporánea como la rama de la ciencia que estudia a aquellos sistemas cuya principal característica es el movimiento.
 
-Durante las últimas décadas se han diseñado y construido una gran cantidad de robots en dos ejes principales: su grado de autonomía y su capacidad de actuar en entornos complejos. Ambos relacionados directamente con su inteligecia~\cite{yazmin_intro}.
+Durante las últimas décadas se han diseñado y construido una gran cantidad de robots en dos ejes principales: su grado de autonomía, entendida como la habilidad de tomar decisiones basadas en una representación interna del mundo, y su capacidad de actuar en entornos complejos. Ambos relacionados directamente con su inteligencia~\cite{yazmin_intro}.
 
 \hypertarget{arkin}{De esta forma, la definición que resulta más útil para el desarrollo de este trabajo es la de Arkin~\cite{arkin}, quien propone que un robot inteligente es una máquina capaz de extraer información de su ambiente y usar el conocimiento acerca de su mundo para moverse de manera segura y significativa, con un propósito específico.}
 
 \section{Robótica de servicio doméstico}
 
-Durante décadas, la robótica hizo a un lado el ideal del sirviente antropomórfico debido a la limitante que suponía generar una representación del entorno, sólo posible con el uso de complejos sensores y gran capacidad de cómputo para \textbf{percibir}, \textbf{abstraer} y \textbf{modelar}. La solución adoptada para superar esa limitante fue reducir el número de variables y minimizar en lo posible eventos inesperados, descartando ambientes dinámicos como hogares~\cite{yazmin_robotsServicio}.
+El objetivo de los robots de servicio es reducir o eliminar el trabajo físico de las personas en lugares como casas. Los dispositivos robóticos ayudarán a las personas con discapacidad a moverse o servirán de compañía a ancianos. Los robots pueden ayudar a hacer los espacios más seguros con acciones que van desde recoger objetos para evitar tropiezos hasta verificar que hemos cerrado la llave del gas~\cite{yazmin_robotsServicio}.
 
-El objetivo de los robots de servicio es reducir o eliminar el trabajo físico de las personas en lugares como casas. Los dispositivos robóticos ayudarán a las personas con discapacidad a moverse o servirán de compañía a ancianos. Los robots pueden ayudar a hacer los espacios más seguros recogiendo objetos para evitar tropezones hasta verificar que hemos cerrado la llave del gas~\cite{yazmin_robotsServicio}.
+El progreso en la robótica ha sido creciente y se prevé una demanda masiva de robots de servicio. La  definición de esta rama más reciente complementa la de \hyperlink{arkin}{Arkin} como una máquina móvil reprogramable autónoma o semiautónoma diseñada para operar en entornos dinámicos de manera segura, confiable y robusta, y ser capaz de realizar tareas específicas~\cite{yazmin_robotsServicio}.
 
-% ---- Buscar info surgimiento de robots móviles
+Bill Gates~\cite{gates_article} vaticina que en un hogar promedio habrá robots de servicio doméstico con propósito específico encargados de cortar el césped, vigilar, limpiar, aspirar, trapear, lavar y planchar. Pero también habrá \textbf{robots humanoides de propósito general} que ayudarán a las personas a traer y llevar objetos. Este último tipo de robot tendrá la capacidad de comunicarse con los miembros de la casa utilizando lenguaje natural y planear las acciones, con base en sus núcleos de acción predefinidos~\cite{yazmin_robotsServicio}, y movimientos necesarios para realizar sus funciones.
 
-El progreso en la robótica ha sido creciente y se prevee una demanda masiva de robots de servicio. Su definición complementa la de \hyperlink{arkin}{Arkin} como una máquina móvil reprogramable autónoma o semiautónoma diseñada para operar en entornos dinámicos de manera segura, confiable y robusta, y ser capaz de realizar tareas específicas~\cite{yazmin_robotsServicio}.
+De esta forma, los robots de servicio doméstico deben contar con tres habilidades básicas: navegación robusta,   manipulación móvil y comunicación intuitiva con el usuario~\cite{nimbro_manipulation}.
 
-En las últimas décadas, la robótica de servicio se ha consolidado como un área de investigación y desarrollo en constante expansión. La competencia internacional RoboCup@HOME se fundó con el objetivo de evaluar anualmente las capacidades de la tecnología emergente en robótica de servicio, incluyendo, entre otras, la interacción y cooperación humano-máquina, la navegación en ambientes dinámicos y la manipulación de objetos~\cite{robocup_athome}.
+Uno de las iniciativas con mayor relevancia a nivel internacional en el desarrollo de robótica e inteligencia artificial es la RoboCup (Robot World Cup). Surgió a partir de avances significativos en estos campos en 1997, tales como la derrota del campeón mundial de ajedrez Gary Kaspárov a manos de IBM Deep Blue y el despliegue del primer sistema robótico autónomo en Marte Sojourner, con el objetivo de coordinar los esfuerzos de diferentes instituciones y proponer metas a largo plazo. Se acordó presentar estos avances a través de partidos de fútbol soccer con robots, ya que resultaba viable y provechoso~\cite{robocup_history}.
+
+El alcance de la RoboCup se amplió con el surgimiento de otras ligas. RoboCup@HOME se fundó con el objetivo de evaluar anualmente las capacidades de la tecnología emergente aplicada a la mejora de las habilidades básicas en robótica de servicio~\cite{robocup_athome}.
+
+\section{Justificación}
+
+La manipulación es un problema bien conocido en robótica. Constituye la interfaz de interacción física con objetos y personas, siendo uno de los medios más importantes de un robot para efectuar cambios en su entorno. Las tres principales funciones de una mano humana son explorar, sujetar y manipular objetos. La manipulación robótica se centra en resolver los últimos dos, ya que el primero cae en el terreno de la háptica~\cite{bicchi_grasping}.
+
+La interacción física presente en nuestra vida diaria cuando se realiza una manipulación, incluso en tareas simples y comunes, va más allá de tomar y colocar algún objeto. Ejemplos de estas tareas son encender la luz, extraer un libro de una estantería, abrir una puerta o cajón, empujar algún  objeto, entre otros~\cite{jaume2_manipulation}.
+
+La integración de manipulación colaborativa amplía significativamente el rango de tareas que se puede realizar un robot, permitiendo manejar objetos de diferentes tamaños, pesos y complejidad, e incorporar acciones que requieren ambos brazos, como la apertura de contenedores o la manipulación fina de objetos.
+
+\emph{Justina} es un robot de servicio diseñado en el Laboratorio de Bio-Robótica de la UNAM para operar en entornos domésticos, concebido como parte de una iniciativa para acercar la robótica a las personas y mejorar su calidad de vida~\cite{BioRoboticsUNAM}. Para resolver la manipulación cuenta con dos brazos de siete grados de libertad cada uno, lo que le permitiría transportar objetos en un menor tiempo y llevar a cabo tareas más complejas.
 
 \section{Planteamiento del problema}
 
 Los manipuladores de \emph{Justina} exhiben deficiencias críticas que impidieron su participación en la RoboCup@HOME 2025. Los actuadores carecen de la capacidad de carga necesaria para las tareas de manipulación doméstica, los componentes estructurales presentan deformaciones permanentes por sobrecarga y el deterioro acumulado del sistema compromete su desempeño. Asimismo, aunque posee dos brazos, la manipulación colaborativa constituye un desafío técnico pendiente.
 
 En respuesta a esta problemática, el presente trabajo plantea el rediseño e implementación integral de los subsistemas mecánico, electrónico y de software que conforman los brazos de \emph{Justina}.
-
-\section{Justificaci\'on}
-
-El rediseño de los manipuladores de \emph{Justina} responde a múltiples necesidades del ámbito académico y del desarrollo tecnológico en robótica de servicio.
-
-\emph{Justina} es un robot de servicio diseñado para operar en entornos domésticos, concebido como parte de una iniciativa para acercar la robótica a las personas y mejorar su calidad de vida. Sin embargo, la meta principal del proyecto es fomentar la formación científica e ingenieril de los estudiantes, brindándoles la oportunidad de aplicar sus conocimientos en escenarios prácticos utilizando tecnología de vanguardia\cite{BioRoboticsUNAM}. Los manipuladores son esenciales para estos fines, ya que constituyen la interfaz de interacción física con objetos y personas.  
-
-La integración de manipulación colaborativa amplía significativamente el rango de tareas que \emph{Justina} puede realizar, permitiendo manejar objetos de mayor tamaño, peso y complejidad, y coordinar actividades que requieren ambos brazos, como la apertura de contenedores o el ensamblaje de objetos.
-
-La participación en la RoboCup@HOME promueve el avance tecnológico del laboratorio al establecer estándares internacionales de desempeño y facilitar la comparación con otras instituciones académicas. No poder participar representa una pérdida de oportunidades de evaluación, retroalimentación y visibilidad.
-
-Finalmente, este trabajo fortalece las competencias del Laboratorio de Bio-Robótica de la UNAM. Introduce la manipulación colaborativa como línea de investigación y desarrollo, genera conocimiento técnico documentado sobre el diseño mecatrónico de manipuladores y proporciona un marco para futuros avances.
 
 \section{Alcance}
 
@@ -47,22 +46,20 @@ El presente trabajo abarca el rediseño integral de los brazos manipuladores de 
     \item \textbf{Software:} desarrollo de nodos de control de los manipuladores y efectores finales e infraestructura para la manipulación colaborativa.
 \end{itemize}
 
-Se contempla además la validación experimental mediante pruebas de desempeño en tareas representativas de robótica de servicio.
+Se contempla además la validación experimental mediante pruebas de desempeño en tareas de manipulación simple en robótica de servicio.
 
-El alcance del proyecto no incluye modificaciones a otros subsistemas de \emph{Justina}. En cuanto a la manipulación colaborativa, se implementará la infraestructura y funcionalidad básica de coordinación, pero no se desarrollarán algoritmos avanzados de planificación, los cuales constituyen trabajo futuro.
+\section{Objetivo}
 
-\section{Objetivos}
+Diseñar e implementar los subsistemas mecánico y electrónico de los brazos de un robot de servicio de propósito general con el fin de manipular objetos de uso común en un entorno doméstico, así como las interfaces para su integración en el \emph{stack} de software.
 
-Diseñar e implementar los subsistemas mecánico y electr\'onico de los brazos de un robot de servicio de prop\'osito general con el fin de manipular objetos de uso com\'un en un entorno dom\'estico, así como las interfaces para su integraci\'on en el \emph{stack} de software.
-
-\subsection{Objetivos espec\'ificos}
+\subsection{Objetivos específicos}
 
 \begin{itemize}
-    \item Diseñar y manufacturar dos manipuladores rob\'oticos.
+    \item Diseñar y manufacturar dos manipuladores robóticos.
     \item Diseñar y manufacturar dos efectores finales (EOAT) para manipular objetos comunes de uso doméstico.
-    \item Implementar el nodo de control en ROS para resolver el modelo de la cinem\'atica directa e inversa de la posición de los manipuladores.
+    \item Implementar el nodo de control en ROS para resolver el modelo de la cinemática directa e inversa de la posición de los manipuladores.
     \item Implementar un nodo de control en ROS para tomar los objetos.
-    \item Actualizar el paquete de ROS con la descripci\'on del robot.
+    \item Actualizar el paquete de ROS con la descripción del robot.
 \end{itemize}
 
 \section{Organización del trabajo}
