@@ -1,22 +1,29 @@
-La robótica como disciplina se inició con la invención de los brazos autónomos para asistir la manufactura en líneas de producción con el robot \emph{Unimate} en 1961~\cite{yazmin_intro}.
+En 1920, el término \textbf{robot}, derivado de la palabra eslava \emph{robota} que significa trabajo subordinado, fue introducido por el dramaturgo checo Karel Čapek en su obra \emph{Rossum's Universal Robot}~\cite{robotics_handbook}. Más adelante, en 1961, se inició la robótica como disciplina con la invención de los brazos autónomos para asistir a la manufactura en líneas de producción con el robot \emph{Unimate}~\cite{yazmin_intro}.
 
-Tadej Bajd, en su libro \emph{Introduction to robotics}~\cite{bajd_introRobotics}, define a la robótica contemporánea como la rama de la ciencia que estudia a aquellos sistemas cuya principal característica es el movimiento. En su libro del mismo nombre, John Craig se centra en definir la robot industrial como extensión de las nuevas técnicas de automatización que marcaron las rápidas transformaciones y acelerado crecimiento económico del siglo XX~\cite{craig_introRobotics}. Lo que constituye a un robot industrial está en debate y el criterio en el que normalmente se basa la clasificación entre la máquina y robot industrial es la complejidad de su programación. Con esto, la \textbf{robótica industrial} se separa del resto de la robótica a tal grado que las definiciones tanto de la \emph{International Standard Organization} en el estándar ISO 8373 como de la \emph{Robot Institute of America} reducen el término de robot a un manipulador~\cite{yazmin_robotsServicio}.
+% ------ Introducir cita de la ISO 8373 y la RIA
+Debido al reciente estudio y desarrollo en robótica, aún existen diversas definiciones de \textbf{robot}, que varían de acuerdo con el campo de aplicación y el área de investigación. Debido al enfoque industrial incial, las definiciones tanto de la \emph{International Standard Organization} en el estándar ISO 8373 como de la \emph{Robot Institute of America} reducen el término de robot a un manipulador~\cite{yazmin_robotsServicio}. Por otro lado, Bajd~\cite{bajd_introRobotics} amplía la definición de la robótica contemporánea como la rama de la ciencia que estudia a aquellos sistemas cuya principal característica es el movimiento.
 
-Durante las últimas décadas se han diseñado y construido una gran cantidad de robots en dos dimensiones principales: su grado de autonomía y su capacidad de actuar en entornos complejos. Ambos relacionados directamente con su inteligecia~\cite{yazmin_intro}.
+Durante las últimas décadas se han diseñado y construido una gran cantidad de robots en dos ejes principales: su grado de autonomía y su capacidad de actuar en entornos complejos. Ambos relacionados directamente con su inteligecia~\cite{yazmin_intro}.
 
-Por un lado, la autonomía del robot está determinada por la riqueza de los sensores del robot y por la variedad de sus mecanismos motores y mentales. Por otro, es una función de la variedad de los tipos de acciones que puede realizar un robot. La complejidad del entorno, en cambio, corresponde a la variedad del ambiente que el robot es capaz de enfrentar e incluso transfomar~\cite{yazmin_intro}.
+\hypertarget{arkin}{De esta forma, la definición que resulta más útil para el desarrollo de este trabajo es la de Arkin~\cite{arkin}, quien propone que un robot inteligente es una máquina capaz de extraer información de su ambiente y usar el conocimiento acerca de su mundo para moverse de manera segura y significativa, con un propósito específico.}
 
 \section{Robótica de servicio doméstico}
+
+Durante décadas, la robótica hizo a un lado el ideal del sirviente antropomórfico debido a la limitante que suponía generar una representación del entorno, sólo posible con el uso de complejos sensores y gran capacidad de cómputo para \textbf{percibir}, \textbf{abstraer} y \textbf{modelar}. La solución adoptada para superar esa limitante fue reducir el número de variables y minimizar en lo posible eventos inesperados, descartando ambientes dinámicos como hogares~\cite{yazmin_robotsServicio}.
+
+El objetivo de los robots de servicio es reducir o eliminar el trabajo físico de las personas en lugares como casas. Los dispositivos robóticos ayudarán a las personas con discapacidad a moverse o servirán de compañía a ancianos. Los robots pueden ayudar a hacer los espacios más seguros recogiendo objetos para evitar tropezones hasta verificar que hemos cerrado la llave del gas~\cite{yazmin_robotsServicio}.
+
+% ---- Buscar info surgimiento de robots móviles
+
+El progreso en la robótica ha sido creciente y se prevee una demanda masiva de robots de servicio. Su definición complementa la de \hyperlink{arkin}{Arkin} como una máquina móvil reprogramable autónoma o semiautónoma diseñada para operar en entornos dinámicos de manera segura, confiable y robusta, y ser capaz de realizar tareas específicas~\cite{yazmin_robotsServicio}.
 
 En las últimas décadas, la robótica de servicio se ha consolidado como un área de investigación y desarrollo en constante expansión. La competencia internacional RoboCup@HOME se fundó con el objetivo de evaluar anualmente las capacidades de la tecnología emergente en robótica de servicio, incluyendo, entre otras, la interacción y cooperación humano-máquina, la navegación en ambientes dinámicos y la manipulación de objetos~\cite{robocup_athome}.
 
 \section{Planteamiento del problema}
 
-El Laboratorio de Bio-Robótica de la UNAM, fundado en 1996, emprendió en 2005 la construcción de robots móviles destinados a ayudar a las personas en sus actividades cotidianas, en entornos domésticos, académicos, laborales y clínicos. El robot de servicio de propósito general \emph{Justina} es resultado de la evolución de otros robots creados en el laboratorio~\cite{justina_uv}.
+Los manipuladores de \emph{Justina} exhiben deficiencias críticas que impidieron su participación en la RoboCup@HOME 2025. Los actuadores carecen de la capacidad de carga necesaria para las tareas de manipulación doméstica, los componentes estructurales presentan deformaciones permanentes por sobrecarga y el deterioro acumulado del sistema compromete su desempeño. Asimismo, aunque posee dos brazos, la manipulación colaborativa constituye un desafío técnico pendiente.
 
-En la actualidad, \emph{Justina} cuenta con una cámara RGBD, un micrófono direccional, un torso telescópico, un sensor LiDAR, dos brazos manipuladores con siete grados de libertad cada uno y una base móvil FESTO \emph{Robotino 3}. No obstante, los manipuladores de \emph{Justina} exhiben deficiencias críticas que impidieron su participación en la RoboCup@HOME 2025. Los actuadores carecen de la capacidad de carga necesaria para las tareas de manipulación doméstica, los componentes estructurales presentan deformaciones permanentes por sobrecarga y el deterioro acumulado del sistema compromete su desempeño. Asimismo, aunque posee dos brazos, la manipulación colaborativa constituye un desafío técnico pendiente.
-
-En respuesta a esta problemática, el presente trabajo plantea el rediseño e implementación integral de los subsistemas mecánico, electrónico y de software que conforman los brazos de \emph{Justina}, con el propósito de superar las limitaciones actuales y habilitar la manipulación colaborativa.
+En respuesta a esta problemática, el presente trabajo plantea el rediseño e implementación integral de los subsistemas mecánico, electrónico y de software que conforman los brazos de \emph{Justina}.
 
 \section{Justificaci\'on}
 

@@ -1,22 +1,27 @@
 \begin{thebibliography}{1}
 
+\bibitem{robotics_handbook}
+B.~Siciliano and O.~Khatib, ``Robotics and the handbook,'' in {\em Handbook of
+  Robotics} (B.~Siciliano and O.~Khatib, eds.), ch.~1, pp.~1--6, Springer,
+  2da~ed., 2016.
+
 \bibitem{yazmin_intro}
 L.~E. Sucar~Succar, ``Introducción,'' in {\em Robótica de Servicio} (E.~Sucar
   and Y.~Hernández, eds.), ch.~1, pp.~1--5, Academia Mexicana de Computación,
   A.C., 2nd~ed., 2019.
 
-\bibitem{bajd_introRobotics}
-T.~Bajd and M.~Mihelj, {\em Introduction to Robotics}.
-\newblock Springer, 1st~ed., 2013.
-
-\bibitem{craig_introRobotics}
-J.~J. Craig, {\em Introduction to Robotics: Mechanics and Control}.
-\newblock Pearson Prentice Hall, 3th~ed., 2006.
-
 \bibitem{yazmin_robotsServicio}
 J.~Savage~Carmona, ``Robots de servicio,'' in {\em Robótica de Servicio}
   (E.~Sucar and Y.~Hernández, eds.), ch.~2, pp.~7--23, Academia Mexicana de
   Computación, A.C., 2nd~ed., 2019.
+
+\bibitem{bajd_introRobotics}
+T.~Bajd and M.~Mihelj, {\em Introduction to Robotics}.
+\newblock Springer, 1st~ed., 2013.
+
+\bibitem{arkin}
+R.~C. Arkin, {\em Behavior-Based Robotics}.
+\newblock MIT Press, 1ra~ed., 1998.
 
 \bibitem{robocup_athome}
 {RoboCup Federation}, ``{RoboCup@Home League}.''
