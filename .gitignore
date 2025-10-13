@@ -1,40 +1,29 @@
-# LaTeX auxiliary files
-*.aux
-*.log
-*.pdf
+# Ignore everything
+*
 
-# Other common LaTeX auxiliary files
-*.out
-*.toc
-*.lof
-*.lot
-*.fls
-*.fdb_latexmk
-*.synctex.gz
-*.synctex.gz(busy)
-*.bbl
-*.blg
-*.bcf
-*.run.xml
-*.idx
-*.ilg
-*.ind
-*.nav
-*.snm
-*.vrb
+# But not git files...
+!.gitattributes
+!.gitignore
+# Neither these files...
 
-# BibTeX files
-*.bib.bak
-*.bib.sav
+!*.bib
+!*.bst
+!*.cls
+!*.tex
+!dictionary.pws
+!Makefile
+!warnspell.sh
+!README.md
 
-# Build directories
-build/
-output/
-
-# Editor/IDE files
-*.swp
-*.swo
-*~
-.DS_Store
-.vscode/
-.idea/
+# Nor these directories...
+!cls/
+!bib/
+# !bst/
+!fig/
+!img/
+# !ist/
+!pages/
+!plots/
+!secs/
+!setup/
+!tables/
