@@ -69,9 +69,20 @@ LaTeXTools maneja esto automáticamente, pero verifica:
 
 1. Clona el repositorio y abre el archivo `tesis.tex`
 2. Presiona `Ctrl+B`
+3. Selecciona "LaTex: Traditional Builder with PDFLaTex"
 4. El PDF debería generarse y abrirse automáticamente
 
-## 7. Atajos de Teclado Útiles
+## 7. Compilar bibliografía
+
+Si al compilar el _builder_ no reconoce los archivos de bibliografía y te advierte de referencias faltantes, es necesario compilar esas referencias en terminal con el siguiente comando:
+
+```bash
+bibtex tesis
+```
+
+A la altura del repositorio. Sustituye _tesis_ por el nombre de tu archivo principal.
+
+## 8. Atajos de Teclado Útiles
 
 - `Ctrl+B` / `Cmd+B`: Compilar el archivo actual
 - `Ctrl+L, J`: Saltar al PDF (búsqueda hacia adelante)
