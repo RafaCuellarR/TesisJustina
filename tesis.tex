@@ -8,6 +8,9 @@
 \usepackage{cite}
 \usepackage{url}
 \usepackage{hyperref}
+\usepackage{subcaption}
+
+\renewcommand{\appendixname}{Apéndice}
 
 \hypersetup{
   colorlinks=true,
@@ -38,7 +41,7 @@
 
 % -------- HEADER: logo + university name
 \begin{minipage}[t]{20cm}
-  \includegraphics[height=3.0cm]{images/escudounam_negro.jpg}
+  \includegraphics[height=3.0cm]{img/escudounam_negro.jpg}
   \hspace{0.5cm}
   \begin{minipage}[b]{14cm}
     \centering
@@ -83,7 +86,7 @@
 
 % -------- FOOTER: second logo + place/date
 \begin{minipage}[t]{4cm}
-  \includegraphics[height=3.2cm]{images/escudofi_negro.jpg}
+  \includegraphics[height=3.2cm]{img/escudofi_negro.jpg}
 \end{minipage}
 \hspace{5cm}
 \begin{minipage}[t]{9cm}
@@ -106,6 +109,14 @@
 % -------- METHODOLOGY
 \chapter{Metodolog\'ia}
 \input{secs/metodologia}
+
+\appendix
+
+\chapter{Protocolo de investigaci\'on}
+\input{appendix/protocolo}
+
+\chapter{Carta de consentimiento informado}
+\input{appendix/consentimiento}
 
 \bibliographystyle{ieeetr}
 \bibliography{bib/introduccion, bib/antecedentes, bib/metodologia}

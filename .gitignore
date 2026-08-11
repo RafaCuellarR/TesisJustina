@@ -10,6 +10,9 @@
 !*.bst
 !*.cls
 !*.tex
+!*.jpeg
+!*.png
+!*.jpg
 !dictionary.pws
 !Makefile
 !warnspell.sh
@@ -20,10 +23,11 @@
 !bib/
 # !bst/
 !fig/
-!images/
+!img/
 # !ist/
 !pages/
 !plots/
 !secs/
+!appendix/
 !setup/
 !tables/
