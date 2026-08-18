@@ -1,7 +1,31 @@
 \section{Diseño de manipuladores robóticos}
 % Robótica
-Para hablar de manipuladores robóticos, es necesario definir la cadena cinemática. Una \textbf{cadena cinemática} es un conjunto de eslabones, conectados por pares cinemáticos, que producen movimientos relativos sincronizados con un propósito determinado. Los \textbf{pares cinemáticos}, a su vez, son el par de eslabones que tienen movimiento relativo entre sí.
+Un manipulador robótico se define como una cadena cinemática abierta que puede programarse para realizar una amplia variedad de aplicaciones. La ingeniería mecánica proporciona un conjunto de metodologías para el estudio de máquinas en situaciones estáticas y dinámicas. Las ramas de la mecánica que permiten definir y estudiar el movimiento para el diseño de manipuladores robóticos, y de máquinas en general, son la \textbf{cinemática} y la \textbf{cinética}. De aquí en adelante, cinética y dinámica se utlizarán como sinónimos para seguir con la nomenclatura utilizada por los autores citados~\cite{craig}.
 
+La \textbf{cinemática} trata el estudio del movimiento sin considerar las fuerzas que lo ocasionan. Se estudian la posición, la velocidad, la aceleración y todas las derivadas de mayor orden de la posición (respecto al tiempo o a cualquier otra variable). La \textbf{dinámica}, por otro lado, se encarga del estudio de las fuerzas sobre sistemas en movimiento. Permite definir los esfuerzos a los que estarán sometidos los elementos del sistema, como función de la aceleración y las fuerzas inerciales~\cite{norton}~\cite{craig}.
+
+Los manipuladores se pueden considerar un tipo especial de \textbf{mecanismo}. Estos se definen, según Norton~\cite{norton}, como los dispositivos que transforman el movimiento en un patrón deseable y donde al menos uno de sus eslabones se ha \enquote{aterrizado} o fijado al sistema de referencia. Por lo general, desarrollan fuerzas muy bajas y transmiten poca potencia, a diferencia de las \textbf{máquinas} que están diseñadas para transmitir fuerzas significativas.
+
+Para hablar de manipuladores robóticos, es necesario definir el concepto de cadena cinemática. Una \textbf{cadena cinemática} es un conjunto de eslabones, conectados por pares cinemáticos o juntas, que producen movimientos relativos sincronizados con un propósito determinado. Estas juntas generalmente se instrumentan con sensores de posición, que permiten conocer esta posición relativa de los eslabones adyacentes.~\cite{craig}
+
+Un \textbf{eslabón} es un cuerpo rígido con al menos dos nodos o puntos de conexión. Se clasifican en binarios, ternarios y cuaternarios, dependiendo del número de nodos que posean. Una \textbf{junta o par cinemático} es la unión de dos o más eslabones en sus nodos, permitiendo movimiento relativo. Las juntas se pueden clasificar por sus grados de libertad (GDL) y las más comunes son las juntas completas (1 GDL) y las semijuntas (2 GDL), aunque también las hay de grados superiores.~\cite{norton}
+
+%% Opcionalemente incluir la clasificación de cadenas cinemáticas
+
+El número de grados de libertad globales de un manipulador es el número de variables de posición \textbf{independientes} que deben especificarse para conocer la posición de todos los eslabones de la cadena cinemática. Dicho de otra forma, es el número de entradas que se deben proporcionar para generar una salida predecible. Para determinarlo se debe de considerar el número de eslabones, el número de juntas y las interacciones entre ellos. La \textbf{condición de Gruebler} considera estos factores resumidos en la ecuación \ref{ec:kutzbach}.
+
+\begin{equation}
+\label{ec:kutzbach}
+    M = 3(L-1)-2J_1-J_2
+\end{equation}
+
+donde:
+\begin{description}
+    \item[$M$] es el número de grados de libertad del mecanismo.
+    \item[$L$] es el número total de eslabones, incluido el eslabón fijo.
+    \item[$J_1$] es el número de pares cinemáticos de un grado de libertad.
+    \item[$J_2$] es el número de pares cinemáticos de dos grados de libertad.
+\end{description}
 % Mecanismos
 
 % Tipos de mecanismos
@@ -16,6 +40,7 @@ Para hablar de manipuladores robóticos, es necesario definir la cadena cinemát
 
 \section{Control de manipuladores robóticos}
 
+La teoría de control proporciona herramientas para diseñar y evaluar algortimos para realizar los movimientos deseados o las aplicaciones de fuerza.
 
 \section{\emph{Robot Operating System}}
 
