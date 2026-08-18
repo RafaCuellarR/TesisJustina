@@ -1,18 +1,35 @@
 \section{Diseño de manipuladores robóticos}
 % Robótica
-Un manipulador robótico se define como una cadena cinemática abierta que puede programarse para realizar una amplia variedad de aplicaciones. La ingeniería mecánica proporciona un conjunto de metodologías para el estudio de máquinas en situaciones estáticas y dinámicas. Las ramas de la mecánica que permiten definir y estudiar el movimiento para el diseño de manipuladores robóticos, y de máquinas en general, son la \textbf{cinemática} y la \textbf{cinética}. De aquí en adelante, cinética y dinámica se utlizarán como sinónimos para seguir con la nomenclatura utilizada por los autores citados~\cite{craig}.
+Un manipulador robótico se define como una cadena cinemática que puede programarse para realizar una amplia variedad de aplicaciones. La ingeniería mecánica proporciona un conjunto de metodologías para el estudio de máquinas en situaciones estáticas y dinámicas. Las ramas de la mecánica que permiten definir y estudiar el movimiento para el diseño de manipuladores robóticos, y de máquinas en general, son la \textbf{cinemática} y la \textbf{cinética}. De aquí en adelante, cinética y dinámica se utlizarán como sinónimos para seguir con la nomenclatura utilizada por los autores citados~\cite{craig}.
 
 La \textbf{cinemática} trata el estudio del movimiento sin considerar las fuerzas que lo ocasionan. Se estudian la posición, la velocidad, la aceleración y todas las derivadas de mayor orden de la posición (respecto al tiempo o a cualquier otra variable). La \textbf{dinámica}, por otro lado, se encarga del estudio de las fuerzas sobre sistemas en movimiento. Permite definir los esfuerzos a los que estarán sometidos los elementos del sistema, como función de la aceleración y las fuerzas inerciales~\cite{norton}~\cite{craig}.
 
 Los manipuladores se pueden considerar un tipo especial de \textbf{mecanismo}. Estos se definen, según Norton~\cite{norton}, como los dispositivos que transforman el movimiento en un patrón deseable y donde al menos uno de sus eslabones se ha \enquote{aterrizado} o fijado al sistema de referencia. Por lo general, desarrollan fuerzas muy bajas y transmiten poca potencia, a diferencia de las \textbf{máquinas} que están diseñadas para transmitir fuerzas significativas.
 
+% Mecanismos
 Para hablar de manipuladores robóticos, es necesario definir el concepto de cadena cinemática. Una \textbf{cadena cinemática} es un conjunto de eslabones, conectados por pares cinemáticos o juntas, que producen movimientos relativos sincronizados con un propósito determinado. Estas juntas generalmente se instrumentan con sensores de posición, que permiten conocer esta posición relativa de los eslabones adyacentes.~\cite{craig}
 
-Un \textbf{eslabón} es un cuerpo rígido con al menos dos nodos o puntos de conexión. Se clasifican en binarios, ternarios y cuaternarios, dependiendo del número de nodos que posean. Una \textbf{junta o par cinemático} es la unión de dos o más eslabones en sus nodos, permitiendo movimiento relativo. Las juntas se pueden clasificar por sus grados de libertad (GDL) y las más comunes son las juntas completas (1 GDL) y las semijuntas (2 GDL), aunque también las hay de grados superiores.~\cite{norton}
+Un \textbf{eslabón} es un cuerpo rígido con al menos dos nodos o puntos de conexión. Se clasifican en binarios, ternarios y cuaternarios, dependiendo del número de nodos que posean. Una \textbf{junta o par cinemático} es la unión de dos o más eslabones en sus nodos, permitiendo movimiento relativo. Las juntas se pueden clasificar por sus grados de libertad (GDL) y las más comunes son las juntas completas (1 GDL) y las semijuntas (2 GDL), aunque también las hay de grados superiores~\cite{norton}.
 
-%% Opcionalemente incluir la clasificación de cadenas cinemáticas
+%% Clasificación de cadenas cinemáticas
+Si cada eslabón en la cadena está conectado a al menos otros dos, la cadena cinemática forma uno o más bucles cerrados y se clasifica como una cadena cinemática \textbf{cerrada}. En caso contrario, se conoce como cadena cinemática \textbf{abierta} y constituye la base de los manipuladores robóticos seriales. Si la cadena consiste exclusivamente de eslabones binarios, se le conoce como \textbf{cerrada simple}. Las cadenas cinemáticas \textbf{cerradas complejas} incluyen otro tipo de eslabones y forman más de un lazo cerrado. De esta forma, un manipulador robótico paralelo se puede diferenciar como una cadena cinemática cerrada compleja~\cite{shigley}.
 
-El número de grados de libertad globales de un manipulador es el número de variables de posición \textbf{independientes} que deben especificarse para conocer la posición de todos los eslabones de la cadena cinemática. Dicho de otra forma, es el número de entradas que se deben proporcionar para generar una salida predecible. Para determinarlo se debe de considerar el número de eslabones, el número de juntas y las interacciones entre ellos. La \textbf{condición de Gruebler} considera estos factores resumidos en la ecuación \ref{ec:kutzbach}.
+El número de grados de libertad globales de un manipulador es el número de variables de posición \textbf{independientes} que deben especificarse para conocer la posición de todos los eslabones de la cadena cinemática. Dicho de otra forma, es el número de entradas que se deben proporcionar para generar una salida predecible. Para determinarlo se debe de considerar el número de eslabones, el número de juntas y las interacciones entre ellos. La \textbf{condición de Gruebler} considera estos factores para un mecanismo plano resumidos en la ecuación \ref{ec:gruebler}~\cite{norton}.
+
+\begin{equation}
+\label{ec:gruebler}
+    M = 3L-2J-3G
+\end{equation}
+
+donde:
+\begin{description}
+    \item[$M$] es el número de grados de libertad del mecanismo.
+    \item[$L$] es el número total de eslabones, incluido el eslabón fijo.
+    \item[$J$] es el número de pares cinemáticos.
+    \item[$G$] es el número de eslabones conectados a tierra.
+\end{description}
+
+Sin embargo, es importante destacar que cuando se tiene más de un eslabón conectado a tierra, el efecto que se obtiene es el de un eslabón más grande y de mayor orden. Por lo tanto, el término $G$ en la ecuación de Gruebler~\ref{ec:gruebler} siempre será unitario. Además, dado que las semijuntas únicamente eliminan un grado de libertad en el plano, se consideran como $1/2$. El resultado es la \textbf{modificación de Kutzbach} mostrada en la ecuación~\ref{ec:kutzbach}.
 
 \begin{equation}
 \label{ec:kutzbach}
@@ -26,9 +43,14 @@ donde:
     \item[$J_1$] es el número de pares cinemáticos de un grado de libertad.
     \item[$J_2$] es el número de pares cinemáticos de dos grados de libertad.
 \end{description}
-% Mecanismos
 
-% Tipos de mecanismos
+Finalmente, para mecanismos espaciales, la modificación de Kurtzbach se puede extender a eslabones con 6 GDL. De esta forma, se considera que las juntas completas anulan 5 GDL y las de orden inferior van restringiendo 1 GDL a la vez. Tomando en cuenta todos sus efectos se obtiene la ecuación~\ref{ec:kutzbach_espacial}, donde el subíndice indica el orden de cada tipo de junta.
+
+\begin{equation}
+\label{ec:kutzbach_espacial}
+    M = 3(L-1)-5J_1-4J_2-3J_3-2J_4-5J_1
+\end{equation}
+% Criterio de Grashof
 
 % Síntesis
 
