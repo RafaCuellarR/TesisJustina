@@ -53,16 +53,16 @@ Finalmente, para mecanismos espaciales, la modificación de Kurtzbach se puede e
 \end{equation}
 
 % Criterio de Grashof
-En el proceso de diseño de un mecanismo, se debe de considerar las posibles inversiones de la cadena cinemática, tantas como el número de eslabones. Una \textbf{inversión} es la variante de una cadena cinemática dado el eslabón que se designe como \enquote{fijo} o de referencia. Esto no cambia el movimiento relativo que hay entre los eslabones, pero sí el movimiento absoluto que se va a generar~\cite{shigley}.
+En el proceso de diseño de un mecanismo, se debe de considerar las posibles inversiones de la cadena cinemática, tantas como el número de eslabones. Una \textbf{inversión} es la variante de una cadena cinemática dado el eslabón que se designe como \enquote{fijo} o de referencia. Esto no cambia el movimiento relativo entre los eslabones, pero sí el movimiento absoluto generado~\cite{shigley}.
 
-La \textbf{ley de Grashof} constituye la herramienta principal para conocer el tipo de movimiento absoluto de una cadena cinemática de cuatro barras plano, basado en la longitud de sus eslabones. En este sentido, establece que para que algún eslabón tenga rotación continua \textit{\enquote{la suma de las longitudes del eslabón más corto (s) y más largo (l) no puede ser más grande que la suma de las longitudes de los eslabones restantes (p y q)}}, véase la inecuación \ref{ec:grashof}. Esto cobra partícular relevancia en la etapa de selección de actuadores. Se debe considerar el tipo de movimiento generado para garantizar una transmisión adecuada~\cite{shigley}. 
+La \textbf{ley de Grashof} constituye la herramienta principal para conocer el tipo de movimiento absoluto de una cadena cinemática de cuatro barras plana, basado en la longitud de sus eslabones. En este sentido, establece que para que algún eslabón tenga rotación continua \textit{\enquote{la suma de las longitudes del eslabón más corto (s) y más largo (l) no puede ser más grande que la suma de las longitudes de los eslabones restantes (p y q)}}, véase la inecuación \ref{ec:grashof}. Esto cobra partícular relevancia en la etapa de selección de actuadores. Se debe considerar el tipo de movimiento generado para garantizar una transmisión adecuada~\cite{shigley}. 
 
 \begin{equation}
 \label{ec:grashof}
     s+l \leq p+q
 \end{equation}
 
-Derivado de la condición de Grashof se pueden agrupar los mecanismos de cuatro barras planos en clases. La \textbf{Clase I} cumple con la desigualdad \ref{ec:grashof} y sus inversiones serán el manivela-balancín, el doble manivela y un doble balancín de Grashof, donde el eslabón acoplador hace una revolución completa. La \textbf{Clase II} no cumple con la condición de Grashof y todas sus inversiones serán balancines triples. La \textbf{Clase III}, o caso especial de Grashof, es cuando se cumple la igualdad. En este último caso todas sus inversiones serán dobles-manivelas o manivela-balancín, pero tendrán \enquote{puntos de cambio}, donde todos los eslabones se alinean y el comportamiento se vuelve indeterminado, pudiendo adquirir cualquiera de las dos configuraciones, véase figura \ref{fig:esp_grashof}~\cite{norton}. 
+Derivado de la condición de Grashof se puede agrupar a las cadenas cinemáticas de cuatro barras planos en clases. La \textbf{Clase I} cumple con la desigualdad \ref{ec:grashof} y sus inversiones serán el manivela-balancín, el doble manivela y un doble balancín de Grashof, donde el eslabón acoplador hace una revolución completa. La \textbf{Clase II} no cumple con la condición de Grashof y todas sus inversiones serán balancines triples. La \textbf{Clase III}, o caso especial de Grashof, es cuando se cumple la igualdad. En este último, todas sus inversiones serán dobles-manivelas o manivela-balancín, pero tendrán \enquote{puntos de cambio}, donde todos los eslabones se alinean y el comportamiento se vuelve indeterminado, pudiendo adquirir cualquiera de las dos configuraciones, véase figura \ref{fig:esp_grashof}~\cite{norton}. 
 
 \begin{figure}[htbp]
     \centering
@@ -74,7 +74,7 @@ Derivado de la condición de Grashof se pueden agrupar los mecanismos de cuatro 
 Para diseñar una cadena cinemática de clase III, se debe limitar el rango de movimiento, a fin de evitar los puntos de cambio, o utilizar un eslabón adicional fuera de fase para garantizar un \enquote{arraste} que haga predecible el movimiento. Por otro lado, la inversión de paralelogramo resulta muy útil, ya que duplica con exactitud el movimiento rotatorio de la manivela de entrada en la de salida, véase figura \ref{fig:esp_grashof}~\cite{norton}.
 
 % Síntesis y análsis
-
+El diseño de mecanismos implica una serie de iteraciones de síntesis y análisis. La creación de un dispositivo generador de un patrón de movimiento deseado implica un espacio de soluciones práticamente infinito. Para delimitarlo se debe echar mano de los requerimientos y las restricciones de diseño. De acuerdo con Norton~\cite{norton}, hay dos grandes clases que engloban las técnicas existentes de síntesis. La \textbf{síntesis cualitativa} es aquella que carece de algoritmos bien definidos que configure o pronostique la solución. 
 
 \section{Variables de interés e instrumentación}
 
