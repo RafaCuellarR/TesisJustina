@@ -4,9 +4,7 @@ La ingeniería mecánica proporciona un conjunto de metodologías para definir y
 
 \subsection{Definición}
 % Definición
-Para el desarrollo del presente trabajo, un \textbf{manipulador robótico se define como una cadena cinemática que puede programarse para realizar una amplia variedad de tareas}~\cite{craig}. Una \textbf{cadena cinemática} es un conjunto de eslabones, conectados por pares cinemáticos o juntas, que producen movimientos relativos sincronizados con un propósito determinado. Estas juntas generalmente se instrumentan con sensores, que permiten conocer la posición relativa de los eslabones adyacentes.~\cite{craig}
-
-% Un \textbf{eslabón} es un cuerpo rígido con al menos dos nodos o puntos de conexión. Se clasifican en binarios, ternarios y cuaternarios, dependiendo del número de nodos que posean. Una \textbf{junta o par cinemático} es la unión de dos o más eslabones en sus nodos, permitiendo movimiento relativo. Las juntas se pueden clasificar por sus grados de libertad (GDL) y las más comunes son las juntas completas (1 GDL) y las semijuntas (2 GDL), aunque también las hay de grados superiores~\cite{norton}.
+Para el desarrollo del presente trabajo, un \textbf{manipulador robótico se define como una cadena cinemática que puede programarse para realizar una amplia variedad de tareas}~\cite{craig}. Una \textbf{cadena cinemática} es un conjunto de eslabones\footnote{Un \textbf{eslabón} es un cuerpo rígido con al menos dos nodos o puntos de conexión. Se clasifican en binarios, ternarios y cuaternarios, dependiendo del número de nodos que posean~\cite{norton}.}, conectados por pares cinemáticos\footnote{Una \textbf{junta o par cinemático} es la unión de dos o más eslabones en sus nodos, permitiendo movimiento relativo. Se clasifican por sus grados de libertad (GDL) y las más comunes son las juntas completas (1 GDL) y las semijuntas (2 GDL)~\cite{norton}.}, que producen movimientos relativos sincronizados con un propósito determinado. Estas juntas generalmente se instrumentan con sensores que permiten conocer la posición relativa de los eslabones adyacentes~\cite{craig}.
 
 %% Clasificación de cadenas cinemáticas
 Si cada eslabón en la cadena está conectado a al menos otros dos, la cadena cinemática forma uno o más bucles cerrados y se clasifica como una cadena cinemática \textbf{cerrada}. En caso contrario, se conoce como cadena cinemática \textbf{abierta} y constituye la base de los manipuladores robóticos seriales. Si la cadena consiste exclusivamente de eslabones binarios, se le conoce como \textbf{cerrada simple}. Las cadenas cinemáticas \textbf{cerradas complejas} incluyen otro tipo de eslabones y forman más de un lazo cerrado~\cite{shigley}. De esta forma, un manipulador robótico paralelo se consituye por una cadena cinemática cerrada compleja.
@@ -14,9 +12,9 @@ Si cada eslabón en la cadena está conectado a al menos otros dos, la cadena ci
 % Mecanismos
 \subsection{Mecanismos y movilidad}
 
-Los manipuladores se pueden considerar un tipo especial de \textbf{mecanismo}. Estos se definen, según Norton~\cite{norton}, como los dispositivos que transforman el movimiento en un patrón deseable y donde al menos uno de sus eslabones se ha ``aterrizado'' o fijado al sistema de referencia, lo que los diferencia de las cadenas cinemáticas~\cite{shigley}. Por lo general, desarrollan fuerzas muy bajas y transmiten poca potencia, a diferencia de las \textbf{máquinas} que están diseñadas para transmitir fuerzas significativas.
+La cinemática de los manipuladores robóticos se estudia como un mecanismo de varios grados de libertad~\cite{norton}. Según Norton, un mecanismo es una cadena cinemática donde al menos uno de sus eslabones se ha``aterrizado'' o fijado al sistema de referencia~\cite{norton}. Reuleaux~\cite{reuleaux} limita su definición a cadenas cinemáticas cerradas y de un grado de libertad, a los cuales se les conoce como ``restringidos''.
 
-El número de grados de libertad globales de un manipulador es el número de variables de posición \textbf{independientes} que deben especificarse para conocer la posición de todos los eslabones de la cadena cinemática. Dicho de otra forma, es el número de entradas que se deben proporcionar para generar una salida predecible. Para determinarlo se debe de considerar el número de eslabones, el número de juntas y las interacciones entre ellos. La \textbf{condición de Gruebler} considera estos factores para un mecanismo plano resumidos en la ecuación \ref{ec:gruebler}~\cite{norton}.
+El número de grados de libertad globales de un manipulador determinan su \textbf{movilidad}. Es el número de variables de posición \textbf{independientes} que deben especificarse para conocer la posición de todos los eslabones de la cadena cinemática. Dicho de otra forma, es el número de entradas que se deben proporcionar para generar una salida predecible. Para determinarlo se debe de considerar el número de eslabones, el número de juntas y las interacciones entre ellos. La \textbf{condición de Gruebler} considera estos factores para un mecanismo plano resumidos en la ecuación \ref{ec:gruebler}~\cite{norton}.
 
 \begin{equation}
 \label{ec:gruebler}
@@ -54,52 +52,40 @@ Finalmente, para mecanismos espaciales, la modificación de Kurtzbach se puede e
 \end{equation}
 
 % Criterio de Grashof
-
 \subsection{Criterio de Grashof}
 
-En el proceso de diseño de un mecanismo, se debe de considerar las posibles inversiones de la cadena cinemática, tantas como el número de eslabones. Una \textbf{inversión} es la variante de una cadena cinemática dependiendo del eslabón que se designe como ``fijo'' o de referencia. Esto no cambia el movimiento relativo entre los eslabones, pero sí el movimiento absoluto generado~\cite{shigley}.
-
-La \textbf{ley de Grashof} constituye la herramienta principal para conocer el tipo de movimiento absoluto de una cadena cinemática de cuatro barras plana, basado en la longitud de sus eslabones. En este sentido, establece que para que algún eslabón tenga rotación continua \textit{``la suma de las longitudes del eslabón más corto (s) y más largo (l) no puede ser más grande que la suma de las longitudes de los eslabones restantes (p y q)''}, véase la inecuación \ref{ec:grashof}. Esto cobra partícular relevancia en la etapa de selección de actuadores. Se debe considerar el tipo de movimiento generado para garantizar una transmisión adecuada~\cite{shigley}. 
+Para la selección de actuadores en el diseño de un mecanismo, se debe considerar el tipo de movimiento de entrada para garantizar una transmisión adecuada. En este sentido, la \textbf{ley de Grashof} establece que para que algún eslabón tenga rotación continua \textit{``la suma de las longitudes del eslabón más corto (s) y más largo (l) no puede ser más grande que la suma de las longitudes de los eslabones restantes (p y q)''}~\cite{shigley}, véase la inecuación \ref{ec:grashof}. 
 
 \begin{equation}
 \label{ec:grashof}
     s+l \leq p+q
 \end{equation}
 
-Derivado de la condición de Grashof se puede agrupar a las cadenas cinemáticas de cuatro barras planos en clases. La \textbf{Clase I} cumple con la desigualdad \ref{ec:grashof} y sus inversiones serán el manivela-balancín, el doble manivela y un doble balancín de Grashof, donde el eslabón acoplador hace una revolución completa. La \textbf{Clase II} no cumple con la condición de Grashof y todas sus inversiones serán balancines triples. La \textbf{Clase III}, o caso especial de Grashof, es cuando se cumple la igualdad. En este último, todas sus inversiones serán dobles-manivelas o manivela-balancín, pero tendrán ``puntos de cambio'', donde todos los eslabones se alinean y el comportamiento se vuelve indeterminado, pudiendo adquirir cualquiera de las dos configuraciones, véase figura \ref{fig:esp_grashof}~\cite{norton}. 
+Derivado de la condición de Grashof se puede agrupar a las cadenas cinemáticas de cuatro barras planos en tres clases, según se muestra en la figura \ref{fig:grashof}. La \textbf{Clase I} cumple con la desigualdad \ref{ec:grashof} y sus inversiones\footnote{Una \textbf{inversión} es la variante de una cadena cinemática dependiendo del eslabón que se designe como ``fijo'' o de referencia. Esto no cambia el movimiento relativo entre los eslabones, pero sí el movimiento absoluto generado~\cite{shigley}.} serán el manivela-balancín, el doble manivela y un doble balancín de Grashof, donde el eslabón acoplador hace una revolución completa. La \textbf{Clase II} no cumple con la condición de Grashof y todas sus inversiones serán balancines triples. La \textbf{Clase III}, o caso especial de Grashof, es cuando se cumple la igualdad~\cite{norton}. 
 
-\begin{figure}[htbp]
+\begin{figure}[!ht]
     \centering
-    \includegraphics[width=0.8\textwidth]{img/antecedentes/inv_no_grashof.png}
-    \caption{Inversiones del caso especial de Grashof~\cite{norton}.}
-    \label{fig:esp_grashof}
+    \includegraphics[width=0.8\textwidth]{img/antecedentes/grashof.png}
+    \caption{Casos del criterio de Grashof~\cite{kivela_thesis}.}
+    \label{fig:grashof}
 \end{figure}
 
-Para diseñar una cadena cinemática de clase III, se debe limitar el rango de movimiento, a fin de evitar los puntos de cambio, o utilizar un eslabón adicional fuera de fase para garantizar un ``arrastre'' que haga predecible el movimiento. Por otro lado, la inversión de paralelogramo resulta muy útil, ya que duplica con exactitud el movimiento rotatorio de la manivela de entrada en la de salida, véase figura \ref{fig:esp_grashof}~\cite{norton}.
-
-% Síntesis y análisis
+% Síntesis
 \subsection{Síntesis cinemática}
 
-La función de la síntesis cinemática es diseñar un mecanismo que cumpla los requerimientos del movimiento deseado. Garantiza que, por ejemplo, un manipulador serial alcance los puntos de trabajo con las orientaciones deseadas del efector final~\cite{kivela_thesis}.
-
-La síntesis de un mecanismo no es una tarea trivial. Para un movimiento pueden existir un número casi infinito de soluciones. Por esta razón, la síntesis cinemática se suele dividir en pasos: \textbf{síntesis de tipo o topológica}, \textbf{de número} y \textbf{dimensional}. Algunos autores suelen juntar la síntesis de tipo y de número en un solo paso, ya que la primera consiste en determinar el tipo de mecanismo que mejor resuelve el problema planteado, en un proceso puramente cualitativo basado en la experiencia y en la intuición~\cite{norton}, y el segundo consiste en determinar la cantidad de eslabones y tipo de juntas para obtener la mobilidad requerida. El último paso está dedicado a definir las dimensiones del mecanismo~\cite{kivela_thesis}.
+La síntesis de un mecanismo no es una tarea trivial. Garantiza que, por ejemplo, un manipulador serial alcance los puntos de trabajo con las orientaciones deseadas del efector final~\cite{kivela_thesis}. Por esta razón, la síntesis cinemática se suele dividir en pasos: \textbf{síntesis de tipo o topológica}, \textbf{de número} y \textbf{dimensional}. Algunos autores suelen juntar la síntesis de tipo y de número en un solo paso, ya que la primera consiste en determinar el tipo de mecanismo que mejor resuelve el problema planteado, en un proceso puramente cualitativo basado en la experiencia y en la intuición~\cite{norton}, y el segundo consiste en determinar la cantidad de eslabones y tipo de juntas para obtener la mobilidad requerida. El último paso está dedicado a definir las dimensiones del mecanismo~\cite{kivela_thesis}.
 
 De acuerdo con Norton~\cite{norton}, las dos grandes clases que engloban las técnicas existentes de síntesis dimensional son la gráfica o geométrica y la analítica. Los métodos gráficos se basan en principios básicos de geometría euclidiana y se centran en cadenas cinemáticas cerradas de cuatro barras. Varían en función de la cantidad de restricciones de diseño, tales como el número de posiciones, de pivotes móviles y fijos. Kivelä retoma la síntesis por optimización de parámetros (\textit{parametric optimization approach}) y el diseño basado en la tarea (\textit{task-based design approach}) como técnicas analíticas de síntesis~\cite{kivela_thesis}.
 
 La síntesis por optimización de parámetros define una función objetivo y funciones de restricción para, al sumarlas, obtener una función de costo. Esta función será minimizada o maximizada para encontrar la solución óptima. Las funciones de restricción se pueden ponderar si se desea un mejor rendimiento en determinada dirección~\cite{kivela_thesis}. Para evaluar esto, una lista completa de criterios a considerar fue desarrollada por Patel y Sobh~\cite{patel_sobh}.
 
-Por otro lado, el diseño basado en la tarea se puede resumir en el siguiente problema de optimización (ecuación \ref{ec:task_based}): ``Encontrar la configuración geométrica, $\mathbf{DH}$, tal que para todo punto $\mathbf{p}$ perteneciente al espacio de tareas, $\mathbf{TS}$, existe un vector de juntas $\mathbf{q}$ perteneciente al espacio de juntas $\mathbf{QS}$, de manera que la función cinemática $\mathbf{f}$ produzca el punto $\mathbf{p}$''~\cite{kivela_thesis}.
-
-\begin{equation}
-\label{ec:task_based}
-    \exists \mathrm{DH}:\;\forall \mathbf{p}\in\mathrm{TS};\;
-    \exists \mathbf{q}\in\mathrm{QS}\mid
-    f(\mathrm{DH},\mathbf{q})=\mathbf{p}
-\end{equation}
+Por otro lado, el diseño basado en la tarea se puede resumir en el siguiente problema de optimización: ``Encontrar la configuración geométrica, $\mathbf{DH}$, tal que para todo punto $\mathbf{p}$ perteneciente al espacio de tareas existe un vector de juntas $\mathbf{q}$ perteneciente al espacio de juntas, de manera que la función cinemática produzca el punto $\mathbf{p}$''~\cite{kivela_thesis}.
 
 Una vez que se encuentre una solución potencial se debe evaluar su calidad. El proceso se vuelve entonces un \textbf{diseño cualitativo mediante análisis sucesivo}~\cite{norton}.
 
+% Análisis
 \subsection{Análisis}
+
 
 
 \section{Variables de interés e instrumentación}
