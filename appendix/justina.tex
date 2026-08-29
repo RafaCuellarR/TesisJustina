@@ -1,0 +1,2645 @@
+\label{app:justina}
+
+La arquitectura de software del robot Justina se encuentra organizada en
+diferentes módulos funcionales. Cada módulo agrupa los paquetes de software
+que implementan una determinada función del sistema. En esta sección se
+describe la estructura de cada módulo, sus paquetes, nodos y las interfaces
+de comunicación.
+
+\subsection{Executor}
+
+\label{app:justina_executor}
+
+El módulo \textit{Executor} se encarga de ejecutar, paso a paso, el plan
+generado por \textit{Planning}/\textit{Supervisor}: solicita cada
+instrucción, la traduce a una meta de acción concreta y despacha su
+ejecución a través de una colección de máquinas de estado (FSM) que
+envuelven las capacidades del robot (navegación, manipulación, HRI, visión
+y hardware), reportando el resultado de vuelta al Supervisor.
+
+
+\subsubsection{Paquetes}
+
+\begin{itemize}
+
+    \item \texttt{executor\_manager}
+
+    Puente entre el \textit{Supervisor} (planificador) y el
+    \textit{Executor Worker}. Solicita la siguiente instrucción del plan,
+    convierte el comando de texto crudo (p. ej. \textit{"Justina goto
+    table"}) en una meta \texttt{TaskStep}/\texttt{ExecuteTask}, la despacha
+    al Worker y gestiona el ciclo de vida de la tarea: pide el siguiente
+    paso si tuvo éxito, salta al siguiente si fue rechazada, y reintenta
+    (hasta \texttt{MAX\_RETRIES}) si falló.
+
+    \item \texttt{executor\_worker}
+
+    Capa de ejecución física: implementa un servidor de acciones de ROS 2
+    que recibe las metas del \texttt{executor\_manager} y las despacha,
+    mediante un \texttt{actionMap} de cadenas a \textit{lambdas}, a la clase
+    FSM correspondiente de \texttt{executor\_tools}. Sigue una política
+    \textit{"accept-to-report"}: incluso las acciones inválidas se aceptan
+    para poder reportar formalmente el rechazo al Supervisor. Cada tarea
+    aceptada corre en un hilo separado para no bloquear el executor
+    principal del nodo.
+
+    \item \texttt{executor\_tools}
+
+    Librería de clases FSM, una por cada primitiva de acción del robot; cada
+    una encapsula un comportamiento concreto y se comunica con los módulos
+    de Navigation, Manipulation, HRI, Knowledge, Vision y Hardware a través
+    de sus respectivas librerías \texttt{*\_tools}. Todas devuelven un
+    \texttt{Result} uniforme (\texttt{success}, \texttt{state},
+    \texttt{message}). Las primitivas registradas en el
+    \texttt{actionMap} de \texttt{executor\_worker\_node} son:
+
+    \begin{itemize}
+        \item \texttt{say} (\texttt{Say}) -- Pronuncia por TTS una frase
+        obtenida del banco de conocimiento a partir de una clave.
+        \item \texttt{listen} (\texttt{Listen}) -- Captura audio, extrae una
+        entidad nombrada y, si aplica, la persiste en el estado del mundo.
+        \item \texttt{go\_to} (\texttt{GoTo}) -- Navega a una ubicación
+        conocida, ajustando primero la altura del torso.
+        \item \texttt{check} (\texttt{Check}) -- Verifica el estado de un
+        sensor o componente de hardware (p. ej. una puerta).
+        \item \texttt{point} (\texttt{Point}) -- Alinea base y cabeza hacia
+        un objetivo y extiende el brazo para señalarlo.
+        \item \texttt{give} (\texttt{Give}) -- Selecciona la mano que
+        sostiene el objeto solicitado, la extiende hacia la persona y abre
+        el gripper al confirmar la entrega.
+        \item \texttt{find\_person} (\texttt{FindPerson}) -- Escanea con la
+        cabeza, detecta y localiza a una persona, la identifica o registra,
+        y actualiza su descripción en el estado del mundo.
+        \item \texttt{align} (\texttt{Align}) -- Alinea la base frente a un
+        objetivo visual con control de lazo cerrado y verificación de
+        estabilidad por muestras consecutivas.
+        \item \texttt{drop} (\texttt{Drop}) -- Consume una TF de espacio
+        seguro generada por \texttt{FindSpace} y ejecuta la maniobra inversa
+        de \texttt{Take}: coloca el objeto y libera el gripper.
+        \item \texttt{find\_space} (\texttt{FindSpace}) -- Encuentra y
+        valida una TF de espacio libre (mesa, repisa o contenedor) para
+        depositar un objeto, sin mover brazos ni soltar nada.
+        \item \texttt{find\_object} (\texttt{FindObject}) -- Mueve la
+        cabeza, detecta un objeto por visión y actualiza su pose y
+        ubicación en el estado del mundo.
+        \item \texttt{focus} (\texttt{Focus}) -- Centra la cámara/cabeza en
+        un objetivo detectado previamente.
+        \item \texttt{receive} (\texttt{Receive}) -- Verifica que la mano
+        esté libre, extiende el brazo, abre el gripper y lo cierra al
+        recibir un objeto de una persona.
+        \item \texttt{follow} (\texttt{Follow}) -- Activa o desactiva el
+        servicio de seguimiento de personas de HRI.
+        \item \texttt{approach} / \texttt{approach\_partial}
+        (\texttt{Approach}) -- Acerca al robot a una persona u objeto
+        navegando a una pose calculada; \texttt{approach\_partial} invoca
+        una variante parcial (\texttt{runPartial}) para aproximaciones
+        controladas/incompletas.
+        \item \texttt{take} (\texttt{Take}) -- FSM principal para tomar un
+        objeto: obtiene el objetivo, planea y ejecuta el pregrasp
+        apoyándose en \texttt{VisualGraspApproach} y en
+        \texttt{manipulation\_tools}, cierra el gripper y retrae la
+        trayectoria.
+        \item \texttt{verify\_take} (\texttt{VerifyTake}) -- Confirma por
+        visión si el objeto sigue presente tras un intento de toma y limpia
+        el estado de "mano ocupada" si ya no lo está.
+        \item \texttt{find\_pose} (\texttt{FindPose}) -- Detecta y localiza
+        la pose de una persona (p. ej. el cliente) y la guarda en el estado
+        del mundo y en un buffer interno compartido.
+        \item \texttt{analyze\_objects} (\texttt{AnalyzeObjects}) -- Ejecuta
+        análisis de conteo, tamaño, color o comparación sobre objetos
+        detectados, actualizando la analítica en el estado del mundo.
+        \item \texttt{analyze\_person} (\texttt{AnalyzePerson}) -- Analiza
+        color de prendas y/o gestos de una persona detectada, actualizando
+        la analítica correspondiente.
+        \item \texttt{save\_loc} (\texttt{SaveLoc}) -- Guarda la pose
+        actual (o una calculada tras avanzar/rotar) como una ubicación
+        nombrada.
+        \item \texttt{fold} (\texttt{Fold}) -- Dobla una prenda plana sobre
+        una mesa en dos fases (mangas y luego base), detectando puntos
+        clave por visión.
+    \end{itemize}
+
+    Además, \texttt{VisualGraspApproach} es una clase de soporte (no
+    registrada como primitiva propia) que \texttt{Take} usa para calcular y
+    planear la aproximación fina de agarre: candidatos \texttt{FRONT}/
+    \texttt{TOP}, corrección visual por el TF del marcador del gripper, y
+    cálculo del retroceso simétrico al avance real de la base.
+
+    \item \texttt{gui\_controller}
+
+    Herramienta de escritorio (PyQt5) para desarrollo y pruebas: lanza,
+    detiene y monitorea los procesos/nodos ROS 2 de todo el sistema de
+    Justina a partir de un catálogo de comandos (\texttt{config.yaml}) y una
+    lista de nodos esperados (\texttt{nodes.yaml}). No forma parte del grafo
+    de ejecución en tiempo de competencia.
+
+\end{itemize}
+
+
+\subsubsection{Nodos}
+
+\begin{itemize}
+
+    \item \texttt{executor\_manager\_node}
+
+    Orquesta el flujo de ejecución del plan: al recibir un disparo, solicita
+    la siguiente instrucción al Supervisor, la parsea a una meta de acción y
+    la envía al Executor Worker, reaccionando a los estados
+    \texttt{SUCCEEDED}, \texttt{REJECTED}, \texttt{FAILURE} y
+    \texttt{ABORTED} con lógica de siguiente paso, salto o reintento.
+    \begin{itemize}
+        \item \textbf{Tópicos suscritos:}
+        \begin{itemize}
+            \item \texttt{/input\_trigger} -- Dispara el inicio (o
+            continuación) del ciclo de solicitud y ejecución del plan.
+        \end{itemize}
+        \item \textbf{Servicios utilizados:}
+        \begin{itemize}
+            \item \texttt{/request\_instruction} -- Solicita al Supervisor
+            el siguiente paso del plan.
+            \item \texttt{/supervisor/supervisor\_executor/authorize} --
+            Reporta al Supervisor la autorización/resultado asociado a la
+            tarea en curso.
+        \end{itemize}
+        \item \textbf{Acciones utilizadas:}
+        \begin{itemize}
+            \item \texttt{/executor/execute\_task} -- Envía cada paso
+            parseado como meta de acción al Executor Worker y monitorea su
+            resultado, con reintento configurable ante fallas.
+        \end{itemize}
+    \end{itemize}
+
+    \item \texttt{executor\_worker\_node}
+
+    Servidor de acciones que recibe cada meta de tarea, la despacha (según
+    el campo \texttt{action}) a la clase FSM correspondiente de
+    \texttt{executor\_tools}, la ejecuta en un hilo separado y reporta el
+    resultado. No crea tópicos ni servicios propios directamente: los
+    clientes concretos de Navigation, Manipulation, HRI, Knowledge, Vision y
+    Hardware viven dentro de cada clase FSM y ya están documentados en las
+    secciones de sus respectivos módulos; se listan de forma compacta en el
+    \texttt{actionMap} descrito en \textit{Paquetes} para evitar
+    duplicarlos aquí.
+    \begin{itemize}
+        \item \textbf{Acciones ofrecidas:}
+        \begin{itemize}
+            \item \texttt{/executor/execute\_task} -- Acepta toda meta
+            recibida (política \textit{accept-to-report}), despacha a la
+            herramienta correspondiente y reporta
+            \texttt{SUCCESS}/\texttt{FAILURE}/\texttt{REJECTED}/
+            \texttt{ABORTED}.
+        \end{itemize}
+    \end{itemize}
+
+    \item \texttt{gui\_controller}
+
+    Nodo ROS 2 mínimo (\texttt{ROS2NodeChecker}) que respalda al panel de
+    control de escritorio: enumera los nodos activos del sistema (vía la
+    API de \texttt{ros2node}) y permite finalizarlos por nombre
+    (\texttt{pkill}) para reiniciar partes del sistema durante pruebas. No
+    crea tópicos, servicios ni acciones propias: introspecciona y detiene
+    nodos por fuera de ROS 2 (API de listado de nodos y señales de
+    sistema).
+
+\end{itemize}
+
+
+% ============================================================
+% HRI
+% ============================================================
+
+\subsection{HRI}
+
+\label{app:justina_hri}
+
+El módulo \textit{HRI} (\textit{Human-Robot Interaction}) se encarga de la
+interacción hablada con las personas (síntesis y reconocimiento de voz), de
+la detección y seguimiento de personas, y de la interfaz visual de operación
+del robot. Localiza a la persona objetivo combinando LiDAR (piernas) y
+visión (cuerpo), mantiene al robot orientado o navegando hacia ella cuando
+el seguimiento está activo, y expone estas capacidades al resto del sistema
+a través de la librería cliente \texttt{hri\_tools}. A diferencia del resto
+del módulo, el paquete \texttt{gui} corre físicamente en la computadora
+embebida en la base Robotino 4 (repositorio \texttt{src\_Robotino}), junto
+con la capa de \textit{Hardware} de bajo nivel; se documenta aquí porque el
+propio árbol de ese repositorio lo clasifica bajo \texttt{HRI}, y porque
+funcionalmente es un panel de operación que consume tópicos de HRI y Vision.
+
+
+\subsubsection{Paquetes}
+
+\begin{itemize}
+
+    \item \texttt{hri\_tools}
+
+    Librería \textit{Facade} (clase \texttt{HRI}) que envuelve como llamadas
+    síncronas los servicios de Talker, Listener, seguimiento de personas y
+    detección de gestos, para que otros módulos (p. ej. \texttt{Say} y
+    \texttt{Listen} de \texttt{executor\_tools}) no manejen directamente
+    clientes asíncronos de ROS 2. También aloja el \textit{launch} raíz del
+    módulo (\texttt{hri.launch.xml}), que agrupa bajo el \textit{namespace}
+    \texttt{/hri} a Talker, Listener, \texttt{human\_detector} y
+    \texttt{human\_follower}.
+
+    \item \texttt{human\_detector} (paquete ROS \texttt{human\_detection})
+
+    Colección de nodos Python basados en YOLO para detección de personas.
+    En el sistema activo, \texttt{hri.launch.xml} sólo lanza
+    \texttt{person\_tracker}, que fusiona detecciones YOLO con la nube de
+    puntos de la cámara para estimar la posición 3D de la persona objetivo,
+    mueve la cabeza hacia ella y expone el enfoque de visión como servicio.
+    \texttt{pose\_detector.py} -- el servidor de
+    \texttt{/human\_detection/detect\_wrist} que consume
+    \texttt{HRI::FindPose} -- \textbf{sí corre en el sistema activo}, pero
+    se lanza desde el módulo \textit{Vision}
+    (\texttt{vision\_tools/launch/vision.launch.xml}, como
+    \texttt{pose\_detector\_node}), no desde \texttt{hri.launch.xml}; se
+    corrige aquí una afirmación anterior de este documento que lo daba por
+    no lanzado. El resto de \textit{entry points} del paquete
+    (\texttt{detector}, \texttt{webcam\_image}, \texttt{person\_tracker\_pose},
+    \texttt{pointing}, \texttt{pointing\_v2}, \texttt{client},
+    \texttt{object\_description}, \texttt{face\_detect}) sí son scripts de
+    desarrollo/prototipo sin \textit{launch} activo.
+
+    \item \texttt{human\_follower}
+
+    Pipeline de seguimiento de personas: \texttt{leg\_finder\_node} detecta
+    piernas por LiDAR; \texttt{human\_follower\_nodeV2} fusiona esa
+    detección con la posición de cuerpo de \texttt{person\_tracker}
+    mediante un filtro de Kalman y publica una meta de navegación hacia la
+    persona; \texttt{human\_tracking\_node} expone el interruptor de alto
+    nivel del seguimiento con vigilancia por \textit{watchdog}. El paquete
+    también compila las variantes \texttt{leg\_finder\_nodev2} y
+    \texttt{human\_follower\_node} (v1), que no están conectadas al
+    \textit{launch} activo.
+
+    \item \texttt{listener}
+
+    Reconocimiento de voz: captura audio del micrófono, aplica detección de
+    actividad de voz (VAD) y transcribe con Whisper (con soporte de
+    gramáticas JSON por escenario), exponiendo el resultado como servicio.
+
+    \item \texttt{talker}
+
+    Síntesis de voz (TTS, motor Piper) expuesta como servicio.
+
+    \item \texttt{gui} (paquete ROS \texttt{justina\_gui}; repositorio
+    \texttt{src\_Robotino}, corre en la computadora de la base Robotino 4)
+
+    Panel de operación (PyQt, clase \texttt{HSRBGui}) que muestra en una
+    pantalla el estado del robot durante la competencia: estado de
+    \textit{run-stop}, el texto que Listener/Talker están procesando, y las
+    imágenes de depuración de los detectores de Vision/HRI (objetos, manos
+    saludando, rostros, asientos vacíos). Es puramente un
+    suscriptor/visualizador; no publica tópicos ni ofrece servicios propios.
+    Se lanza junto con los nodos de \textit{Hardware} de bajo nivel desde
+    \texttt{justina\_hardware}, bajo el \textit{namespace}
+    \texttt{/hardware} (no \texttt{/hri}).
+
+\end{itemize}
+
+
+\subsubsection{Nodos}
+
+\begin{itemize}
+
+    \item \texttt{person\_tracker}
+
+    Fusiona las detecciones de YOLO con la nube de puntos de la cámara para
+    estimar y publicar la posición 3D de la persona objetivo, mover la
+    cabeza hacia ella y exponer el enfoque de visión como servicio.
+    \begin{itemize}
+        \item \textbf{Tópicos publicados:}
+        \begin{itemize}
+            \item \texttt{/human\_detection/target\_point} -- Posición 3D
+            estimada de la persona objetivo.
+            \item \texttt{/hri/human\_tracking/confidence} -- Confianza de
+            la estimación actual.
+            \item \texttt{/hardware/head/look\_at} -- Punto al que debe
+            mirar la cabeza para centrar a la persona.
+            \item \texttt{/human\_detection/track\_markers} -- Marcadores de
+            depuración del seguimiento (RViz).
+            \item \texttt{/navigation/camera\_obstacles/bypass} -- Indica a
+            navegación que ignore temporalmente los obstáculos de cámara.
+        \end{itemize}
+        \item \textbf{Tópicos suscritos:}
+        \begin{itemize}
+            \item \texttt{/vision/detections\_list} -- Lista de detecciones
+            YOLO.
+            \item \texttt{/hardware/camera/points} -- Nube de puntos de la
+            cámara (parámetro \texttt{point\_cloud\_topic}).
+        \end{itemize}
+        \item \textbf{Servicios ofrecidos:}
+        \begin{itemize}
+            \item \texttt{/vision/focus} -- Activa/desactiva el enfoque
+            continuo en la persona detectada.
+            \item \texttt{/vision/focus/enable} / \texttt{/vision/focus/disable}
+            -- Variantes tipo \textit{Trigger} para activar/desactivar el
+            enfoque.
+        \end{itemize}
+        \item \textbf{Servicios utilizados:}
+        \begin{itemize}
+            \item \texttt{/vision/enable\_continuous} -- Habilita la
+            detección continua en el nodo de visión.
+        \end{itemize}
+    \end{itemize}
+
+    \item \texttt{pose\_detector\_node} (paquete \texttt{human\_detection};
+    lanzado desde \texttt{Vision/vision\_tools/launch/vision.launch.xml},
+    no desde \texttt{hri.launch.xml} -- ver nota en \textit{Paquetes})
+
+    Detecta si una persona está saludando/apuntando con la muñeca y en qué
+    dirección, a partir de la imagen y la nube de puntos de la cámara.
+    \begin{itemize}
+        \item \textbf{Tópicos publicados:}
+        \begin{itemize}
+            \item \texttt{/human\_detection/pose\_image\_wrist} -- Imagen
+            de depuración de la detección (consumida por \texttt{gui\_node}).
+        \end{itemize}
+        \item \textbf{Tópicos suscritos:}
+        \begin{itemize}
+            \item Imagen RGB, nube de puntos y \texttt{camera\_info} de la
+            cámara (parámetros \texttt{image\_topic}/\texttt{pointcloud\_topic}).
+        \end{itemize}
+        \item \textbf{Servicios ofrecidos:}
+        \begin{itemize}
+            \item \texttt{/human\_detection/detect\_wrist} -- Detecta si hay
+            una persona haciendo un gesto de muñeca/saludo y en qué
+            dirección (usado por \texttt{HRI::FindPose}).
+        \end{itemize}
+    \end{itemize}
+
+    \item \texttt{leg\_finder\_node}
+
+    Procesa el láser de la base para detectar patrones de piernas humanas y
+    publica la posición de la más probable frente al robot.
+    \begin{itemize}
+        \item \textbf{Tópicos publicados:}
+        \begin{itemize}
+            \item \texttt{/hri/leg\_finder/legs\_pose} -- Posición estimada
+            de las piernas detectadas.
+            \item \texttt{/hri/leg\_finder/marker} -- Marcador de depuración
+            (RViz).
+        \end{itemize}
+        \item \textbf{Tópicos suscritos:}
+        \begin{itemize}
+            \item \texttt{/hardware/base/scan} -- Barrido láser de la base
+            (parámetro \texttt{scan\_topic}).
+            \item \texttt{/hri/leg\_finder/enable} -- Activa/desactiva la
+            detección.
+        \end{itemize}
+    \end{itemize}
+
+    \item \texttt{human\_follower\_nodeV2}
+
+    Fusiona (filtro de Kalman de 4 estados) la posición de piernas y de
+    cuerpo de la persona objetivo, y publica una meta de navegación para
+    mantener una distancia fija hacia ella mientras el seguimiento está
+    activo.
+    \begin{itemize}
+        \item \textbf{Tópicos publicados:}
+        \begin{itemize}
+            \item \texttt{/nav\_control/goal} -- Meta de navegación hacia la
+            persona (parámetro \texttt{goal\_topic}).
+            \item \texttt{/navigation/stop} -- Señal de detención cuando se
+            pierde el objetivo (parámetro \texttt{stop\_topic}).
+            \item \texttt{/hri/human\_follower/state} -- Estado textual del
+            seguimiento.
+            \item \texttt{/hri/human\_follower/debug\_fused\_point} -- Punto
+            fusionado de depuración.
+        \end{itemize}
+        \item \textbf{Tópicos suscritos:}
+        \begin{itemize}
+            \item \texttt{/hri/human\_following/enable} -- Activa/desactiva
+            el seguimiento.
+            \item \texttt{/hri/leg\_finder/legs\_pose} -- Posición de
+            piernas detectada por \texttt{leg\_finder\_node}.
+            \item \texttt{/human\_detection/target\_point} -- Posición de
+            cuerpo estimada por \texttt{person\_tracker}.
+        \end{itemize}
+    \end{itemize}
+
+    \item \texttt{human\_tracking\_node}
+
+    Expone el interruptor de alto nivel del seguimiento de personas: al
+    activarse, habilita detección continua de visión, detección de piernas
+    y seguimiento de cuerpo; vigila la confianza reportada con un
+    \textit{watchdog} para desactivarse automáticamente si se pierde el
+    objetivo.
+    \begin{itemize}
+        \item \textbf{Tópicos publicados:}
+        \begin{itemize}
+            \item \texttt{/hri/human\_following/enable} -- Habilita/deshabilita
+            \texttt{human\_follower\_nodeV2}.
+            \item \texttt{/hri/leg\_finder/enable} -- Habilita/deshabilita
+            \texttt{leg\_finder\_node}.
+            \item \texttt{/vision/enable\_continuous} -- Habilita/deshabilita
+            la detección continua de visión.
+            \item \texttt{/hri/human\_tracking/state} -- Estado agregado del
+            seguimiento.
+        \end{itemize}
+        \item \textbf{Tópicos suscritos:}
+        \begin{itemize}
+            \item \texttt{/hri/human\_tracking/confidence} -- Confianza
+            reportada por \texttt{person\_tracker}, usada por el
+            \textit{watchdog}.
+        \end{itemize}
+        \item \textbf{Servicios ofrecidos:}
+        \begin{itemize}
+            \item \texttt{/hri/human\_tracking/enable} -- Activa/desactiva
+            el seguimiento de personas de extremo a extremo (usado por la
+            primitiva \texttt{follow} del Executor).
+        \end{itemize}
+        \item \textbf{Servicios utilizados:}
+        \begin{itemize}
+            \item \texttt{/vision/focus/enable} / \texttt{/vision/focus/disable}
+            -- Activa/desactiva el enfoque de visión en la persona objetivo.
+        \end{itemize}
+    \end{itemize}
+
+    \item \texttt{listener\_node}
+
+    Captura audio local del micrófono (no un tópico ROS), aplica detección
+    de actividad de voz y transcribe con Whisper (opcionalmente restringido
+    a una gramática JSON por escenario), devolviendo el texto reconocido de
+    forma síncrona.
+    \begin{itemize}
+        \item \textbf{Tópicos publicados:}
+        \begin{itemize}
+            \item \texttt{/hsrb/gui/state} -- Estado del reconocimiento para
+            el GUI de operación.
+        \end{itemize}
+        \item \textbf{Servicios ofrecidos:}
+        \begin{itemize}
+            \item \texttt{/hri/listener/listen} -- Ejecuta un ciclo de
+            reconocimiento de voz y regresa el texto transcrito. (El
+            parámetro de \textit{override} del nombre de servicio expuesto
+            por el \textit{launch}, \texttt{listen\_service}, no coincide
+            con el parámetro que el nodo realmente declara,
+            \texttt{listener\_service}, por lo que en la práctica siempre
+            se usa el valor por defecto \texttt{listen}, resuelto bajo el
+            \textit{namespace} del nodo.)
+        \end{itemize}
+    \end{itemize}
+
+    \item \texttt{talker\_node}
+
+    Sintetiza voz a partir de texto usando el motor Piper y la reproduce por
+    el altavoz del robot.
+    \begin{itemize}
+        \item \textbf{Tópicos publicados:}
+        \begin{itemize}
+            \item \texttt{/hsrb/gui/text} -- Texto en curso de síntesis,
+            para el GUI de operación.
+        \end{itemize}
+        \item \textbf{Servicios ofrecidos:}
+        \begin{itemize}
+            \item \texttt{/hri/talker/talk} -- Sintetiza y reproduce el
+            texto recibido; regresa éxito/fracaso.
+        \end{itemize}
+    \end{itemize}
+
+    \item \texttt{gui\_node} (nombre interno del nodo:
+    \texttt{justina\_gui\_node}; corre en la computadora de la base
+    Robotino 4, bajo el \textit{namespace} \texttt{/hardware})
+
+    Panel de operación en pantalla: refleja el estado de \textit{run-stop},
+    el texto de Listener/Talker, y las imágenes de depuración de los
+    detectores de personas/objetos/rostros/asientos para que el operador
+    supervise a Justina durante una prueba o competencia.
+    \begin{itemize}
+        \item \textbf{Tópicos suscritos:}
+        \begin{itemize}
+            \item \texttt{/navigation/navigation\_ctrl/stop} -- Estado del
+            paro de emergencia/\textit{run-stop}.
+            \item \texttt{/hsrb/gui/state} -- Estado textual publicado por
+            \texttt{listener\_node}.
+            \item \texttt{/hsrb/gui/text} -- Texto en curso de síntesis
+            publicado por \texttt{talker\_node}.
+            \item \texttt{/vision/owl/debug\_image} -- Imagen de depuración
+            del detector de objetos (OWL) de Vision.
+            \item \texttt{/human\_detection/pose\_image\_wrist} -- Imagen de
+            depuración de detección de saludo/muñeca.
+            \item \texttt{/face\_recog/debug\_image} -- Imagen de depuración
+            del reconocimiento facial de Vision.
+            \item \texttt{/vision/detect\_seats/debug\_image} -- Imagen de
+            depuración de detección de asientos vacíos de Vision.
+        \end{itemize}
+    \end{itemize}
+
+\end{itemize}
+
+
+% ============================================================
+% HARDWARE
+% ============================================================
+
+\subsection{Hardware}
+
+\label{app:justina_hardware}
+
+El módulo \textit{Hardware} se encarga de exponer el hardware físico del
+robot (cabeza, torso, brazos, pinzas, base omnidireccional, cámara RGB-D y
+LiDAR) como una fachada de ROS 2 síncrona para el resto del sistema, y de
+controlar cada uno de esos actuadores/sensores a bajo nivel.
+
+\textit{Arquitectura distribuida:} el sistema de Justina corre en dos
+computadoras que forman un mismo grafo de ROS 2 (descubrimiento
+DDS/CycloneDDS sobre una red Ethernet dedicada), ambas bajo el
+\textit{namespace} común \texttt{/hardware}:
+\begin{itemize}
+    \item La \textbf{computadora principal} (repositorio \texttt{src.zip},
+    ya documentado arriba) ejecuta \texttt{hardware\_tools} (la fachada
+    \texttt{Hardware}), \texttt{door\_detector}, \texttt{scanner} (puente de
+    orientación de cabeza), \texttt{kinect\_ros2} y el \textit{driver} de
+    cámara RGB-D (\texttt{openni2\_camera}), además de todos los módulos de
+    software de más alto nivel (Executor, HRI, Knowledge, Manipulation,
+    Navigation, Planning, Supervisor, Vision).
+    \item La \textbf{computadora embebida en la base Robotino 4 (FESTO)}
+    (repositorio \texttt{src\_Robotino}) ejecuta los \textit{drivers} de
+    bajo nivel de la base, cabeza, torso, brazos y pinzas
+    (\texttt{justina\_hardware}, \texttt{base}, \texttt{head},
+    \texttt{torso}, \texttt{arms}, \texttt{grippers},
+    \texttt{joint\_states\_parser}) y el panel de operación
+    (\texttt{gui}, documentado en la sección de \textit{HRI} por la
+    categorización del propio repositorio).
+\end{itemize}
+El paquete \texttt{justina\_description} está duplicado byte a byte en
+ambos repositorios (cada computadora necesita el URDF para su propio
+\texttt{robot\_state\_publisher} / TF local), por lo que se documenta una
+sola vez. Los dos repositorios son consistentes entre sí: los nombres de
+tópicos y servicios que \texttt{hardware\_tools/Hardware.hpp} espera del
+lado de la base Robotino (p. ej. \texttt{/hardware/arms/move\_right\_arm},
+\texttt{/hardware/torso/current\_pose}) coinciden exactamente con los que
+los nodos de \texttt{src\_Robotino} realmente exponen.
+
+
+\subsubsection{Paquetes}
+
+\begin{itemize}
+
+    \item \texttt{hardware\_tools}
+
+    Fachada síncrona (clase \texttt{Hardware}) sobre los servicios de torso,
+    cabeza, brazos, pinzas, base y detección de puerta, para que otros
+    módulos no manejen clientes asíncronos de ROS 2 directamente. También
+    aloja el \textit{launch} raíz del módulo (\texttt{hardware.launch.xml}),
+    que bajo el \textit{namespace} \texttt{/hardware} levanta el
+    \textit{driver} de cámara RGB-D (\texttt{openni2\_camera}) y la
+    generación de nube de puntos (\texttt{depth\_image\_proc}) como nodos
+    componibles, además de \texttt{door\_detector} y \texttt{scanner}; y,
+    condicionalmente, \texttt{takeshi\_hardware.launch.xml} -- el
+    \textit{bringup} alterno para el backend de hardware del robot Takeshi
+    (HSR), no relacionado con Justina.
+
+    \item \texttt{door\_detector}
+
+    Determina si una puerta está abierta o cerrada comparando la distancia
+    promedio del sector central del LiDAR contra un umbral, y expone el
+    resultado como servicio.
+
+    \item \texttt{scanner} (paquete con nombre heredado; el nodo que
+    contiene es en realidad un puente de orientación de cabeza, no un
+    controlador de LiDAR)
+
+    Traduce un punto 3D de interés (publicado por
+    \texttt{Hardware::LookAt}) en un objetivo de cabeza (pan/tilt),
+    calculando el ángulo necesario vía TF entre el marco de la cámara/cuello
+    y el objetivo, respetando límites articulares y una zona muerta para
+    evitar micro-movimientos.
+
+    \item \texttt{kinect\_ros2}
+
+    Controlador de terceros (basado en \texttt{libfreenect}) para la cámara
+    Kinect v1, vendorizado en el árbol de código. No forma parte del
+    \textit{pipeline} activo de cámara (que usa \texttt{openni2\_camera});
+    sólo se referencia desde \textit{launches} de depuración.
+
+    \item \texttt{justina\_description}
+
+    Modelo del robot (URDF, mallas 3D) y entorno de simulación Webots.
+    Además del \textit{launch} de \textit{bringup} para el robot real
+    (\texttt{display.launch.xml}, que publica el URDF vía
+    \texttt{robot\_state\_publisher} e incluye los \textit{drivers} de
+    cabeza/brazos/torso/pinzas fuera de este repositorio), aloja tres nodos
+    auxiliares con código fuente propio:
+    \begin{itemize}
+        \item \texttt{simple\_justina\_sim.py} -- Simulador ligero en
+        software: integra \texttt{/hardware/base/cmd\_vel}, publica
+        odometría, TF \texttt{odom→base\_link}, articulaciones falsas y un
+        láser simulado (contra el mapa de navegación si está disponible);
+        además implementa directamente los servicios
+        \texttt{move\_head}/\texttt{move\_torso}/\texttt{move\_arms}
+        para sustituir a los \textit{drivers} reales durante pruebas sin
+        robot físico (usado por \texttt{justina\_sim.launch.xml}).
+        \item \texttt{kinect\_tilt\_motor\_node.py} -- Refleja el
+        \textit{tilt} de cabeza comandado hacia el motor físico de
+        inclinación del Kinect v1 vía USB; sólo se lanza cuando
+        \texttt{use\_kinect} está activo.
+        \item \texttt{virtual\_pointcloud.cpp}
+        (\texttt{depth\_to\_pointcloud}) -- Convierte una imagen de
+        profundidad y su \texttt{camera\_info} en una nube de puntos;
+        utilidad de depuración, no forma parte del \textit{pipeline}
+        principal de percepción.
+    \end{itemize}
+
+    \item \texttt{justina\_hardware} (repositorio \texttt{src\_Robotino})
+
+    \textit{Bringup} raíz del lado Robotino: bajo el \textit{namespace}
+    \texttt{/hardware}, remapea los tópicos \texttt{joint\_states}
+    relativos de cada driver (\texttt{base}, \texttt{head},
+    \texttt{arms/left\_arm}, \texttt{arms/right\_arm}, \texttt{torso},
+    \texttt{grippers/left\_gripper}, \texttt{grippers/right\_gripper}) al
+    tópico canónico \texttt{/hardware/joint\_states}; incluye los
+    \textit{launches} de \texttt{head}, \texttt{arms}, \texttt{torso},
+    \texttt{grippers} y \texttt{joint\_states\_parser}; lanza el
+    \texttt{gui\_node} del panel de operación; y levanta un segundo
+    \texttt{robot\_state\_publisher} (con el mismo URDF que el de la
+    computadora principal) cuyo tópico de entrada de articulaciones se
+    remapea a \texttt{/manipulation/joint\_states} -- la salida ya
+    fusionada de \texttt{joint\_states\_parser}.
+
+    \item \texttt{base} (repositorio \texttt{src\_Robotino})
+
+    Controlador de la base Robotino 4: envuelve el cliente TCP hacia el
+    servidor \textit{RobotinoAPI2} del fabricante (clase \texttt{ComROS})
+    para exponer como ROS 2 tracción omnidireccional, sensor de choque
+    (\textit{bumper}), lecturas de motores, gestión de energía, IMU,
+    entradas/salidas digitales y encoders (patrón adaptado del
+    \textit{driver} comunitario
+    \texttt{robotino\_node}). También construye, como ejecutables
+    independientes: \texttt{robotino\_odometry\_node} (odometría + TF
+    \texttt{odom→base\_link}, separado del nodo principal) y
+    \texttt{Stop\_node} (traduce una entrada digital física de paro de
+    emergencia a la señal de alto de navegación). Los ejecutables
+    \texttt{robotino\_camera\_node} y \texttt{robotino\_laserrangefinder\_node}
+    se compilan pero no se incluyen en el \textit{launch} activo (la
+    cámara y el LiDAR se sirven en su lugar por \texttt{openni2\_camera},
+    en la computadora principal, y por el paquete de terceros
+    \texttt{urg\_node}, respectivamente). El paquete también lanza
+    \texttt{urg\_node} (\textit{driver} de terceros para el LiDAR
+    Hokuyo/URG usado por Justina).
+
+    \item \texttt{arms} (repositorio \texttt{src\_Robotino})
+
+    Controla los 6 servomotores Dynamixel de cada brazo (hombro doble,
+    brazo, codo, muñeca -- según los \texttt{joint\_names} configurados)
+    vía el SDK de Dynamixel sobre RS-485. El mismo ejecutable
+    (\texttt{arms\_node}) se lanza dos veces, una por lado, parametrizado
+    por \texttt{config/left\_arm.yaml} / \texttt{right\_arm.yaml} (puerto
+    serial, IDs de servo, límites, dirección de giro). Incluye una
+    compensación de gravedad simple: un arreglo fijo de \textit{offsets}
+    por articulación (\texttt{compensation\_bits}) sumado al comando
+    antes de escribirlo al motor, activable con \texttt{compensation\_enable}.
+
+    \item \texttt{head} (repositorio \texttt{src\_Robotino})
+
+    Controla los 2 servomotores Dynamixel de pan/tilt de la cabeza; misma
+    arquitectura de nodo que \texttt{arms} (servicio de movimiento,
+    tópicos de articulaciones/pose actual/objetivo, parada por
+    \texttt{/navigation/navigation\_ctrl/stop}), sin compensación de
+    gravedad.
+
+    \item \texttt{torso} (repositorio \texttt{src\_Robotino})
+
+    Controla el eje lineal del torso mediante un controlador de motor Jrk
+    (Pololu) sobre puerto serial (\texttt{/dev/torso}), usando
+    retroalimentación analógica de posición con tolerancia y un número
+    mínimo de lecturas estables antes de considerar la meta alcanzada.
+
+    \item \texttt{grippers} (repositorio \texttt{src\_Robotino})
+
+    Controla las pinzas mediante un microcontrolador embebido propio
+    (RP2350 + módulo Ethernet W5500, protocolo binario de tramas fijas de
+    8 bytes, librería \texttt{gripper\_sdk} vendorizada en el mismo
+    paquete) conectado por TCP/IP, en vez de un bus serial compartido como
+    brazos/cabeza/torso. El mismo ejecutable (\texttt{grippers\_node}) se
+    lanza dos veces (una por lado), parametrizado por
+    \texttt{config/left\_gripper.yaml} / \texttt{right\_gripper.yaml} (IP,
+    puerto y nombres de articulación de cada pinza).
+
+    \item \texttt{joint\_states\_parser} (repositorio \texttt{src\_Robotino})
+
+    Fusiona los mensajes \texttt{JointState} parciales que cada
+    \textit{driver} (base, brazos, cabeza, pinzas) publica bajo
+    \texttt{/hardware/joint\_states} en un único mensaje completo, con
+    todas las articulaciones del robot en un orden canónico fijo, para
+    consumo de MoveIt2 (lo publica en \texttt{/manipulation/joint\_states}).
+
+\end{itemize}
+
+
+\subsubsection{Nodos}
+
+\begin{itemize}
+
+    \item \texttt{door\_detector\_node}
+
+    Analiza el sector central del barrido láser de la base para estimar si
+    la puerta frente al robot está abierta o cerrada.
+    \begin{itemize}
+        \item \textbf{Tópicos suscritos:}
+        \begin{itemize}
+            \item \texttt{/hardware/base/scan} -- Barrido láser 2D de la
+            base.
+        \end{itemize}
+        \item \textbf{Servicios ofrecidos:}
+        \begin{itemize}
+            \item \texttt{/hardware/door\_detector/check} -- Regresa
+            \texttt{success=true} si la puerta está abierta (distancia
+            promedio central mayor a 0.75\,m), \texttt{false} si está
+            cerrada.
+        \end{itemize}
+    \end{itemize}
+
+    \item \texttt{scanner\_node} (nombre interno del nodo:
+    \texttt{head\_control\_node})
+
+    Puente entre un punto 3D de interés y el objetivo de cabeza: al recibir
+    un punto en \texttt{/hardware/head/look\_at}, calcula pan/tilt vía TF
+    respecto al marco de cámara/cuello, aplica límites articulares y una
+    zona muerta, y publica el objetivo resultante. También reacciona al
+    estado de navegación para evitar mover la cabeza durante ciertas fases.
+    \begin{itemize}
+        \item \textbf{Tópicos publicados:}
+        \begin{itemize}
+            \item \texttt{/hardware/head/goal\_pose} -- Objetivo de
+            pan/tilt calculado para el \textit{driver} de cabeza.
+        \end{itemize}
+        \item \textbf{Tópicos suscritos:}
+        \begin{itemize}
+            \item \texttt{/hardware/head/look\_at} -- Punto 3D de interés
+            (publicado por \texttt{Hardware::LookAt}).
+            \item \texttt{/hardware/head/current\_pose} -- Pose actual de
+            la cabeza.
+            \item \texttt{/navigation/status} -- Estado de la meta de
+            navegación en curso.
+        \end{itemize}
+    \end{itemize}
+
+    \item \texttt{simple\_justina\_sim} (sólo en configuración de
+    simulación, \texttt{justina\_sim.launch.xml})
+
+    Sustituye a \texttt{hardware\_tools} y a los \textit{drivers} reales
+    cuando no hay robot físico: simula la base, las articulaciones y el
+    láser, e implementa directamente los servicios de movimiento que
+    \texttt{Hardware.hpp} espera de cabeza/torso/brazos.
+    \begin{itemize}
+        \item \textbf{Tópicos publicados:}
+        \begin{itemize}
+            \item \texttt{/hardware/base/odom}, \texttt{/hardware/joint\_states},
+            \texttt{/hardware/base/scan} -- Odometría, articulaciones y
+            láser simulados.
+            \item \texttt{/hardware/head/current\_pose},
+            \texttt{/hardware/torso/current\_pose},
+            \texttt{/hardware/arms/left\_arm/current\_pose},
+            \texttt{/hardware/arms/right\_arm/current\_pose} -- Poses
+            actuales simuladas.
+            \item \texttt{/navigation/initialpose} -- Reenvía la pose
+            inicial dada por RViz.
+        \end{itemize}
+        \item \textbf{Tópicos suscritos:}
+        \begin{itemize}
+            \item \texttt{/hardware/base/cmd\_vel} -- Velocidad comandada
+            de la base.
+            \item \texttt{/hardware/head/goal\_pose},
+            \texttt{/hardware/torso/goal\_pose},
+            \texttt{/hardware/arms/left\_arm/goal\_pose},
+            \texttt{/hardware/arms/right\_arm/goal\_pose} -- Objetivos de
+            pose simulados.
+            \item \texttt{/initialpose}, \texttt{/navigation/initialpose}
+            -- Pose inicial desde RViz.
+        \end{itemize}
+        \item \textbf{Servicios ofrecidos:}
+        \begin{itemize}
+            \item \texttt{/hardware/head/move\_head},
+            \texttt{/hardware/torso/move\_torso},
+            \texttt{/hardware/arms/move\_left\_arm},
+            \texttt{/hardware/arms/move\_right\_arm} -- Simulan el
+            movimiento solicitado y actualizan la pose publicada.
+        \end{itemize}
+    \end{itemize}
+
+    \item \texttt{kinect\_tilt\_motor\_node} (opcional, \texttt{use\_kinect})
+
+    Traduce el \textit{tilt} actual de la cabeza en un comando USB directo
+    al motor de inclinación físico del Kinect v1.
+    \begin{itemize}
+        \item \textbf{Tópicos suscritos:}
+        \begin{itemize}
+            \item \texttt{/hardware/head/current\_pose} -- Pose actual de
+            la cabeza, de donde extrae el componente de \textit{tilt}.
+        \end{itemize}
+    \end{itemize}
+
+    \item \texttt{depth\_to\_pointcloud} (utilidad de depuración, no forma
+    parte del \textit{pipeline} activo)
+    \begin{itemize}
+        \item \textbf{Tópicos publicados:}
+        \begin{itemize}
+            \item Nube de puntos (\texttt{PointCloud2}) reconstruida.
+        \end{itemize}
+        \item \textbf{Tópicos suscritos:}
+        \begin{itemize}
+            \item Imagen de profundidad y \texttt{camera\_info}
+            correspondiente.
+        \end{itemize}
+    \end{itemize}
+
+    \item \texttt{head\_node} (repositorio \texttt{src\_Robotino})
+
+    Recibe posiciones objetivo de pan/tilt y las escribe a los servos
+    Dynamixel de la cabeza vía el SDK sobre RS-485.
+    \begin{itemize}
+        \item \textbf{Tópicos publicados:}
+        \begin{itemize}
+            \item \texttt{/hardware/head/joint\_states} -- Articulaciones
+            de la cabeza (remapeado a \texttt{/hardware/joint\_states} por
+            \texttt{justina\_hardware}).
+            \item \texttt{/hardware/head/current\_pose} -- Posiciones
+            actuales medidas de pan/tilt.
+            \item \texttt{/hardware/head/goal\_reached} -- Indica si la
+            meta fue alcanzada.
+        \end{itemize}
+        \item \textbf{Tópicos suscritos:}
+        \begin{itemize}
+            \item \texttt{/hardware/head/goal\_pose} -- Objetivo de
+            pan/tilt (interfaz alterna basada en tópico; en el sistema
+            activo lo publica \texttt{scanner\_node}).
+            \item \texttt{/navigation/navigation\_ctrl/stop} -- Detiene el
+            movimiento ante una señal de paro.
+        \end{itemize}
+        \item \textbf{Servicios ofrecidos:}
+        \begin{itemize}
+            \item \texttt{/hardware/head/move\_head} -- Mueve la cabeza a
+            un arreglo de posiciones pan/tilt (usado por
+            \texttt{Hardware::MoveHead}).
+        \end{itemize}
+    \end{itemize}
+
+    \item \texttt{torso\_node} (repositorio \texttt{src\_Robotino})
+
+    Controla el eje lineal del torso mediante el controlador Jrk, con
+    retroalimentación analógica de posición (rango \texttt{feedback\_min}/
+    \texttt{feedback\_max}) y confirmación de meta alcanzada tras varias
+    lecturas estables.
+    \begin{itemize}
+        \item \textbf{Tópicos publicados:}
+        \begin{itemize}
+            \item \texttt{/hardware/torso/joint\_states} -- Articulación
+            del torso (remapeada a \texttt{/hardware/joint\_states}).
+            \item \texttt{/hardware/torso/current\_pose} -- Posición
+            actual medida.
+            \item \texttt{/hardware/torso/goal\_reached} -- Indica si la
+            meta fue alcanzada.
+        \end{itemize}
+        \item \textbf{Tópicos suscritos:}
+        \begin{itemize}
+            \item \texttt{/hardware/torso/goal\_pose} -- Interfaz alterna
+            basada en tópico para comandar posición.
+        \end{itemize}
+        \item \textbf{Servicios ofrecidos:}
+        \begin{itemize}
+            \item \texttt{/hardware/torso/move\_torso} -- Mueve el torso a
+            una posición (usado por \texttt{Hardware::MoveTorso}).
+        \end{itemize}
+    \end{itemize}
+
+    \item \texttt{left\_arm\_node} / \texttt{right\_arm\_node} (mismo
+    ejecutable \texttt{arms\_node}, repositorio \texttt{src\_Robotino})
+
+    Reciben posiciones articulares de un brazo y las escriben a sus
+    servos Dynamixel, aplicando la compensación de gravedad por
+    \textit{offsets} si está habilitada.
+    \begin{itemize}
+        \item \textbf{Tópicos publicados:}
+        \begin{itemize}
+            \item \texttt{/hardware/arms/left\_arm/joint\_states} y
+            \texttt{/hardware/arms/right\_arm/joint\_states} -- Estado
+            articular de cada brazo (remapeado a
+            \texttt{/hardware/joint\_states}).
+            \item \texttt{/hardware/arms/left\_arm/current\_pose} y
+            \texttt{/hardware/arms/right\_arm/current\_pose} -- Posición
+            actual medida (consumida por \texttt{Hardware.hpp}).
+            \item \texttt{/hardware/arms/left\_arm/goal\_reached} y
+            \texttt{/hardware/arms/right\_arm/goal\_reached}.
+        \end{itemize}
+        \item \textbf{Tópicos suscritos:}
+        \begin{itemize}
+            \item \texttt{/hardware/arms/left\_arm/goal\_pose} y
+            \texttt{/hardware/arms/right\_arm/goal\_pose} -- Interfaz
+            alterna basada en tópico.
+            \item \texttt{/navigation/navigation\_ctrl/stop} -- Detiene el
+            movimiento ante una señal de paro.
+        \end{itemize}
+        \item \textbf{Servicios ofrecidos:}
+        \begin{itemize}
+            \item \texttt{/hardware/arms/move\_left\_arm} /
+            \texttt{/hardware/arms/move\_right\_arm} -- Mueven el brazo
+            correspondiente a un arreglo de posiciones con velocidad dada
+            (usado por \texttt{Hardware::MoveLeftArm}/
+            \texttt{MoveRightArm} y por \texttt{manipulation\_controller}).
+        \end{itemize}
+    \end{itemize}
+
+    \item \texttt{left\_gripper\_node} / \texttt{right\_gripper\_node}
+    (mismo ejecutable \texttt{grippers\_node}, repositorio
+    \texttt{src\_Robotino})
+
+    Traducen comandos de pinza a tramas del protocolo binario propio
+    (8 bytes) hacia el microcontrolador RP2350 de cada pinza, por TCP/IP.
+    \begin{itemize}
+        \item \textbf{Tópicos publicados:}
+        \begin{itemize}
+            \item \texttt{/hardware/grippers/left\_gripper/joint\_states}
+            y \texttt{/hardware/grippers/right\_gripper/joint\_states} --
+            Estado articular de cada pinza (remapeado a
+            \texttt{/hardware/joint\_states}).
+        \end{itemize}
+        \item \textbf{Tópicos suscritos:}
+        \begin{itemize}
+            \item \texttt{/navigation/navigation\_ctrl/stop} -- Detiene el
+            movimiento ante una señal de paro.
+        \end{itemize}
+        \item \textbf{Servicios ofrecidos:}
+        \begin{itemize}
+            \item \texttt{/hardware/grippers/move\_left\_gripper} /
+            \texttt{/hardware/grippers/move\_right\_gripper} -- Ejecuta
+            \texttt{open}/\texttt{close}/\texttt{stop}/\texttt{query\_status}
+            sobre la pinza correspondiente y regresa estado, corriente y
+            posición (usado por \texttt{Hardware::MoveLeftGripper}/
+            \texttt{MoveRightGripper}).
+        \end{itemize}
+    \end{itemize}
+
+    \item \texttt{joint\_states\_parser\_node} (repositorio
+    \texttt{src\_Robotino})
+
+    Acumula las lecturas parciales de articulaciones de todos los
+    \textit{drivers} y publica un \texttt{JointState} completo, en un
+    orden fijo, para MoveIt2.
+    \begin{itemize}
+        \item \textbf{Tópicos publicados:}
+        \begin{itemize}
+            \item \texttt{/manipulation/joint\_states} -- Estado articular
+            completo del robot (torso, ambos brazos, ambas pinzas, cabeza
+            y ruedas de la base).
+        \end{itemize}
+        \item \textbf{Tópicos suscritos:}
+        \begin{itemize}
+            \item \texttt{/hardware/joint\_states} -- Estado articular
+            parcial agregado (vía los \textit{remaps} de
+            \texttt{justina\_hardware}) de cada \textit{driver}.
+        \end{itemize}
+    \end{itemize}
+
+    \item \texttt{base\_node} (nombre interno del nodo: el nombre pasado a
+    \texttt{RTONode}; repositorio \texttt{src\_Robotino})
+
+    Driver principal de la base Robotino 4: conecta por TCP al servidor
+    \textit{RobotinoAPI2} del fabricante y expone tracción omnidireccional,
+    \textit{bumper}, lecturas de motores, energía, IMU y E/S digital.
+    \begin{itemize}
+        \item \textbf{Tópicos publicados:}
+        \begin{itemize}
+            \item \texttt{/hardware/base/bumper} -- Estado del
+            parachoques.
+            \item \texttt{/hardware/base/motor\_readings} y
+            \texttt{/hardware/base/motor\_error\_readings} -- Lecturas y
+            errores de los 3 motores omnidireccionales.
+            \item \texttt{/hardware/base/joint\_states} -- Estado de las
+            ruedas (remapeado a \texttt{/hardware/joint\_states}).
+            \item \texttt{/hardware/base/battery\_status} -- Estado de la
+            batería.
+            \item \texttt{/hardware/base/imu} -- Lectura del giroscopio.
+            \item \texttt{/hardware/base/digital\_readings} -- Entradas
+            digitales (incluye la señal de paro que consume
+            \texttt{Stop\_node}).
+            \item \texttt{/hardware/base/encoder\_readings} -- Lecturas de
+            encoders.
+        \end{itemize}
+        \item \textbf{Tópicos suscritos:}
+        \begin{itemize}
+            \item \texttt{/hardware/base/cmd\_vel} -- Velocidad
+            omnidireccional comandada (publicada por
+            \texttt{Hardware::MoveBase}).
+            \item \texttt{/hardware/base/set\_digital\_values} -- Escribe
+            salidas digitales.
+        \end{itemize}
+        \item \textbf{Servicios ofrecidos:}
+        \begin{itemize}
+            \item \texttt{/hardware/base/cmd\_vel\_enable} -- Habilita o
+            deshabilita la tracción.
+            \item \texttt{/hardware/base/set\_velocity\_limits} -- Ajusta
+            los límites de velocidad lineal/angular.
+            \item \texttt{/hardware/base/set\_encoder\_position} -- Reinicia
+            la posición de un encoder.
+        \end{itemize}
+    \end{itemize}
+
+    \item \texttt{robotino\_odometry\_node} (repositorio
+    \texttt{src\_Robotino})
+
+    Calcula y publica la odometría de la base a partir de las lecturas del
+    driver, por separado del nodo principal.
+    \begin{itemize}
+        \item \textbf{Tópicos publicados:}
+        \begin{itemize}
+            \item \texttt{/hardware/base/odom} -- Odometría de la base;
+            también difunde la TF \texttt{odom→base\_link} si
+            \texttt{launch\_odom\_tf} está activo.
+        \end{itemize}
+        \item \textbf{Servicios ofrecidos:}
+        \begin{itemize}
+            \item \texttt{/hardware/base/reset\_odometry} -- Reinicia la
+            odometría acumulada.
+        \end{itemize}
+    \end{itemize}
+
+    \item \texttt{Stop\_node} (nombre interno del nodo:
+    \texttt{digital\_stop\_node}; repositorio \texttt{src\_Robotino})
+
+    Traduce una entrada digital física (índice 6 del arreglo de entradas
+    digitales, cableada a un botón/interruptor de paro) en la señal de
+    alto que consumen navegación, brazos, cabeza y pinzas.
+    \begin{itemize}
+        \item \textbf{Tópicos publicados:}
+        \begin{itemize}
+            \item \texttt{/navigation/navigation\_ctrl/stop} -- Señal de
+            paro (invertida respecto a la entrada digital).
+        \end{itemize}
+        \item \textbf{Tópicos suscritos:}
+        \begin{itemize}
+            \item \texttt{/hardware/base/digital\_readings} -- Entradas
+            digitales de la base.
+        \end{itemize}
+    \end{itemize}
+
+    \item \texttt{urg\_node} (paquete de terceros, repositorio
+    \texttt{src\_Robotino})
+
+    \textit{Driver} de terceros (paquete ROS \texttt{urg\_node},
+    fabricante Hokuyo) para el LiDAR 2D de la base. Se configura con
+    puerto serial \texttt{/dev/lidar} y un campo de visión acotado a
+    $\pm90°$. No se documenta su implementación interna por ser un
+    paquete de terceros; se integra bajo \texttt{/hardware/base/scan}
+    (remapeado desde su tópico de salida por defecto), consumido por
+    \texttt{door\_detector}, \texttt{leg\_finder\_node} y
+    \texttt{Navigation}.
+
+\end{itemize}
+
+
+% ============================================================
+% KNOWLEDGE
+% ============================================================
+
+\subsection{Knowledge}
+
+\label{app:justina_knowledge}
+
+El módulo \textit{Knowledge} se encarga de mantener y exponer el estado del
+mundo del robot en tiempo de ejecución (personas, objetos, ubicaciones
+conocidas, atributos del robot y analítica de percepción), así como de
+proveer un banco de frases parametrizables que el módulo HRI utiliza para
+generar diálogo, resolviendo las referencias de esas frases contra el
+estado del mundo.
+
+
+\subsubsection{Paquetes}
+
+\begin{itemize}
+
+    \item \texttt{knowledge\_bank}
+
+    Paquete de datos (sin nodos) que aloja los dominios estáticos del mundo
+    (\texttt{domains/locations.yaml}, \texttt{objects.yaml},
+    \texttt{people.yaml}), el banco de frases organizado por contexto
+    (\texttt{phrases/gpsr.yaml}, \texttt{hri.yaml}, \texttt{inspection.yaml},
+    \texttt{laundry.yaml}, \texttt{pnp.yaml}, \texttt{restaurant.yaml}), los
+    diccionarios de vocabulario (\texttt{dictionaries/}: bebidas, nombres,
+    objetos, órdenes, etc.) y el estado en tiempo de ejecución
+    (\texttt{runtime/world.yaml}) persistido por \texttt{world\_state\_node}.
+
+    \item \texttt{knowledge\_manager}
+
+    Implementa los nodos que exponen el estado del mundo y el banco de
+    frases como servicios de ROS 2: \texttt{world\_state\_node} y
+    \texttt{phrase\_manager\_node}.
+
+    \item \texttt{knowledge\_tools}
+
+    Librería cliente (clase \texttt{Knowledge}) que encapsula las llamadas a
+    los servicios \texttt{/knowledge/knowledge\_manager/world/get\_state},
+    \texttt{/knowledge/knowledge\_manager/world/update\_state} y
+    \texttt{/knowledge/knowledge\_manager/phrases/get\_phrase}, para que
+    otros módulos (Executor, Supervisor, HRI) puedan consultar y actualizar
+    el estado del mundo sin reimplementar la lógica de cliente.
+
+\end{itemize}
+
+
+\subsubsection{Nodos}
+
+\begin{itemize}
+
+    \item \texttt{world\_state\_node}
+
+    Mantiene en memoria el estado del mundo (robot, ubicaciones conocidas,
+    objetos, personas y analítica de percepción); lo construye a partir de
+    los dominios estáticos de \texttt{knowledge\_bank} al iniciar y lo
+    persiste en \texttt{runtime/world.yaml} después de cada actualización.
+    Atiende las peticiones de lectura y escritura en grupos de callbacks
+    independientes, con un \textit{mutex} de lecturas/escrituras concurrente
+    para permitir múltiples lecturas simultáneas.
+    \begin{itemize}
+        \item \textbf{Servicios ofrecidos:}
+        \begin{itemize}
+            \item \texttt{/knowledge/knowledge\_manager/world/get\_state} --
+            Consulta el estado del mundo por categoría, identificador y
+            atributo (opcionales); devuelve el resultado serializado en
+            JSON.
+            \item \texttt{/knowledge/knowledge\_manager/world/update\_state}
+            -- Actualiza el atributo de una categoría (robot, objeto,
+            persona o analítica) y persiste el nuevo estado.
+        \end{itemize}
+    \end{itemize}
+
+    \item \texttt{phrase\_manager\_node}
+
+    Carga el banco de frases de \texttt{knowledge\_bank/phrases} agrupado
+    por contexto y clave; ante una petición, selecciona una frase aleatoria
+    para la clave solicitada y resuelve los \textit{placeholders} de la
+    forma \texttt{\{categoria:atributo:id\}} (o el formato heredado
+    \texttt{categoria\_atributo[\_id]}) consultando el estado del mundo,
+    antes de devolver el texto final.
+    \begin{itemize}
+        \item \textbf{Servicios ofrecidos:}
+        \begin{itemize}
+            \item \texttt{/knowledge/knowledge\_manager/phrases/get\_phrase}
+            -- Devuelve una frase resuelta para una clave y un contexto
+            (opcional) dados.
+        \end{itemize}
+        \item \textbf{Servicios utilizados:}
+        \begin{itemize}
+            \item \texttt{/knowledge/knowledge\_manager/world/get\_state} --
+            Consulta los valores del estado del mundo necesarios para
+            resolver los \textit{placeholders} de la frase seleccionada.
+        \end{itemize}
+    \end{itemize}
+
+\end{itemize}
+
+
+% ============================================================
+% MANIPULATION
+% ============================================================
+
+\subsection{Manipulation}
+
+\label{app:justina_manipulation}
+
+El módulo \textit{Manipulation} se encarga de planear y ejecutar las
+trayectorias de brazos y torso necesarias para tomar, colocar y manipular
+objetos. Actúa como puente entre los consumidores de manipulación del robot
+(por ejemplo, la FSM \texttt{Take} del Executor) y MoveIt2, que se usa
+únicamente como motor de planeación cinemática y de colisiones (IK vía
+TRAC-IK, planeación con OMPL/RRTConnect), sin controlar el hardware
+directamente. La ejecución real sobre los servomotores se delega a los nodos
+de \texttt{Hardware} (\texttt{arms\_node}, controlador de torso).
+
+
+\subsubsection{Paquetes}
+
+\begin{itemize}
+
+    \item \texttt{manipulation\_planner}
+
+    Nodo puente entre los consumidores de manipulación y MoveIt2. Recibe una
+    pose objetivo, valida el grupo de planeación y el \textit{tip link},
+    lee el estado articular real desde \texttt{/hardware/joint\_states},
+    solicita la planeación a MoveIt2 (forzando \texttt{pipeline\_id=ompl},
+    \texttt{planner\_id=RRTConnect}) y devuelve la trayectoria articular
+    resultante. Opcionalmente coordina el filtro de nube de manipulación y
+    la exclusión del objeto objetivo para que MoveIt2 no lo trate como
+    obstáculo al planear el acercamiento.
+
+    \item \texttt{manipulation\_controller}
+
+    Ejecuta una trayectoria ya planeada: recibe la lista de \textit{waypoints}
+    (bloques de torso + 6 articulaciones del brazo), y por cada bloque envía
+    en paralelo las peticiones correspondientes al brazo (izquierdo o
+    derecho, según el grupo de planeación) y al torso, esperando la
+    confirmación de ambos antes de continuar con el siguiente bloque.
+
+    \item \texttt{manipulation\_tools}
+
+    Paquete de utilidades comunes de la pila de manipulación. Contiene la
+    librería cliente \texttt{Manipulation} (patrón \textit{Facade}), que
+    expone \texttt{PlanTrajectory} y \texttt{FollowTrajectory} como llamadas
+    síncronas sin exponer el manejo asíncrono de clientes de ROS 2 a quien
+    la usa (p. ej. \texttt{executor\_tools}); el nodo
+    \texttt{manipulation\_cloud\_filter\_node}; y el \textit{launch} principal
+    (\texttt{manipulation.launch.xml}) que levanta bajo el
+    \textit{namespace} \texttt{/manipulation} tanto \texttt{move\_group}
+    (MoveIt2) como \texttt{manipulation\_planner} y
+    \texttt{manipulation\_controller}, remapeando el estado articular a la
+    fuente canónica \texttt{/hardware/joint\_states}.
+
+    \item \texttt{move\_it}
+
+    Paquete de configuración generado con el \textit{MoveIt Setup Assistant}
+    para el modelo cinemático de Justina: URDF/SRDF, grupos de planeación
+    (\texttt{left\_arm\_group}, \texttt{right\_arm\_group}),
+    \texttt{kinematics.yaml} (solver \texttt{TRAC\_IKKinematicsPlugin}),
+    límites articulares y controladores. Lanza el nodo \texttt{move\_group}
+    de MoveIt2, que al ser un nodo de terceros no se documenta a detalle en
+    esta sección.
+
+    \item \texttt{trac\_ik}
+
+    Librería de terceros (TRACLabs Robotics) usada como \textit{plugin} de
+    cinemática inversa por los grupos de planeación de MoveIt2. Se incluye
+    en el árbol de código como dependencia vendorizada; no aporta nodos
+    propios del proyecto.
+
+\end{itemize}
+
+
+\subsubsection{Nodos}
+
+\begin{itemize}
+
+    \item \texttt{manipulation\_planner\_node}
+
+    Traduce una pose objetivo del efector final en una trayectoria
+    articular planeada por MoveIt2, validando el grupo de planeación y el
+    \textit{tip link}, y coordinando opcionalmente el filtro de nube y la
+    limpieza del \textit{octomap} antes de planear.
+    \begin{itemize}
+        \item \textbf{Tópicos suscritos:}
+        \begin{itemize}
+            \item \texttt{/hardware/joint\_states} -- Estado articular real
+            del robot (fuente canónica), usado como punto de partida de la
+            planeación.
+        \end{itemize}
+        \item \textbf{Servicios ofrecidos:}
+        \begin{itemize}
+            \item \texttt{/manipulation/manipulation\_planner/plan\_trajectory}
+            -- Recibe una pose objetivo, grupo de planeación y \textit{tip
+            link}, y devuelve los nombres de articulaciones y los
+            \textit{waypoints} de la trayectoria planeada.
+        \end{itemize}
+        \item \textbf{Servicios utilizados:}
+        \begin{itemize}
+            \item \texttt{/manipulation/plan\_kinematic\_path} -- Solicitud
+            \texttt{GetMotionPlan} al \texttt{move\_group} de MoveIt2
+            (OMPL, RRTConnect).
+            \item \texttt{/manipulation/cloud\_filter/enable} -- Activa o
+            desactiva el filtro de nube de manipulación justo antes y
+            después de planear.
+            \item \texttt{/manipulation/clear\_octomap} -- Limpia el
+            \textit{octomap} de MoveIt2 antes de solicitar una nueva
+            planeación.
+        \end{itemize}
+    \end{itemize}
+
+    \item \texttt{manipulation\_controller\_node}
+
+    Ejecuta una trayectoria ya planeada, enviando bloque a bloque (torso +
+    brazo) las posiciones articulares a los nodos de hardware
+    correspondientes, y reporta éxito o falla por bloque.
+    \begin{itemize}
+        \item \textbf{Servicios ofrecidos:}
+        \begin{itemize}
+            \item \texttt{/manipulation/manipulation\_controller/follow\_trajectory}
+            -- Recibe el grupo de planeación, los nombres de articulaciones
+            y los \textit{waypoints} de una trayectoria, y la ejecuta
+            bloque por bloque.
+        \end{itemize}
+        \item \textbf{Servicios utilizados:}
+        \begin{itemize}
+            \item \texttt{/hardware/arms/move\_right\_arm} -- Mueve el brazo
+            derecho al bloque de posiciones articulares correspondiente.
+            \item \texttt{/hardware/arms/move\_left\_arm} -- Mueve el brazo
+            izquierdo al bloque de posiciones articulares correspondiente.
+            \item \texttt{/hardware/torso/move\_torso} -- Mueve el torso a
+            la posición del bloque actual.
+        \end{itemize}
+    \end{itemize}
+
+    \item \texttt{manipulation\_cloud\_filter\_node}
+
+    Filtra la nube de puntos cruda de la cámara a una región de interés
+    (ROI) acotada al volumen útil de los brazos, la reduce por
+    \textit{voxelización} y la publica para alimentar el \textit{octomap}
+    de MoveIt2, evitando que el suelo o puntos fuera de alcance contaminen
+    la planeación. Arranca apagado y sólo se activa bajo demanda (p. ej.
+    desde \texttt{manipulation\_planner\_node}) para no procesar nube de
+    forma innecesaria.
+    \begin{itemize}
+        \item \textbf{Tópicos publicados:}
+        \begin{itemize}
+            \item \texttt{/manipulation/camera/points\_filtered} -- Nube de
+            puntos filtrada y recortada al ROI de manipulación.
+            \item \texttt{/manipulation/cloud\_filter/debug\_markers} --
+            Marcadores de depuración del ROI y la voxelización (opcional).
+        \end{itemize}
+        \item \textbf{Tópicos suscritos:}
+        \begin{itemize}
+            \item \texttt{/hardware/camera/points} -- Nube de puntos cruda
+            de la cámara del robot.
+        \end{itemize}
+        \item \textbf{Servicios ofrecidos:}
+        \begin{itemize}
+            \item \texttt{/manipulation/cloud\_filter/enable} -- Activa o
+            desactiva el procesamiento del filtro bajo demanda.
+        \end{itemize}
+    \end{itemize}
+
+\end{itemize}
+
+
+% ============================================================
+% NAVIGATION
+% ============================================================
+
+\subsection{Navigation}
+
+\label{app:justina_navigation}
+
+El módulo \textit{Navigation} se encarga de localizar al robot, mantener un
+mapa de obstáculos dinámicos superpuesto al mapa estático, planear rutas
+sobre ese mapa, y ejecutarlas con evitación reactiva de obstáculos. Es el
+módulo con más paquetes del repositorio (14), aunque no todos forman parte
+del sistema activo de Justina: varios existen específicamente para el
+backend alterno del robot Takeshi (HSR) o para la simulación en Webots, y
+se documentan como tales.
+
+\textit{Arquitectura en capas (sistema activo):} \texttt{nav\_controller\_node}
+y \texttt{locations\_manager\_node} son la interfaz pública (usada por
+\texttt{navigation\_tools} y por el resto del sistema) y corren en el
+\textit{namespace} raíz, no bajo \texttt{/navigation}. Por debajo,
+\texttt{mvn\_pln} (\texttt{motion\_planner\_node}) orquesta una maniobra
+completa hacia una meta, apoyándose en \texttt{path\_planner} (ruta A* sobre
+el mapa aumentado), \texttt{simple\_move} (seguimiento de trayectoria/control
+de velocidad) y \texttt{potential\_fields} (evitación reactiva superpuesta
+al \texttt{cmd\_vel}). El mapa aumentado lo mantienen
+\texttt{map\_augmenter} y \texttt{obstacle\_detector} (obstáculos dinámicos
+por LiDAR/nube) a partir del mapa estático servido por \texttt{nav2\_map\_server}
+y localizado por \texttt{nav2\_amcl} (modo AMCL) o \texttt{slam\_toolbox}
+(modo SLAM/\texttt{mapless}, mismo resto de la pila).
+
+
+\subsubsection{Paquetes}
+
+\begin{itemize}
+
+    \item \texttt{navigation\_tools}
+
+    Fachada síncrona (clase \texttt{Navigation}) sobre ir a una ubicación
+    conocida y registrar la pose actual como ubicación nueva. Aloja también
+    un \textit{launch} propio (no es el usado por \texttt{justina.launch.xml},
+    que en su lugar incluye directamente \texttt{navigation\_start}).
+
+    \item \texttt{navigation\_controller} (dos paquetes:
+    \texttt{locations\_manager}, \texttt{nav\_controller})
+
+    La interfaz pública del módulo, corriendo ambos en el \textit{namespace}
+    raíz. \texttt{locations\_manager} guarda/consulta ubicaciones nombradas
+    (\texttt{config/known\_locations.yaml}) y difunde su TF cada 0.5\,s para
+    visualización. \texttt{nav\_controller} traduce "ir a ubicación
+    conocida" en una meta de pose concreta, calcula un \textit{timeout}
+    proporcional a la distancia a recorrer, y difunde la señal de paro de
+    navegación que consumen los \textit{drivers} de hardware.
+
+    \item \texttt{navigation\_planner} (paquete de agrupación; siete
+    paquetes ROS propios más dos exclusivos del backend Takeshi)
+
+    \begin{itemize}
+        \item \texttt{navigation\_start} -- Paquete de sólo
+        \textit{launch}/configuración/mapas (sin nodos propios): aloja
+        \texttt{navigation\_justina\_amcl.launch.xml} (modo AMCL, el que
+        usa \texttt{justina.launch.xml} por defecto),
+        \texttt{navigation\_justina\_slam.launch.xml} (mismo resto de la
+        pila, localización con \texttt{slam\_toolbox} en vez de AMCL,
+        seleccionado con el argumento \texttt{mapless=true} de
+        \texttt{justina.launch.xml}), los mapas estáticos y de prohibición
+        por escenario (incluye mapas de RoboCup 2026 y del Torneo Mexicano
+        de Robótica 2026), y variantes para el backend Takeshi/HSR
+        (\texttt{navigation\_takeshi*.launch.xml},
+        \texttt{slam\_navigation.launch.xml}) no usadas por Justina.
+        \item \texttt{mvn\_pln} -- Orquesta una maniobra completa hacia una
+        meta: pide ruta a \texttt{path\_planner}, la ejecuta con
+        \texttt{simple\_move}, coordina \texttt{potential\_fields}, y
+        reacciona a paros y a la señal de riesgo de colisión.
+        \item \texttt{path\_planner} -- Búsqueda de ruta A* (con opción de
+        movimientos diagonales) sobre el mapa estático o el aumentado.
+        \item \texttt{simple\_move} -- Sigue una ruta/objetivo con control
+        proporcional de velocidad lineal/angular; puede orientar la cabeza
+        en la dirección de movimiento.
+        \item \texttt{potential\_fields} -- Campo potencial reactivo
+        (repulsión por LiDAR y nube de puntos) superpuesto al
+        \texttt{cmd\_vel} para evitar colisiones no vistas por el mapa;
+        incluye \texttt{publish\_enable.py}, un script auxiliar.
+        \item \texttt{map\_augmenter} -- \texttt{map\_augmenter\_node}
+        combina el mapa estático, el de prohibición y los obstáculos
+        dinámicos en un "mapa aumentado" (y su versión de costo) para
+        planeación; \texttt{obstacle\_detector\_node} detecta esos
+        obstáculos dinámicos a partir del LiDAR y la nube de la cámara.
+        El paquete también compila \texttt{cloud\_filter\_node}, que está
+        comentado en el \textit{launch} activo (no corre).
+        \item \texttt{augment\_gridmap\_online} -- Herramienta manual: deja
+        que un operador añada un obstáculo permanente al mapa de
+        prohibición haciendo clic en un punto en RViz.
+        \item \texttt{hardware\_controller} (\textbf{no usado por
+        Justina}) -- \texttt{head\_controller} y \texttt{arm\_controller}
+        traducen entre la convención propia de Justina
+        (\texttt{goal\_pose}/\texttt{current\_pose}) y la interfaz estándar
+        de ROS 2 \texttt{JointTrajectoryController}
+        (\texttt{trajectory\_msgs/JointTrajectory},
+        \texttt{control\_msgs/JointTrajectoryControllerState}). Sólo se
+        referencia desde \texttt{slam\_navigation.launch.xml} y
+        \texttt{navigation\_namespace.launch.xml}, ambos orientados al
+        backend Takeshi/HSR -- no alcanzables desde
+        \texttt{justina.launch.xml}.
+        \item \texttt{map\_server\_bypass} (\textbf{no usado por Justina})
+        -- Puentea el mapa de Google Cartographer
+        (\texttt{/cartographer\_map}) hacia la interfaz \texttt{GetMap}
+        estándar que esperan \texttt{path\_planner}/\texttt{map\_augmenter}.
+        Sólo se usa desde \texttt{slam\_navigation.launch.xml}
+        (Takeshi/HSR con Cartographer), no desde el \textit{launch} de
+        Justina.
+    \end{itemize}
+
+    \item \texttt{mapless\_navigation} (dos paquetes:
+    \texttt{mapless\_nav}, \texttt{debugger}; \textbf{ninguno se usa en el
+    robot real})
+
+    \texttt{mapless\_nav} implementa navegación reactiva sin mapa: campos
+    potenciales, navegación por árbol de comportamiento
+    (\texttt{bt\_navigation.py}), y un modelo recurrente entrenado
+    (\texttt{RNN\_mapless.py} + \texttt{TorchModels/RNN.pth}) que decide
+    velocidades directamente a partir de la percepción; sólo se lanza desde
+    el entorno de simulación Webots
+    (\texttt{justina\_mapless\_wbt.launch.xml}), no desde
+    \texttt{justina.launch.xml}. \texttt{debugger} no es un nodo: es una
+    librería cliente (\texttt{DebugClient}, con API idéntica en C++ y
+    Python) que cualquier nodo puede usar para enviar mensajes de estado a
+    un tablero unificado en terminal (\texttt{debug\_manager.py}),
+    ejecutado manualmente por quien depura, no por ningún \textit{launch}.
+
+\end{itemize}
+
+
+\subsubsection{Nodos}
+
+\begin{itemize}
+
+    \item \texttt{nav\_controller\_node}
+
+    Interfaz pública para "ir a una ubicación": resuelve el nombre contra
+    \texttt{locations\_manager}, publica la meta, calcula un
+    \textit{timeout} proporcional a la distancia (con mínimo y máximo
+    configurables) y espera el resultado.
+    \begin{itemize}
+        \item \textbf{Tópicos publicados:}
+        \begin{itemize}
+            \item \texttt{/nav\_control/goal} -- Meta de navegación
+            (consumida por \texttt{mvn\_pln\_node}).
+            \item \texttt{/navigation/navigation\_ctrl/stop} -- Señal de
+            paro que consumen los \textit{drivers} de \textit{Hardware}
+            (brazos, cabeza, pinzas) y \texttt{gui\_node}.
+        \end{itemize}
+        \item \textbf{Tópicos suscritos:}
+        \begin{itemize}
+            \item \texttt{/navigation/status} -- Estado de la meta en curso
+            (publicado por \texttt{mvn\_pln\_node}).
+        \end{itemize}
+        \item \textbf{Servicios ofrecidos:}
+        \begin{itemize}
+            \item \texttt{/nav\_controller/go\_to\_location} -- Usado por
+            \texttt{supervisor\_manager\_node} para navegación correctiva
+            directa.
+        \end{itemize}
+        \item \textbf{Servicios utilizados:}
+        \begin{itemize}
+            \item \texttt{/locations\_manager/get} -- Resuelve el nombre de
+            la ubicación a una pose.
+        \end{itemize}
+    \end{itemize}
+
+    \item \texttt{locations\_manager\_node}
+
+    Mantiene el catálogo de ubicaciones nombradas y difunde su TF.
+    \begin{itemize}
+        \item \textbf{Tópicos publicados:} TF de cada ubicación conocida
+        (cada 0.5\,s, para visualización en RViz).
+        \item \textbf{Servicios ofrecidos:}
+        \begin{itemize}
+            \item \texttt{/locations\_manager/add} -- Agrega una ubicación
+            con pose explícita (usado por \texttt{Navigation::AddLocationPose}).
+            \item \texttt{/locations\_manager/get} -- Consulta la pose de
+            una ubicación por nombre.
+            \item \texttt{/locations\_manager/save} -- Guarda la pose
+            actual del robot como una ubicación nueva (usado por
+            \texttt{Navigation::AddLocation}, la primitiva
+            \texttt{save\_loc} del Executor).
+        \end{itemize}
+    \end{itemize}
+
+    \item \texttt{mvn\_pln} (nombre interno del nodo:
+    \texttt{motion\_planner\_node})
+
+    Orquesta una maniobra de navegación completa: pide una ruta, la
+    despacha a \texttt{simple\_move} y reacciona a obstáculos, paros y
+    resultado final.
+    \begin{itemize}
+        \item \textbf{Tópicos publicados:}
+        \begin{itemize}
+            \item \texttt{/navigation/status} -- Estado de la meta
+            (\texttt{GoalStatus}).
+            \item \texttt{/navigation/potential\_fields/enable},
+            \texttt{/navigation/potential\_fields/enable\_cloud} -- Activan
+            los campos potenciales por LiDAR/nube en \texttt{potential\_fields}.
+            \item \texttt{/simple\_move/goal\_path},
+            \texttt{/simple\_move/goal\_dist\_angle},
+            \texttt{/simple\_move/stop} -- Comandan a \texttt{simple\_move}.
+        \end{itemize}
+        \item \textbf{Tópicos suscritos:}
+        \begin{itemize}
+            \item \texttt{/nav\_control/goal} -- Meta de navegación (nombre
+            absoluto codificado en el nodo; el \textit{remap} a
+            \texttt{move\_base\_simple/goal} presente en el \textit{launch}
+            no aplica sobre un nombre absoluto y no tiene efecto).
+            \item \texttt{/stop}, \texttt{/navigation/stop} -- Señales de
+            paro general y de navegación.
+            \item \texttt{/simple\_move/goal\_reached} -- Resultado de
+            \texttt{simple\_move}.
+            \item \texttt{/navigation/set\_patience},
+            \texttt{/navigation/potential\_fields/collision\_risk} --
+            Ajuste de reintentos y riesgo de colisión reportado por
+            \texttt{potential\_fields}.
+        \end{itemize}
+        \item \textbf{Servicios utilizados:}
+        \begin{itemize}
+            \item \texttt{path\_planner/plan\_path\_with\_static} /
+            \texttt{\_augmented} -- Solicita la ruta a \texttt{path\_planner}.
+            \item Servicios de \texttt{map\_augmenter} para obtener el mapa
+            aumentado y su costo, y para consultar si hay obstáculos o si
+            el robot está dentro de uno.
+        \end{itemize}
+    \end{itemize}
+
+    \item \texttt{path\_planner} (nombre interno del nodo:
+    \texttt{path\_planner\_node})
+
+    Busca una ruta punto a punto con A* sobre el mapa solicitado.
+    \begin{itemize}
+        \item \textbf{Servicios ofrecidos:}
+        \begin{itemize}
+            \item \texttt{path\_planner/plan\_path\_with\_static} /
+            \texttt{\_augmented} -- Ruta sobre el mapa estático o el
+            aumentado con obstáculos dinámicos.
+        \end{itemize}
+        \item \textbf{Servicios utilizados:}
+        \begin{itemize}
+            \item Servicios \texttt{GetMap} de \texttt{map\_augmenter}
+            (estático, de costo estático, aumentado, de costo aumentado).
+        \end{itemize}
+    \end{itemize}
+
+    \item \texttt{simple\_move} (nombre interno del nodo:
+    \texttt{simple\_move\_node})
+
+    Convierte una ruta/objetivo en comandos de velocidad, con control
+    proporcional y orientación de cabeza opcional hacia la dirección de
+    movimiento.
+    \begin{itemize}
+        \item \textbf{Tópicos publicados:}
+        \begin{itemize}
+            \item \texttt{/hardware/base/cmd\_vel} -- Velocidad comandada
+            (\textit{remap} de \texttt{/cmd\_vel} en el \textit{launch}).
+            \item \texttt{/simple\_move/goal\_reached} -- Resultado.
+            \item Objetivo de cabeza (cuando \texttt{move\_head} está
+            activo).
+        \end{itemize}
+        \item \textbf{Tópicos suscritos:}
+        \begin{itemize}
+            \item \texttt{/simple\_move/goal\_path},
+            \texttt{/simple\_move/goal\_dist\_angle},
+            \texttt{/simple\_move/stop} -- Comandados por \texttt{mvn\_pln}.
+            \item \texttt{/stop}, señal de paro de navegación, y fuerza de
+            rechazo/riesgo de colisión reportados por
+            \texttt{potential\_fields}.
+        \end{itemize}
+    \end{itemize}
+
+    \item \texttt{potential\_fields}
+
+    Calcula un campo de repulsión a partir del LiDAR y/o la nube de puntos
+    y lo superpone al \texttt{cmd\_vel} de \texttt{simple\_move} para
+    evitar colisiones con obstáculos no reflejados en el mapa.
+    \begin{itemize}
+        \item \textbf{Tópicos publicados:}
+        \begin{itemize}
+            \item \texttt{/hardware/base/cmd\_vel} -- Corrige la velocidad
+            comandada (\textit{remap} de \texttt{/cmd\_vel}).
+            \item \texttt{/navigation/potential\_fields/collision\_risk} --
+            Alerta de riesgo de colisión para \texttt{mvn\_pln}.
+        \end{itemize}
+        \item \textbf{Tópicos suscritos:}
+        \begin{itemize}
+            \item \texttt{/navigation/potential\_fields/enable} /
+            \texttt{enable\_cloud} -- Activan la repulsión por
+            LiDAR/nube.
+            \item \texttt{/simple\_move/goal\_path} -- Referencia de ruta.
+            \item LiDAR y nube de puntos de la cámara.
+        \end{itemize}
+    \end{itemize}
+
+    \item \texttt{map\_augmenter\_node}
+
+    Combina el mapa estático, el de prohibición y los obstáculos dinámicos
+    en un mapa aumentado y su versión de costo, para que
+    \texttt{path\_planner} planee evitándolos.
+    \begin{itemize}
+        \item \textbf{Tópicos publicados:} Mapa aumentado
+        (\texttt{OccupancyGrid}) y mapa de planeación.
+        \item \textbf{Tópicos suscritos:}
+        \begin{itemize}
+            \item \texttt{clicked\_point} -- Punto agregado manualmente
+            desde RViz (vía \texttt{map\_enhancer}).
+            \item Mapa de obstáculos dinámicos de
+            \texttt{obstacle\_detector\_node}.
+        \end{itemize}
+        \item \textbf{Servicios ofrecidos:}
+        \begin{itemize}
+            \item Cuatro servicios \texttt{GetMap} (estático, de costo
+            estático, aumentado, de costo aumentado) y dos
+            \texttt{Trigger} (\texttt{are\_there\_obstacles},
+            \texttt{is\_inside\_obstacles}).
+        \end{itemize}
+        \item \textbf{Servicios utilizados:}
+        \begin{itemize}
+            \item \texttt{GetMap} del servidor de mapa estático y del de
+            prohibición.
+        \end{itemize}
+    \end{itemize}
+
+    \item \texttt{obstacle\_detector\_node}
+
+    Detecta obstáculos dinámicos a partir del LiDAR y/o la nube de puntos,
+    filtrando por ventana espacial configurable, y los publica como
+    \texttt{OccupancyGrid} con decaimiento en el tiempo.
+    \begin{itemize}
+        \item \textbf{Tópicos publicados:} Mapa de obstáculos dinámicos
+        (\texttt{OccupancyGrid}), consumido por \texttt{map\_augmenter\_node}.
+        \item \textbf{Tópicos suscritos:} LiDAR y nube(s) de puntos de la
+        cámara.
+        \item \textbf{Servicios utilizados:}
+        \begin{itemize}
+            \item \texttt{GetMap} del servidor de mapa estático (para
+            saber qué celdas ya son obstáculo conocido).
+        \end{itemize}
+    \end{itemize}
+
+    \item \texttt{map\_enhancer} (nombre interno del nodo:
+    \texttt{augment\_gridmap\_online\_node})
+
+    Herramienta manual para agregar obstáculos permanentes al mapa de
+    prohibición desde RViz.
+    \begin{itemize}
+        \item \textbf{Tópicos publicados:} Mapa de prohibición aumentado,
+        sus metadatos, y un marcador de depuración.
+        \item \textbf{Tópicos suscritos:}
+        \begin{itemize}
+            \item \texttt{clicked\_point} -- Punto seleccionado en RViz.
+            \item Mapa de prohibición fijo.
+        \end{itemize}
+        \item \textbf{Servicios ofrecidos:}
+        \begin{itemize}
+            \item Limpiar el mapa aumentado (\texttt{Empty}) y consultarlo
+            (\texttt{GetMap}, remapeado a \texttt{prohibition\_map} para
+            \texttt{map\_augmenter\_node}).
+        \end{itemize}
+    \end{itemize}
+
+\end{itemize}
+
+
+% ============================================================
+% PLANNING
+% ============================================================
+
+\subsection{Planning}
+
+\label{app:justina_planning}
+
+El módulo \textit{Planning} traduce entradas en lenguaje natural (o metas ya
+estructuradas) en un plan lineal de instrucciones para el robot. La entrada
+llega vía \textit{semantic\_parser} (un LLM externo -- Qwen -- o un
+analizador basado en spaCy) o directamente como una lista de metas
+\texttt{goal(args)}; ambas rutas terminan generando hechos para un motor de
+reglas CLIPS (\texttt{clips\_node}), que produce el plan y lo publica en
+\texttt{/planning/clips/results}, consumido por
+\texttt{supervisor\_plan\_node} (véase \textit{Supervisor}).
+
+
+\subsubsection{Paquetes}
+
+\begin{itemize}
+
+    \item \texttt{clips\_node} (paquete ROS \texttt{clips\_node}, Python)
+
+    Envuelve el motor de reglas CLIPS (librería \texttt{clips}) en un nodo
+    de ROS 2: carga uno de varios conjuntos de reglas según el parámetro
+    \texttt{plan\_name} (\texttt{goals\_planning}, \texttt{gpsr\_planning},
+    \texttt{hri\_planning}, \texttt{laundry\_planning},
+    \texttt{pnp\_planning\_Justina}/\texttt{\_Takeshi},
+    \texttt{restaurant\_planning}, \texttt{robot\_inspection} --
+    correspondientes a categorías de prueba de RoboCup@Home), expone
+    servicios para insertar hechos y disparar la planeación, y publica el
+    plan resultante. También aloja dos nodos adicionales:
+    \texttt{goals\_to\_clips\_node} (activo) convierte una lista JSON de
+    metas \texttt{goal(args)} -- típicamente producidas por un LLM -- en
+    hechos CLIPS, los inserta en lote y dispara la planeación; y
+    \texttt{natural\_to\_clips.py} (registrado como ejecutable instalable,
+    pero \textbf{no referenciado por ningún \textit{launch} del
+    repositorio}) traduciría oraciones libres a hechos CLIPS a través de un
+    servicio curiosamente alojado bajo
+    \texttt{/hri/listener/natural\_to\_clips/interpret} en vez de bajo
+    \texttt{/planning}.
+
+    \item \texttt{clips\_launch}
+
+    Paquete de sólo \textit{launch}: \texttt{clips.launch.xml} arranca
+    siempre \texttt{clips\_node}; arranca \texttt{goals\_to\_clips\_node}
+    si \texttt{use\_goals\_to\_clips} está activo (lo está por defecto,
+    sobreescrito a \texttt{true} desde \texttt{planning\_tools}); y deja
+    \texttt{primitive\_to\_clips\_node} comentado -- no se lanza en la
+    configuración activa.
+
+    \item \texttt{plan\_manager\_node} (\textbf{código huérfano, no
+    referenciado por ningún \textit{launch}})
+
+    Implementación que se solapa casi por completo con
+    \texttt{supervisor\_plan\_node} del módulo \textit{Supervisor}: se
+    suscribe a \texttt{/clips/results} (nótese, sin el prefijo
+    \texttt{/planning} que usa la ruta activa), ofrece
+    \texttt{/request\_instruction} y publica \texttt{/instruction\_msg}.
+    Todo indica que es una versión anterior de esa lógica que quedó en el
+    árbol de código sin conectarse a ningún \textit{launch}.
+
+    \item \texttt{primitive\_to\_clips}
+
+    Convierte texto de una primitiva (acción del Executor) en un hecho
+    CLIPS, consultando el estado del mundo de \textit{Knowledge}
+    (\texttt{world\_state\_client.hpp}) para dar contexto, y puede
+    insertarlo y disparar la planeación. Su nodo,
+    \texttt{primitive\_to\_clips\_node}, ofrece exactamente el servicio que
+    \texttt{planning\_tools} espera (\texttt{/planning/primitive\_to\_clips/convert}),
+    pero está comentado en \texttt{clips.launch.xml} y por lo tanto
+    \textbf{no corre en la configuración activa}.
+
+    \item \texttt{planning\_tools}
+
+    Fachada síncrona (clase \texttt{Planning}) sobre todos los servicios
+    del \textit{pipeline} de planeación: análisis semántico (Qwen y
+    spaCy), extracción de entidades, traducción de primitivas/oraciones a
+    CLIPS, conversión de metas a CLIPS, solicitud de instrucciones y
+    disparo del motor CLIPS. Aloja el \textit{launch} raíz del módulo
+    (\texttt{planning.launch.xml}), que bajo el \textit{namespace}
+    \texttt{/planning} conecta \texttt{clips\_launch} y
+    \texttt{semantic\_parser}. También incluye \texttt{qwen\_to\_plan.py},
+    una utilidad de línea de comandos para probar manualmente el
+    \textit{pipeline} Qwen→metas→CLIPS (no forma parte de ningún
+    \textit{launch}).
+
+    \textit{Dos métodos de la fachada no tienen backend activo:}
+    \texttt{interpretToClips()} apunta a
+    \texttt{/hri/listener/natural\_to\_clips/interpret}, cuya única
+    implementación (\texttt{natural\_to\_clips.py}) no se lanza en ningún
+    \textit{launch}; y \texttt{requestInstruction()} apunta a
+    \texttt{/planning/request\_instruction}, pero el único servicio
+    realmente ofrecido con ese propósito es el
+    \texttt{/request\_instruction} (sin el prefijo \texttt{/planning}) de
+    \texttt{supervisor\_plan\_node} -- por lo que, tal como está el código
+    hoy, esa llamada tampoco encontraría servidor.
+
+    \item \texttt{semantic\_parser}
+
+    Tres nodos de comprensión de lenguaje natural para comandos estilo
+    GPSR: \texttt{qwen\_semantic\_node} (llama a un servidor HTTP externo
+    de Qwen para convertir una oración en metas \texttt{goal(args)}
+    estructuradas; también ofrece un servicio combinado
+    "escuchar + interpretar" que llama directamente al Listener de HRI),
+    \texttt{semantic\_node} (alternativa basada en spaCy que produce un
+    análisis tipo \textit{Conceptual Dependency}), y
+    \texttt{entity\_extractor\_node} (extrae una entidad nombrada de una
+    categoría dada a partir de una oración, usando los diccionarios de
+    vocabulario del \texttt{knowledge\_bank} de \textit{Knowledge}
+    directamente por su directorio de instalación, no por servicio ROS).
+
+    \textit{Anomalía en el \textit{launch} activo:} \texttt{semantic\_parser.launch.xml}
+    lanza \texttt{semantic\_node} dos veces bajo el mismo nombre de nodo
+    (\texttt{semantic\_node}): una vez condicionada a
+    \texttt{use\_spacy\_parser} con servicio
+    \texttt{semantic\_parser\_spacy}, y otra vez incondicionalmente con el
+    nombre de servicio por defecto del código, \texttt{semantic\_parser}
+    -- que es exactamente el mismo nombre de servicio que
+    \texttt{qwen\_semantic\_node} recibe explícitamente por parámetro en
+    ese mismo \textit{launch}. El resultado son dos nodos con el mismo
+    nombre (\texttt{semantic\_node} duplicado) y dos servidores distintos
+    anunciando el mismo servicio
+    (\texttt{/planning/semantic\_parser/semantic\_parser}, uno respaldado
+    por Qwen y otro por spaCy); sólo leyendo el código no se puede
+    determinar cuál de los dos atiende una llamada dada de
+    \texttt{Planning::parseSemanticCommand()}.
+
+\end{itemize}
+
+
+\subsubsection{Nodos}
+
+\begin{itemize}
+
+    \item \texttt{clips\_node}
+
+    Motor de planeación: carga el conjunto de reglas CLIPS correspondiente
+    a \texttt{plan\_name}, atiende peticiones para insertar hechos y
+    disparar la planeación (en un hilo de trabajo separado para no
+    bloquear el \textit{executor} de ROS 2), y publica el plan resultante.
+    \begin{itemize}
+        \item \textbf{Tópicos publicados:}
+        \begin{itemize}
+            \item \texttt{/planning/clips/results} -- Plan generado, como
+            texto serializado.
+        \end{itemize}
+        \item \textbf{Servicios ofrecidos:}
+        \begin{itemize}
+            \item \texttt{/planning/clips/start\_planning} -- Dispara el
+            motor de reglas sobre los hechos ya insertados.
+            \item \texttt{/planning/clips/assert\_fact} -- Inserta un hecho
+            CLIPS individual.
+            \item \texttt{/planning/clips/assert\_facts\_batch} -- Inserta
+            varios hechos CLIPS de una vez.
+        \end{itemize}
+    \end{itemize}
+
+    \item \texttt{goals\_to\_clips\_node} (nombre interno del nodo:
+    \texttt{goals\_to\_clips})
+
+    Traduce una lista JSON de metas \texttt{goal(args)} en hechos CLIPS,
+    los inserta en lote y dispara la planeación.
+    \begin{itemize}
+        \item \textbf{Servicios ofrecidos:}
+        \begin{itemize}
+            \item \texttt{/planning/goals\_to\_clips/convert} -- Recibe el
+            JSON de metas y regresa el resultado de insertarlas y disparar
+            la planeación.
+        \end{itemize}
+        \item \textbf{Servicios utilizados:}
+        \begin{itemize}
+            \item \texttt{/planning/clips/assert\_facts\_batch} y
+            \texttt{/planning/clips/start\_planning} -- Insertan los hechos
+            generados y disparan el motor CLIPS.
+        \end{itemize}
+    \end{itemize}
+
+    \item \texttt{qwen\_semantic\_node}
+
+    Convierte una oración en metas estructuradas llamando a un servidor
+    HTTP externo de Qwen; también ofrece un modo "escuchar y luego
+    interpretar" para comandos GPSR.
+    \begin{itemize}
+        \item \textbf{Servicios ofrecidos:}
+        \begin{itemize}
+            \item \texttt{/planning/semantic\_parser/semantic\_parser} --
+            (nombre de servicio configurado explícitamente por
+            \textit{launch}, ver anomalía arriba) Interpreta una oración ya
+            transcrita y regresa metas estructuradas.
+            \item \texttt{/planning/semantic\_parser/listen\_gpsr} --
+            Escucha un comando de voz (vía el Listener de HRI) y lo
+            interpreta con Qwen en una sola llamada.
+        \end{itemize}
+        \item \textbf{Servicios utilizados:}
+        \begin{itemize}
+            \item \texttt{/hri/listener/listen} -- Captura el comando
+            hablado para el modo \texttt{listen\_gpsr}.
+        \end{itemize}
+    \end{itemize}
+
+    \item \texttt{semantic\_node} (lanzado dos veces con el mismo nombre;
+    ver anomalía arriba)
+
+    Analiza una oración con un \textit{pipeline} de spaCy (modelo
+    \texttt{en\_core\_web\_trf}) y produce una representación semántica
+    tipo \textit{Conceptual Dependency}.
+    \begin{itemize}
+        \item \textbf{Servicios ofrecidos:}
+        \begin{itemize}
+            \item \texttt{semantic\_parser\_spacy} (primera instancia,
+            condicionada a \texttt{use\_spacy\_parser}) /
+            \texttt{semantic\_parser} (segunda instancia, sin condición,
+            nombre por defecto del código -- coincide con el servicio de
+            \texttt{qwen\_semantic\_node}) -- Ambas bajo
+            \texttt{/planning/semantic\_parser/}.
+        \end{itemize}
+    \end{itemize}
+
+    \item \texttt{entity\_extractor\_node}
+
+    Extrae una entidad nombrada de una categoría dada (bebidas, nombres,
+    objetos, etc.) de una oración, usando los diccionarios de
+    \texttt{knowledge\_bank}.
+    \begin{itemize}
+        \item \textbf{Servicios ofrecidos:}
+        \begin{itemize}
+            \item \texttt{/planning/semantic\_parser/extract\_entity} --
+            Regresa la(s) entidad(es) de la categoría solicitada
+            encontradas en la oración.
+        \end{itemize}
+    \end{itemize}
+
+    \item \texttt{primitive\_to\_clips\_node} (\textbf{no se lanza en la
+    configuración activa} -- comentado en \texttt{clips.launch.xml})
+    \begin{itemize}
+        \item \textbf{Servicios ofrecidos:}
+        \begin{itemize}
+            \item \texttt{/planning/primitive\_to\_clips/convert} --
+            Convierte el texto de una primitiva en un hecho CLIPS
+            (consultando el estado del mundo para dar contexto) y puede
+            insertarlo y disparar la planeación.
+        \end{itemize}
+        \item \textbf{Servicios utilizados:}
+        \begin{itemize}
+            \item \texttt{/planning/clips/assert\_facts\_batch} y
+            \texttt{/planning/clips/start\_planning}.
+        \end{itemize}
+    \end{itemize}
+
+    \item \texttt{natural\_to\_clips} (\textbf{no referenciado por ningún
+    \textit{launch}}; ejecutable instalado pero huérfano)
+    \begin{itemize}
+        \item \textbf{Servicios ofrecidos:}
+        \begin{itemize}
+            \item \texttt{/hri/listener/natural\_to\_clips/interpret} --
+            Traduciría una oración libre a un hecho CLIPS.
+        \end{itemize}
+    \end{itemize}
+
+    \item \texttt{plan\_manager\_node} (\textbf{código huérfano, no
+    referenciado por ningún \textit{launch}}; ver nota en \textit{Paquetes})
+    \begin{itemize}
+        \item \textbf{Tópicos publicados:}
+        \begin{itemize}
+            \item \texttt{/instruction\_msg} -- Instrucción despachada.
+        \end{itemize}
+        \item \textbf{Tópicos suscritos:}
+        \begin{itemize}
+            \item \texttt{/clips/results} -- Plan generado (ruta sin
+            prefijo \texttt{/planning}, inconsistente con la activa).
+        \end{itemize}
+        \item \textbf{Servicios ofrecidos:}
+        \begin{itemize}
+            \item \texttt{/request\_instruction} -- Regresa la siguiente
+            instrucción de la cola.
+        \end{itemize}
+    \end{itemize}
+
+\end{itemize}
+
+
+% ============================================================
+% SUPERVISOR
+% ============================================================
+
+\subsection{Supervisor}
+
+\label{app:justina_supervisor}
+
+El módulo \textit{Supervisor} cierra el ciclo entre \textit{Planning} y
+\textit{Executor}: convierte el plan serializado que produce CLIPS en una
+cola de instrucciones que el Executor va solicitando una a una, valida y
+clasifica el resultado de cada tarea que el Executor reporta, y (cuando
+está habilitado) orquesta comportamiento correctivo -- reintentos, rebobinar
+un paso, inyectar una instrucción de emergencia -- entre ambos.
+
+\textit{Hallazgo importante:} en la configuración de \textit{launch} activa
+(\texttt{supervisor\_manager/launch/supervisor.launch.xml}), el nodo
+\texttt{supervisor\_manager\_node} está comentado y por lo tanto \textbf{no
+se lanza}. Es, con mucho, el componente más grande del módulo (más de 4400
+líneas), e implementa el coordinador de más alto nivel: la política de
+recuperación PNP, la inyección de instrucciones correctivas, y la señal
+\texttt{/supervisor/supervisor\_manager/allow\_next\_instruction} que
+\texttt{supervisor\_execution\_node} necesita para volver a pulsar
+\texttt{/input\_trigger} después de cada tarea. Con \texttt{supervisor\_manager\_node}
+apagado, nada más en el repositorio publica esa señal (se verificó que sólo
+esos dos nodos referencian \texttt{/input\_trigger}), por lo que el pulso
+automático de "siguiente instrucción" depende de que se habilite este nodo;
+esta sección documenta su implementación tal como existe en el código,
+señalando explícitamente que está desactivado en el \textit{launch} activo.
+
+
+\subsubsection{Paquetes}
+
+\begin{itemize}
+
+    \item \texttt{supervisor\_plan}
+
+    Recibe el plan serializado publicado por CLIPS
+    (\texttt{/planning/clips/results}), lo parsea en una cola interna de
+    instrucciones secuenciales, y expone \texttt{/request\_instruction}
+    para que \texttt{executor\_manager} las vaya pidiendo una a una. Si no
+    hay plan cargado, responde con una instrucción de respaldo
+    (\texttt{"Justina listen keyword"}) para que el robot siga siendo
+    reactivo. Soporta superponer una instrucción correctiva sin perder la
+    cola original (se reanuda el plan tras ejecutarla) y rebobinar un paso.
+
+    \item \texttt{supervisor\_execution}
+
+    Valida y clasifica el resultado de cada tarea que
+    \texttt{executor\_manager} reporta después de que
+    \texttt{executor\_worker} la ejecuta. Contiene una clase validadora por
+    cada nombre de acción del Executor (\texttt{GoTo}, \texttt{Say},
+    \texttt{Listen}, \texttt{Check}, \texttt{Save}, \texttt{Describe},
+    \texttt{Point}, \texttt{Find}, \texttt{Focus}, \texttt{Follow},
+    \texttt{Unfocus}, \texttt{MemorizeFace}, \texttt{SaveLoc},
+    \texttt{Align}, \texttt{Take}, \texttt{VerifyTake}, \texttt{Drop},
+    \texttt{Analyze}, \texttt{Approach}, \texttt{Fold}); cada una recibe el
+    argumento original de la acción y el texto crudo devuelto por
+    \texttt{executor\_tools} (p. ej. \texttt{"arrived\_at: cocina: ..."}) y
+    lo normaliza a un \texttt{TaskExecutionReport} estructurado
+    (\texttt{approved}, \texttt{status}, \texttt{failure\_reason}
+    categorizado -- argumento inválido, resultado mal formado,
+    \textit{timeout}, falla de navegación, etc.).
+
+    \item \texttt{supervisor\_manager} (\textbf{no se lanza en la
+    configuración activa} -- ver hallazgo arriba)
+
+    Coordinador de más alto nivel: escucha \texttt{/system/status}, el
+    resultado validado de \texttt{supervisor\_execution}, y el estado del
+    plan de \texttt{supervisor\_plan}; puede pedir rebobinar un paso,
+    habilitar la siguiente instrucción, habilitar la entrega de una
+    instrucción del plan, mandar un comando auxiliar (reintento) o inyectar
+    una instrucción correctiva (p. ej. pedirle a Justina que repita un dato
+    que no entendió). Mantiene clientes propios y directos a Talker,
+    Listener, navegación por ubicaciones conocidas y cabeza, para
+    comportamiento correctivo hablado/de orientación independiente del
+    Executor. Incluye \texttt{PnpRecoveryManager}
+    (\texttt{pnp\_recovery.hpp/cpp}): una política de tiempo de ejecución
+    sobre el plan PNP (\textit{Pick aNd Place}) fijo que emite
+    \texttt{pnp\_planning\_Justina.clp} -- inserta \texttt{verify\_take}
+    después de cada toma exitosa, pospone un objeto fallido mientras el
+    plan nominal continúa, reintenta localmente en el origen antes de
+    transferir al destino, salta los pasos de destino/soltar para objetos
+    nunca verificados como cargados, y usa el tiempo restante en un
+    segundo intento sobre los objetos fallidos.
+
+    \item \texttt{supervisor\_system}
+
+    Publica \texttt{/system/status} cada segundo. \textbf{Implementación
+    actual:} el nodo (\texttt{supervisor\_system\_node.cpp}, 65 líneas) no
+    inspecciona el grafo de ROS 2 ni verifica la presencia de nodos
+    concretos -- publica un mensaje con todos los módulos
+    (\texttt{navigation}, \texttt{manipulation}, \texttt{vision},
+    \texttt{hri}, \texttt{executor}, \texttt{planner}, \texttt{hardware})
+    marcados como saludables de forma fija (\textit{hardcoded}). La
+    verificación real de nodos activos, terminación y relanzamiento
+    automático que describe el \texttt{README} del paquete no está
+    implementada en este código; es un \textit{stub}/marcador de posición
+    para ese trabajo futuro.
+
+    \item \texttt{surge\_et\_ambula}
+
+    Paquete de sólo \textit{launch} (sin nodos propios) que centraliza el
+    \textit{bringup} de todo el robot: \texttt{justina.launch.xml} (robot
+    real, incluye Supervisor, Executor, Planning, Navigation, Manipulation,
+    HRI, Vision, Knowledge y Hardware, más RViz),
+    \texttt{justina\_sim.launch.xml} (misma composición pero sustituyendo
+    \texttt{hardware\_tools} por \texttt{simple\_justina\_sim.py}),
+    \texttt{map.launch.xml}, y los \textit{launches} alternos para el
+    backend de hardware del robot Takeshi (HSR).
+
+\end{itemize}
+
+
+\subsubsection{Nodos}
+
+\begin{itemize}
+
+    \item \texttt{supervisor\_plan\_node}
+
+    Mantiene la cola de instrucciones del plan activo y la entrega bajo
+    demanda.
+    \begin{itemize}
+        \item \textbf{Tópicos publicados:}
+        \begin{itemize}
+            \item \texttt{/instruction\_msg} -- Instrucción actualmente
+            despachada (sólo para observabilidad).
+            \item \texttt{/supervisor/supervisor\_plan/active} -- Indica si
+            aún quedan instrucciones por ejecutar en el plan.
+            \item \texttt{/supervisor/supervisor\_plan/plan\_ready} --
+            Pulso que indica que un nuevo plan de CLIPS ya fue parseado.
+        \end{itemize}
+        \item \textbf{Tópicos suscritos:}
+        \begin{itemize}
+            \item \texttt{/planning/clips/results} -- Plan serializado
+            producido por CLIPS.
+            \item \texttt{/supervisor/supervisor\_manager/instruction} --
+            Instrucción correctiva a superponer sobre el plan.
+            \item \texttt{/supervisor/supervisor\_manager/instruction\_command}
+            -- Comando auxiliar (p. ej. reintentar).
+            \item \texttt{/supervisor/supervisor\_manager/allow\_plan\_instruction}
+            -- Habilita la entrega de la siguiente instrucción del plan.
+            \item \texttt{/supervisor/supervisor\_plan/rewind\_one} --
+            Solicita repetir la instrucción anterior.
+        \end{itemize}
+        \item \textbf{Servicios ofrecidos:}
+        \begin{itemize}
+            \item \texttt{/request\_instruction} -- Regresa la siguiente
+            instrucción de la cola (o la instrucción de respaldo si no hay
+            plan cargado).
+        \end{itemize}
+    \end{itemize}
+
+    \item \texttt{supervisor\_execution\_node}
+
+    Autoriza/clasifica el resultado de cada tarea reportada por el
+    Executor, despachando al validador de la clase correspondiente a la
+    acción, y mantiene viva la señal que permite pedir la siguiente
+    instrucción.
+    \begin{itemize}
+        \item \textbf{Tópicos publicados:}
+        \begin{itemize}
+            \item \texttt{/input\_trigger} -- Pulso que dispara el ciclo de
+            solicitud/ejecución en \texttt{executor\_manager\_node}
+            (emitido en respuesta a
+            \texttt{allow\_next\_instruction}; reintenta si aún no hay
+            suscriptor).
+            \item \texttt{/supervisor/supervisor\_execution/result} --
+            Reporte estructurado (\texttt{TaskExecutionReport}) de la
+            tarea recién validada.
+        \end{itemize}
+        \item \textbf{Tópicos suscritos:}
+        \begin{itemize}
+            \item \texttt{/supervisor/supervisor\_manager/allow\_next\_instruction}
+            -- Señal para volver a pulsar \texttt{/input\_trigger}
+            (publicada únicamente por \texttt{supervisor\_manager\_node},
+            actualmente deshabilitado).
+        \end{itemize}
+        \item \textbf{Servicios ofrecidos:}
+        \begin{itemize}
+            \item \texttt{/supervisor/supervisor\_executor/authorize} --
+            Recibe la acción, argumento y resultado crudo del Executor;
+            regresa si fue aprobada y el motivo de falla si no.
+        \end{itemize}
+    \end{itemize}
+
+    \item \texttt{supervisor\_system\_node} (nombre interno del nodo:
+    \texttt{system\_status\_publisher})
+
+    Publica el estado de salud del sistema una vez por segundo.
+    \textit{Implementación actual: valores fijos, ver nota en Paquetes.}
+    \begin{itemize}
+        \item \textbf{Tópicos publicados:}
+        \begin{itemize}
+            \item \texttt{/system/status} -- Estado (fijo) de los módulos
+            de navegación, manipulación, visión, HRI, executor, planner y
+            hardware.
+        \end{itemize}
+    \end{itemize}
+
+    \item \texttt{supervisor\_manager\_node} (\textbf{no se lanza en la
+    configuración activa})
+
+    Coordinador de más alto nivel y política de recuperación PNP, descrito
+    en \textit{Paquetes}. Interfaz tal como está implementada en el código
+    (no en ejecución):
+    \begin{itemize}
+        \item \textbf{Tópicos publicados:}
+        \begin{itemize}
+            \item \texttt{/supervisor/supervisor\_plan/rewind\_one},
+            \texttt{/supervisor/supervisor\_manager/allow\_next\_instruction},
+            \texttt{/supervisor/supervisor\_manager/allow\_plan\_instruction},
+            \texttt{/supervisor/supervisor\_manager/instruction\_command},
+            \texttt{/supervisor/supervisor\_manager/instruction} -- Señales
+            de control hacia \texttt{supervisor\_plan\_node} y
+            \texttt{supervisor\_execution\_node} descritas arriba.
+        \end{itemize}
+        \item \textbf{Tópicos suscritos:}
+        \begin{itemize}
+            \item \texttt{/system/status} -- Salud del sistema.
+            \item \texttt{/supervisor/supervisor\_execution/result} --
+            Resultado validado de la última tarea.
+            \item \texttt{/supervisor/supervisor\_plan/active} y
+            \texttt{/supervisor/supervisor\_plan/plan\_ready} -- Estado del
+            plan.
+            \item \texttt{/instruction\_msg} -- Instrucción en curso (sólo
+            observabilidad).
+        \end{itemize}
+        \item \textbf{Servicios utilizados:}
+        \begin{itemize}
+            \item \texttt{/hri/talker/talk}, \texttt{/hri/listener/listen}
+            -- Habla/escucha correctiva independiente del Executor.
+            \item \texttt{/nav\_controller/go\_to\_location} -- Navegación
+            correctiva a una ubicación conocida.
+            \item \texttt{/hardware/head/move\_head} -- Movimiento
+            correctivo de cabeza.
+        \end{itemize}
+    \end{itemize}
+
+\end{itemize}
+
+
+% ============================================================
+% VISION
+% ============================================================
+
+\subsection{Vision}
+
+\label{app:justina_vision}
+
+El módulo \textit{Vision} se encarga de la percepción visual del robot:
+detección de objetos 2D/3D (YOLO y OWLv2), analítica sobre esas detecciones
+(conteo, tamaño, color, comparación), reconocimiento e identificación facial,
+detección de asientos vacíos, alineación con mesas, y localización de
+espacios de entrega (mesa/repisa/contenedor) para las tareas de
+manipulación. Expone todo esto a través de la fachada \texttt{vision\_tools}.
+Es, con \textit{Navigation}, uno de los módulos con más nodos activos
+simultáneamente (14, todos bajo el \textit{namespace} \texttt{/vision}).
+
+
+\subsubsection{Paquetes}
+
+\begin{itemize}
+
+    \item \texttt{vision\_tools}
+
+    Fachada síncrona (clase \texttt{Vision}) sobre todos los servicios de
+    detección, analítica y reconocimiento facial del módulo. Aloja el
+    \textit{launch} raíz (\texttt{vision.launch.xml}, con una cantidad
+    considerable de parámetros afinados a mano, sobre todo para los nodos
+    de \texttt{vacancy\_detector}) y tres nodos propios:
+    \texttt{detect\_seats\_node}, \texttt{Detect\_Fusion\_Node} e
+    \texttt{image\_fixed\_node} (descritos en \textit{Nodos}).
+
+    \textit{Un método de la fachada no tiene backend activo bajo el nombre
+    esperado:} \texttt{Vision::DetectByClass()} llama a
+    \texttt{/vision/detect\_by\_class}, pero \texttt{Detect\_Fusion\_Node}
+    -- que implementa exactamente esa lógica -- registra el servicio como
+    \texttt{/detect\_by\_class}, sin el prefijo \texttt{/vision}; hay una
+    línea comentada en el código que sugiere que el nombre con prefijo se
+    consideró en algún momento. Mientras no coincidan, esa llamada de la
+    fachada no encuentra servidor.
+
+    \item \texttt{object\_recognizer} (tres paquetes ROS:
+    \texttt{owlv2\_detect}, \texttt{pc\_bbox\_pose}, \texttt{yolo\_detect})
+
+    \texttt{yolo\_detect} corre YOLO11 sobre la imagen de la cámara,
+    publicando la lista de detecciones y ofreciendo detección bajo demanda
+    y el interruptor de detección continua. \texttt{owlv2\_detect} corre el
+    modelo OWLv2 (detección por texto/\textit{open-vocabulary}) sobre la
+    misma imagen; en el sistema activo se lanzan \texttt{owlv2\_node}
+    (servicio de detección) y \texttt{Analize\_node} (analítica de conteo,
+    tamaño, color y comparación sobre las detecciones de OWLv2, no de
+    YOLO). El paquete también instala \texttt{Analize\_Human\_node} y
+    \texttt{owl\_2d}, ninguno de los dos referenciado por
+    \texttt{vision.launch.xml}; en particular,
+    \texttt{Analize\_Human\_node} sería el servidor de
+    \texttt{/vision/analyze\_person} que consume
+    \texttt{Vision::AnalyzePerson()}, por lo que ese método de la fachada
+    tampoco tiene backend activo. \texttt{pc\_bbox\_pose} convierte un
+    \textit{bounding box} 2D más la nube de puntos en una pose 3D.
+
+    \item \texttt{face\_recognizer} (paquete ROS \texttt{face\_recog})
+
+    Reconocimiento facial. El \textit{launch} activo usa
+    \texttt{faceFlorence} (\texttt{face\_recogFlorence2.py}, basado en el
+    modelo Florence-2), que ofrece detectar, identificar, describir y
+    registrar personas por rostro. Los ejecutables \texttt{face}
+    (\texttt{face\_recog.py}) y \texttt{facev2} (\texttt{face\_recogv2.py})
+    se instalan pero no se lanzan -- versiones anteriores del mismo nodo.
+
+    \item \texttt{table\_alignment}
+
+    Segmenta la nube de puntos para encontrar el plano de una mesa (redonda
+    o rectangular) y calcula el ángulo de alineación entre el robot y su
+    borde.
+
+    \item \texttt{vacancy\_detector}
+
+    Localiza puntos de entrega libres en tres tipos de superficie --
+    \texttt{table\_drop\_tf\_node} (mesa), \texttt{shelf\_drop\_tf\_node}
+    (repisa/estante, detectando planos horizontales candidatos) y
+    \texttt{container\_drop\_tf\_node} (contenedor/cubeta, apoyándose
+    opcionalmente en un \textit{bounding box} de OWLv2 para acotar la
+    región de búsqueda antes de procesar geometría) -- y publica el
+    resultado como TF. Los tres reutilizan la misma nube de puntos filtrada
+    por \texttt{vacancy\_cloud\_filter\_node}: cada uno activa el filtro
+    compartido bajo demanda para no procesar nube constantemente, y todos
+    arrancan desactivados (\texttt{active\_on\_start=false}). Las
+    ubicaciones de referencia de cada superficie viven en archivos de texto
+    planos dentro del propio paquete
+    (\texttt{table\_drop\_points.txt}, \texttt{shelf\_drop\_points.txt},
+    \texttt{container\_drop\_points.txt}).
+
+\end{itemize}
+
+
+\subsubsection{Nodos}
+
+\begin{itemize}
+
+    \item \texttt{yolo\_detect\_node}
+
+    Corre YOLO11 sobre la imagen de la cámara y expone las detecciones.
+    \begin{itemize}
+        \item \textbf{Tópicos publicados:}
+        \begin{itemize}
+            \item \texttt{/vision/detections\_list} -- Lista de
+            detecciones YOLO (consumida por \texttt{person\_tracker} de
+            HRI).
+        \end{itemize}
+        \item \textbf{Tópicos suscritos:}
+        \begin{itemize}
+            \item Imagen de la cámara (parámetro \texttt{image\_topic}).
+            \item \texttt{/vision/enable\_continuous} -- Activa/desactiva
+            la detección continua (también como servicio, ver abajo).
+        \end{itemize}
+        \item \textbf{Servicios ofrecidos:}
+        \begin{itemize}
+            \item \texttt{/vision/detection} -- Detección bajo demanda.
+            \item \texttt{/vision/enable\_continuous} -- Activa/desactiva
+            la detección continua (usado por \texttt{Vision::EnableContinuous}
+            y por \texttt{human\_tracking\_node} de HRI).
+        \end{itemize}
+    \end{itemize}
+
+    \item \texttt{owlv2\_detect\_node} (nombre interno del nodo:
+    \texttt{owl\_server})
+
+    Corre OWLv2 (detección por texto) sobre la imagen de la cámara.
+    \begin{itemize}
+        \item \textbf{Tópicos publicados:}
+        \begin{itemize}
+            \item \texttt{/vision/detections} -- Detecciones de OWLv2
+            (consumidas por \texttt{Analize\_node}).
+            \item \texttt{/vision/owl/debug\_image} -- Imagen de depuración
+            (consumida por \texttt{gui\_node} de HRI/Hardware).
+        \end{itemize}
+        \item \textbf{Tópicos suscritos:}
+        \begin{itemize}
+            \item Imagen de la cámara (parámetro \texttt{image\_topic}).
+        \end{itemize}
+        \item \textbf{Servicios ofrecidos:}
+        \begin{itemize}
+            \item \texttt{/vision/owl/owlv2\_service} -- Detección por
+            texto/consulta abierta (usado por
+            \texttt{Vision::DetectOwlV2}, \texttt{Detect\_Fusion\_Node} y
+            \texttt{container\_drop\_tf\_node}).
+        \end{itemize}
+        \item \textbf{Servicios utilizados:}
+        \begin{itemize}
+            \item \texttt{/vision/bbox\_to\_pose} -- Convierte el
+            \textit{bounding box} detectado en una pose 3D.
+        \end{itemize}
+    \end{itemize}
+
+    \item \texttt{Analize\_node} (nombre interno del nodo:
+    \texttt{vision\_analytic\_service})
+
+    Analítica sobre las detecciones de OWLv2: conteo (con acumulado
+    histórico e IoU para no contar el mismo objeto dos veces), tamaño,
+    color y comparación entre clases.
+    \begin{itemize}
+        \item \textbf{Tópicos suscritos:}
+        \begin{itemize}
+            \item \texttt{/vision/detections} -- Detecciones de OWLv2 que
+            alimentan el historial de conteo.
+        \end{itemize}
+        \item \textbf{Servicios ofrecidos:}
+        \begin{itemize}
+            \item \texttt{/vision/count\_objects},
+            \texttt{/vision/get\_by\_size}, \texttt{/vision/get\_by\_color},
+            \texttt{/vision/compare\_count} -- Las cuatro modalidades de
+            analítica (usadas por \texttt{Vision::AnalyzeCount/Size/Color/Compare}).
+        \end{itemize}
+        \item \textbf{Servicios utilizados:}
+        \begin{itemize}
+            \item \texttt{/vision/owl/owlv2\_service} -- Redetecta bajo
+            demanda cuando el historial no basta.
+        \end{itemize}
+    \end{itemize}
+
+    \item \texttt{pc\_bbox\_pose\_node}
+
+    Convierte un \textit{bounding box} 2D más la nube de puntos en una pose
+    3D del objeto detectado.
+    \begin{itemize}
+        \item \textbf{Tópicos suscritos:}
+        \begin{itemize}
+            \item Nube de puntos de la cámara (parámetro
+            \texttt{pointcloud\_topic}).
+        \end{itemize}
+        \item \textbf{Servicios ofrecidos:}
+        \begin{itemize}
+            \item \texttt{/vision/bbox\_to\_pose} -- Usado por
+            \texttt{Vision::DetectByClass/GetOwlPose}, \texttt{owlv2\_detect\_node}
+            y \texttt{detect\_seats\_node}.
+        \end{itemize}
+    \end{itemize}
+
+    \item \texttt{face\_recog\_node} (ejecutable \texttt{faceFlorence};
+    nombre interno del nodo: \texttt{face\_service\_node})
+
+    Detecta, identifica, describe y registra personas por reconocimiento
+    facial (modelo Florence-2).
+    \begin{itemize}
+        \item \textbf{Tópicos publicados:}
+        \begin{itemize}
+            \item \texttt{/face\_recog/debug\_image} -- Imagen de
+            depuración (consumida por \texttt{gui\_node}).
+        \end{itemize}
+        \item \textbf{Tópicos suscritos:}
+        \begin{itemize}
+            \item Imagen de la cámara y su \texttt{camera\_info}.
+        \end{itemize}
+        \item \textbf{Servicios ofrecidos:}
+        \begin{itemize}
+            \item \texttt{/vision/detect\_person},
+            \texttt{/vision/identify\_person},
+            \texttt{/vision/describe\_person},
+            \texttt{/vision/register\_person} -- Las cuatro operaciones del
+            pipeline de rostro (usadas por \texttt{Vision::DetectPerson/
+            IdentifyPerson/DescribePerson/RegisterPerson}).
+        \end{itemize}
+    \end{itemize}
+
+    \item \texttt{detect\_seats\_node}
+
+    Combina detección YOLO y conversión a pose 3D para determinar si hay un
+    asiento libre frente al robot.
+    \begin{itemize}
+        \item \textbf{Tópicos publicados:}
+        \begin{itemize}
+            \item \texttt{/vision/detect\_seats/debug\_image} -- Imagen de
+            depuración (consumida por \texttt{gui\_node}).
+        \end{itemize}
+        \item \textbf{Tópicos suscritos:}
+        \begin{itemize}
+            \item Imagen de la cámara (parámetro \texttt{image\_topic},
+            sólo para depuración).
+        \end{itemize}
+        \item \textbf{Servicios ofrecidos:}
+        \begin{itemize}
+            \item \texttt{/vision/find\_seat} -- Usado por
+            \texttt{Vision::FindSeat}.
+        \end{itemize}
+        \item \textbf{Servicios utilizados:}
+        \begin{itemize}
+            \item \texttt{/vision/detection} y \texttt{/vision/bbox\_to\_pose}
+            -- Detecta y ubica candidatos a asiento.
+        \end{itemize}
+    \end{itemize}
+
+    \item \texttt{Detect\_Fusion\_Node} (nombre interno del nodo:
+    \texttt{detect\_fusion\_node})
+
+    Elige un detector 2D (YOLO u OWLv2, según el modelo solicitado), obtiene
+    el \textit{bounding box} de la clase pedida, y lo convierte en pose 3D
+    vía \texttt{pc\_bbox\_pose}.
+    \begin{itemize}
+        \item \textbf{Servicios ofrecidos:}
+        \begin{itemize}
+            \item \texttt{/detect\_by\_class} -- Ver anomalía de nombre en
+            \textit{Paquetes}: la fachada llama a
+            \texttt{/vision/detect\_by\_class}, sin coincidir.
+        \end{itemize}
+        \item \textbf{Servicios utilizados:}
+        \begin{itemize}
+            \item \texttt{/vision/detection}, \texttt{/vision/owl/owlv2\_service}
+            -- Los dos detectores disponibles.
+            \item \texttt{/vision/bbox\_to\_pose} -- Conversión a pose 3D.
+        \end{itemize}
+    \end{itemize}
+
+    \item \texttt{table\_segmenter\_node}
+
+    Segmenta el plano de una mesa en la nube de puntos y calcula el ángulo
+    de alineación del robot respecto a su borde.
+    \begin{itemize}
+        \item \textbf{Tópicos publicados:}
+        \begin{itemize}
+            \item Nube de puntos segmentada, ángulo de alineación
+            (\texttt{Float64}) y marcadores de depuración (RViz).
+        \end{itemize}
+        \item \textbf{Tópicos suscritos:}
+        \begin{itemize}
+            \item Nube de puntos de la cámara (parámetro
+            \texttt{pointcloud\_topic}).
+        \end{itemize}
+        \item \textbf{Servicios ofrecidos:}
+        \begin{itemize}
+            \item \texttt{/vision/get\_table\_alignment} -- Usado por
+            \texttt{Vision::GetTableAlignment}.
+        \end{itemize}
+    \end{itemize}
+
+    \item \texttt{vacancy\_cloud\_filter} (nombre interno del nodo:
+    \texttt{vacancy\_cloud\_filter\_node})
+
+    Filtro de nube compartido por los tres nodos de
+    \texttt{vacancy\_detector}: recorta la nube al ROI configurado y la
+    publica sólo mientras está activo; al activarse, pausa opcionalmente la
+    navegación por campos potenciales y el filtro de obstáculos de nube de
+    Navigation para no interferir con la detección de espacio.
+    \begin{itemize}
+        \item \textbf{Tópicos publicados:}
+        \begin{itemize}
+            \item \texttt{/vision/vacancy/points\_filtered} -- Nube
+            filtrada al ROI (parámetro \texttt{output\_topic}).
+            \item Habilitación de campos potenciales de navegación
+            (normal y de nube), restaurada al desactivarse.
+        \end{itemize}
+        \item \textbf{Tópicos suscritos:}
+        \begin{itemize}
+            \item Nube de puntos de la cámara (parámetro
+            \texttt{input\_topic}).
+        \end{itemize}
+        \item \textbf{Servicios ofrecidos:}
+        \begin{itemize}
+            \item \texttt{/vision/vacancy\_cloud\_filter/enable} -- Activa
+            o desactiva el filtrado (llamado por los tres nodos
+            \texttt{*\_drop\_tf\_node} bajo demanda).
+        \end{itemize}
+        \item \textbf{Servicios utilizados:}
+        \begin{itemize}
+            \item Servicio de habilitación del filtro de obstáculos de
+            nube de \textit{Navigation} (parámetro
+            \texttt{nav\_cloud\_filter\_enable\_service}).
+        \end{itemize}
+    \end{itemize}
+
+    \item \texttt{table\_drop\_tf\_node} / \texttt{shelf\_drop\_tf\_node} /
+    \texttt{container\_drop\_tf\_node}
+
+    Buscan un punto de entrega libre sobre la nube filtrada compartida y lo
+    publican como TF (\texttt{table\_frame}, \texttt{shelf\_frame} y
+    \texttt{container\_frame} respectivamente, con su punto de aproximación
+    \texttt{*\_drop\_start}); \texttt{shelf\_drop\_tf\_node} además detecta
+    los planos horizontales candidatos (repisas) antes de elegir sección; y
+    \texttt{container\_drop\_tf\_node} puede usar un \textit{bounding box}
+    de OWLv2 como región de búsqueda antes de procesar la geometría, con
+    reintentos si la ventana visual recorta demasiado.
+    \begin{itemize}
+        \item \textbf{Tópicos publicados:}
+        \begin{itemize}
+            \item Marcadores de depuración (RViz); adicionalmente, la nube
+            recortada de depuración en \texttt{container\_drop\_tf\_node}.
+        \end{itemize}
+        \item \textbf{Tópicos suscritos:}
+        \begin{itemize}
+            \item Nube filtrada de \texttt{vacancy\_cloud\_filter}
+            (parámetro \texttt{pointcloud\_topic}).
+        \end{itemize}
+        \item \textbf{Servicios ofrecidos:}
+        \begin{itemize}
+            \item \texttt{enable} (\texttt{SetBool}, uno por nodo) --
+            Activa/desactiva la búsqueda de ese tipo de superficie.
+        \end{itemize}
+        \item \textbf{Servicios utilizados:}
+        \begin{itemize}
+            \item \texttt{/vision/vacancy\_cloud\_filter/enable} -- Activa
+            el filtro compartido mientras busca.
+            \item \texttt{/vision/owl/owlv2\_service} -- Sólo
+            \texttt{container\_drop\_tf\_node}, para acotar la búsqueda por
+            visión antes de procesar geometría.
+        \end{itemize}
+    \end{itemize}
+
+    \item \texttt{image\_fixed\_node} (nombre interno del nodo:
+    \texttt{hsr\_image\_enhancer})
+
+    Aplica balance de blancos y realce a la imagen cruda de la cámara del
+    HSR/Takeshi y la republica bajo el tópico canónico de cámara de
+    Justina. Se lanza sin condición en \texttt{vision.launch.xml}; en el
+    robot real (base Robotino, cámara vía \texttt{openni2\_camera}) nada
+    publica en el tópico HSR del que depende, por lo que el nodo
+    simplemente no recibe imágenes y no tiene efecto -- es relevante sólo
+    al operar sobre el backend de hardware alterno de Takeshi.
+    \begin{itemize}
+        \item \textbf{Tópicos publicados:}
+        \begin{itemize}
+            \item \texttt{/hardware/camera/image\_raw} -- Imagen realzada,
+            en el tópico que consume el resto del sistema.
+        \end{itemize}
+        \item \textbf{Tópicos suscritos:}
+        \begin{itemize}
+            \item \texttt{/head\_rgbd\_sensor/rgb/image\_rect\_color} --
+            Tópico de cámara estándar del HSR/Takeshi.
+        \end{itemize}
+    \end{itemize}
+
+\end{itemize}

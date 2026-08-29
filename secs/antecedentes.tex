@@ -1,61 +1,67 @@
-\section{Mecanismos y manipuladores robóticos}
+En la Universidad Nacional Autónoma de México (UNAM), el Laboratorio de Bio-Robótica de la Facultad de Ingeniería realiza investigación en áreas como robótica móvil, realidad virtual, reconocimiento de patrones, inteligencia artificial e interfaces hombre-máquina~\cite{justina_uv}. Fundado en 1996 por Jesús Savage Carmona, el laboratorio comenzó su trayectoria con la adquisición de un robot comercial estadounidense y, desde entonces, ha conformado equipos de estudiantes de licenciatura, maestría y doctorado para desarrollar prototipos propios, tales como TX8, TPR8, PAC-ITO y AL-ITA~\cite{robots_ia_unam}. Cada plataforma ha sido fruto de una línea de trabajo orientada a la creación de robots de servicio para apoyar a las personas en sus actividades cotidianas en entornos como casas, escuelas, oficinas u hospitales~\cite{justina_uv}.
 
+Actualmente, el robot \emph{Justina} se ha consolidado como la insignia del laboratorio y su referente en la competencia internacional RoboCup@Home. Al constituir el sistema de validación de este trabajo, en el presente capítulo se aborda su arquitectura de hardware y software, para posteriormente exponer la teoría general de manipuladores robóticos, en particular sus variables de interés, instrumentación y estrategias de control.
 
+\section{\emph{Justina}}
 
-\section{Control de posición y trayectoria}
+\emph{Justina} (fig.~\ref{fig:justina}) es un robot de servicio doméstico cuyo diseño amigable e inteligente facilita la interacción con los humanos y su entorno. Como proyecto, se enmarca en una iniciativa para mejorar la calidad de vida de las personas, al tiempo que contribuye a la formación de estudiantes en ciencia e ingeniería~\cite{BioRoboticsUNAM}. La plataforma cuenta con una base móvil omnidireccional, un torso telescópico, un LiDAR, un micrófono cardioide, una cámara RGB-D y dos brazos manipuladores. 
 
+La integración del hardware con el software se fundamenta en la arquitectura ViRbot (fig.~\ref{fig:virbot}), un sistema modular diseñado para coordinar la operación de robots de servicio autónomos combinando planeación de acciones con comportamientos reactivos sobre una representación dinámica del mundo~\cite{Savage2007}. Bajo este esquema, las funciones se organizan en cuatro capas: entrada, manejo del conocimiento, planeación y ejecución.
 
-
-\section{Medición de par y fuerza en robótica}
-
-
-
-\section{\emph{Robot Operating System}}
-
-El \emph{Robot Operating System (ROS)} es una plataforma (\emph{framework}) de código abierto orientada al desarrollo de sistemas en robótica. Su arquitectura facilita la comunicación y sincronización de los diferentes procesos encargados de las diferentes tareas que se deben realizar para el funcionamiento del sistema~\cite{ros_docs}.
-
-Uno de los conceptos fundamentales de ROS es el \textbf{nodo}. Un nodo es un proceso que ejecuta una función específica dentro del sistema. Los nodos pueden comunicarse entre sí mediante diferentes mecanismos, permitiendo construir sistemas distribuidos en los que diferentes componentes pueden ejecutarse en distintas arquitecturas de hardware y con distintos sistemas operativos~\cite{ros_nodos}.
-
-Las primeras distribuciones de ROS ya no cuentan con soporte actualmente. Su evolución es ROS 2 y fue diseñado para mejorar aspectos relacionados con tiempo real, seguridad, escalabilidad y aplicaciones comerciales e industriales. Una de sus principales diferencias es el uso del \emph{Data Distribution Service (DDS)} como infraestructura de comunicación. Esto permitió eliminar el proceso raíz, \emph{master}, encargado de la sincronización de los procesos.
-
-ROS 2 proporciona principalmente tres mecanismos de comunicación~\cite{ros_interfaces}:
-
-\begin{enumerate}
-	\item \textbf{Tópicos:} Utilizan un modelo de publicador/suscriptor para la transmisión de datos de manera asíncrona. Son utilizados para sensores, estados del robot o comandos.
-	\item \textbf{Servicios:} Utilizan un modelo de solicitud/respuesta y son apropiados para operaciones relativamente rápidas y discretas.
-	\item \textbf{Acciones:} Permiten ejecutar tareas de mayor duración, proporcionando retroalimentación, un resultado final y la posibilidad de cancelar la operación.
-\end{enumerate}
-
-\section{Robot \emph{Justina}}
-
-El Laboratorio de Bio-Robótica de la UNAM, fundado en 1997, se centra principalmente en la investigación de campos como visión artificial, reconocimiento de voz, planeación de tareas complejas, navegación y manipulación. Tiene la misión de promover el desarrollo de la ingeniería y la robótica en México. Con esta motivación, emprendió en 2005 la construcción de robots móviles destinados a ayudar a las personas en sus actividades cotidianas, en entornos domésticos, académicos, laborales y clínicos. Como resultado de esta labor, se construyó el robot de servicio de propósito general \emph{Justina}~\cite{justina_uv}.
-
-\emph{Justina}, ver fig.~\ref{fig:justina}, desarrollada en su totalidad en el Laboratorio de Bio-Robótica, tiene el propósito de mejorar la calidad de vida de las personas. Su diseño se centra en facilitar la interacción con los humanos y con el ambiente. Todos los avances y mejoras que se incorporan son presentados anualmente en la categoría \emph{@HOME} de la RoboCup.
-
-Actualmente, \emph{Justina} cuenta con una cámara RGBD, un micrófono direccional, un torso telescópico, un sensor LiDAR, dos brazos manipuladores con siete grados de libertad cada uno y una base móvil FESTO \emph{Robotino 4}. Por otro lado, el \emph{software} para controlar a Justina está organizado de manera modular, según el esquema del VirBot, ver fig.~\ref{fig:virbot}.
-
-\begin{figure}[htbp]
+\begin{figure}[!ht]
     \centering
-    \begin{subfigure}{0.5\textwidth}
+    \begin{subfigure}{0.25\textwidth}
         \centering
         \includegraphics[width=\textwidth]{img/antecedentes/justina_subsystems.jpg}
         \caption{Justina}
         \label{fig:justina}
     \end{subfigure}
     \hfill
-    \begin{subfigure}{0.42\textwidth}
+    \begin{subfigure}{0.7\textwidth}
         \centering
         \includegraphics[width=\textwidth]{img/antecedentes/ViRBot_2.0.png}
-        \caption{VirBot}
+        \caption{ViRbot}
         \label{fig:virbot}
     \end{subfigure}
-    \caption{Hardware y software de Justina}
+    \caption{Arquitectura base del robot \emph{Justina}}
 \end{figure}
 
-\section {Diseño centrado en el usuario}
+Para desempeñar sus tareas, un robot de servicio basado en la arquitectura ViRbot percibe el entorno mediante sus sensores, actualiza su representación del mundo, planifica sus acciones y transmite comandos de control a sus actuadores~\cite{Negrete2019}. En la implementación actual de \emph{Justina}, este modelo conceptual se materializa empleando \emph{Robot Operating System} (ROS), un ecosistema de código abierto cuyo \emph{framework} proporciona herramientas que facilitan la comunicación y sincronización de los procesos encargados del funcionamiento del robot~\cite{ros_about}. 
 
-Históricamente, el conocimiento práctico y la experiencia acumulada constituyeron la base del diseño. Como señalan Pahl y Beitz, a partir de la segunda mitad del siglo XX, la importancia económica del desarrollo eficiente y oportuno de productos motivó la creación de procedimientos sistemáticos y flexibles que permitieran planificar, optimizar, verificar y enseñar el proceso de diseño. Tal evolución propició la formalización de metodologías para analizar y descomponer problemas, generar soluciones óptimas y evaluar alternativas bajo criterios técnicos y económicos~\cite{Pahl-Beitz}. Estas metodologías, sin embargo, partían de especificaciones y requisitos que no consideraban a quienes usarían los productos.
+En ROS, las responsabilidades del sistema se estructuran en \emph{nodos}, unidades básicas de cómputo encargadas de realizar una función específica. Los nodos pueden comunicarse entre sí utilizando diversos mecanismos, lo que permite construir sistemas distribuidos en los que sus componentes pueden ejecutarse en distintas arquitecturas de hardware e incluso en diferentes sistemas operativos~\cite{ros_nodos}.
 
-El diseño centrado en el usuario (DCU) surgió en el laboratorio de Donald A. Norman en la Universidad de California San Diego como una filosofía que involucra al usuario en todas las fases del desarrollo de un producto, desde su conceptualización hasta su evaluación~\cite{Garreta-Mor}. Norman propuso en \textit{The Design of Everyday Things} un enfoque que parte de la comprensión profunda de las personas y de las necesidades que el diseño pretende satisfacer~\cite{Norman}. Este enfoque no es subjetivo, pues se fundamenta en disciplinas científicas como la ergonomía, la psicología y la antropología, y requiere que las decisiones de diseño estén respaldadas por datos obtenidos directamente de los usuarios~\cite{Lowdermilk}.
+A medida que las necesidades de la comunidad superaron el enfoque inicial de ROS, la plataforma evolucionó hacia ROS 2 para contemplar, desde el diseño, nuevos casos de uso, como sistemas embebidos, control en tiempo real y aplicaciones industriales~\cite{ros_2_why}. Para la interacción entre nodos, ROS 2 define tres interfaces de comunicación fundamentales~\cite{ros_interfaces}:
 
-En aplicaciones domésticas de robótica de servicio, el DCU resulta especialmente pertinente. Robots como Justina demuestran capacidades de navegación, manipulación, visión e interacción humano-robot que les permiten operar en ambientes reales no estandarizados, adaptándose a los hogares y a sus habitantes~\cite{Rulebook@HOME}. Identificar sistemáticamente las necesidades de quienes conviven con estos sistemas es, por lo tanto, una condición necesaria para orientar el desarrollo de soluciones robóticas apropiadas.
+\begin{itemize}
+    \item \emph{Tópicos}: Implementan un patrón publicador/suscriptor para la transmisión continua, unidireccional y asíncrona de datos, como lecturas de sensores o estados del sistema.
+    \item \emph{Servicios}: Implementan un patrón de solicitud/respuesta para interacciones síncronas de corta duración, donde un cliente requiere una respuesta o confirmación inmediata por parte de un servidor.
+	\item \emph{Acciones}: Implementan un patrón de meta/retroalimentación/resultado para tareas asíncronas de larga duración, donde un cliente puede enviar una meta, recibir retroalimentación periódica, cancelar la ejecución y obtener un resultado.
+\end{itemize}
+
+Estas primitivas de comunicación cimentan la arquitectura actual de \emph{Justina}, permitiendo desacoplar el sistema en módulos orquestadores y módulos especializados, cuyos paquetes, nodos e interfaces se documentan detalladamente en el anexo~\ref{app:justina}. Desde una perspectiva operativa, las tareas del robot provienen de rutinas preprogramadas, como las pruebas de la competencia RoboCup@Home, o de peticiones libres derivadas de comandos de voz. En ambos casos, el procesamiento de la solicitud (fig.~\ref{fig:justina_architecture}) recae en los módulos orquestadores:
+
+\begin{enumerate}
+	\item \emph{Planning}: Descompone la petición en una secuencia coherente de acciones.
+	\item \emph{Supervisor}: Examina cada paso del plan generado, proporcionando rutinas de recuperación ante cualquier imprevisto.
+	\item \emph{Executor}: Traduce las instrucciones de alto nivel en llamadas a los métodos de los módulos especializados correspondientes.
+\end{enumerate}
+
+A partir de este punto, la ejecución se distribuye en módulos especializados que proporcionan capacidades específicas:
+
+\begin{itemize}
+    \item \emph{Knowledge}: Administra el estado del entorno para consulta de los demás módulos.
+    \item \emph{HRI}: Canaliza la interacción con personas a través del reconocimiento y síntesis de voz.
+    \item \emph{Vision}: Procesa imágenes para la detección y clasificación de objetos y personas.
+    \item \emph{Navigation}: Localiza el robot y traza rutas hacia el destino evadiendo obstáculos.
+    \item \emph{Manipulation}: Genera y coordina las trayectorias de los brazos y el torso.
+    \item \emph{Hardware}: Abstrae la comunicación con sensores y actuadores.
+\end{itemize}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{img/antecedentes/ViRBot_2.0.png}
+    \caption{Arquitectura de operación de \emph{Justina}.}
+    \label{fig:justina_architecture}
+\end{figure}
+
+Adicionalmente, mediante una red Ethernet, \emph{Justina} distribuye el cómputo entre una computadora portátil, dedicada al comportamiento autónomo de alto nivel, y la computadora embebida en la base móvil, encargada del control de los componentes de bajo nivel.
