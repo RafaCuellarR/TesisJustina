@@ -38,7 +38,9 @@ A medida que las necesidades de la comunidad superaron el enfoque inicial de ROS
     \item \emph{Acciones}: Implementan un patrón de meta/retroalimentación/resultado para tareas asíncronas de larga duración, donde un cliente puede enviar una meta, recibir retroalimentación periódica, cancelar la ejecución y obtener un resultado.
 \end{itemize}
 
-Estas primitivas de comunicación cimentan la arquitectura actual de \emph{Justina}, permitiendo desacoplar el sistema en módulos orquestadores y módulos especializados, cuyos paquetes, nodos e interfaces se documentan detalladamente en el anexo~\ref{app:justina}. Desde una perspectiva operativa, las tareas del robot provienen de rutinas preprogramadas, como las pruebas de la competencia RoboCup@Home, o de peticiones libres derivadas de comandos de voz. En ambos casos, el procesamiento de la solicitud (fig.~\ref{fig:justina_architecture}) recae en los módulos orquestadores:
+Estas primitivas de comunicación cimentan la arquitectura actual de \emph{Justina}, permitiendo distribuir el cómputo entre diferentes plataformas de hardware comunicadas por una red Ethernet. En la implementación actual, una computadora portátil ejecuta los procesos asociados con el comportamiento autónomo de alto nivel, mientras que una computadora embebida en la base móvil se encarga del control de los componentes de bajo nivel. Sobre esta arquitectura distribuida, \emph{Justina} se desacopla en módulos orquestadores y módulos especializados, cuyos paquetes, nodos e interfaces se documentan detalladamente en el anexo~\ref{app:justina}.
+
+Desde una perspectiva operativa, las tareas del robot provienen de rutinas preprogramadas, como las pruebas de la competencia RoboCup@Home, o de peticiones libres derivadas de comandos de voz. En ambos casos, el procesamiento de la solicitud (fig.~\ref{fig:justina_architecture}) recae en los módulos orquestadores:
 
 \begin{enumerate}
     \item \emph{Planning}: Descompone la petición en una secuencia coherente de acciones.
@@ -64,15 +66,15 @@ A partir de este punto, la ejecución se distribuye en módulos especializados q
     \label{fig:justina_architecture}
 \end{figure}
 
-Adicionalmente, mediante una red Ethernet, \emph{Justina} distribuye el cómputo entre una computadora portátil, dedicada al comportamiento autónomo de alto nivel, y la computadora embebida en la base móvil, encargada del control de los componentes de bajo nivel.
+Dentro del sistema de \emph{Manipulation}, los brazos permiten posicionar los efectores finales para realizar las tareas de interacción física con el entorno. El rediseño de estos elementos requiere considerar tanto su configuración mecánica como las relaciones que determinan su movimiento.
 
 \section{Diseño de manipuladores robóticos}
 % Robótica
-La ingeniería mecánica proporciona un conjunto de metodologías para definir y estudiar el movimiento en el diseño de manipuladores robóticos, y de máquinas en general. Las ramas predominantes encargadas de ese análisis son la cinemática y la dinámica~\cite{craig}. La \textbf{cinemática} trata el estudio del movimiento sin considerar las fuerzas que lo ocasionan. La \textbf{dinámica}, por otro lado, se encarga del estudio de las fuerzas sobre sistemas en movimiento. Permite definir los esfuerzos a los que estarán sometidos los elementos del sistema, como función de la aceleración y las fuerzas inerciales~\cite{norton}.
+La ingeniería mecánica proporciona un conjunto de metodologías para el diseño de manipuladores robóticos, y de máquinas en general. Las ramas predominantes encargadas de ese análisis son la cinemática y la dinámica~\cite{craig}. La cinemática trata el estudio del movimiento sin considerar las fuerzas que lo ocasionan. La dinámica, por otro lado, se encarga del estudio de las fuerzas sobre sistemas en movimiento. Permite definir los esfuerzos a los que estarán sometidos los elementos del sistema, como función de la aceleración y las fuerzas inerciales~\cite{norton}.
 
 \subsection{Definición}
 % Definición
-Un \textbf{manipulador robótico se define como una cadena cinemática que puede programarse para realizar una amplia variedad de tareas}~\cite{craig}. Una \textbf{cadena cinemática} es un conjunto de eslabones\footnote{Cuerpo rígido con al menos dos nodos o puntos de conexión. Se clasifican en binarios, ternarios y cuaternarios, dependiendo del número de nodos que posean~\cite{norton}.} conectados por pares cinemáticos\footnote{Unión de dos o más eslabones en sus nodos, permitiendo movimiento relativo. Se clasifican por sus grados de libertad (GDL) y las más comunes son las juntas completas (1 GDL) y las semijuntas (2 GDL)~\cite{norton}.}, para producir movimientos relativos sincronizados con un propósito determinado~\cite{craig}.
+Un manipulador robótico se define como una cadena cinemática que puede programarse para realizar una amplia variedad de tareas~\cite{craig}. Una cadena cinemática es un conjunto de eslabones\footnote{Cuerpo rígido con al menos dos nodos o puntos de conexión. Se clasifican en binarios, ternarios y cuaternarios, dependiendo del número de nodos que posean~\cite{norton}.} conectados por pares cinemáticos\footnote{Unión de dos o más eslabones en sus nodos, permitiendo movimiento relativo. Se clasifican por sus grados de libertad (GDL) y las más comunes son las juntas completas (1 GDL) y las semijuntas (2 GDL)~\cite{norton}.}, para producir movimientos relativos sincronizados con un propósito determinado~\cite{craig}.
 
 % Mecanismos
 Desde el punto de vista de la teoría de mecanismos~\cite{norton}, un manipulador robótico puede considerarse un mecanismo de varios grados de libertad. A pesar de la definición de Reuleaux~\cite{reuleaux}, que limita un mecanismo a cadenas cinemáticas cerradas y de un grado de libertad, para Norton~\cite{norton}, un mecanismo es una cadena cinemática donde al menos uno de sus eslabones se ha ``aterrizado'' o fijado al sistema de referencia.
