@@ -81,7 +81,7 @@ Desde el punto de vista de la teoría de mecanismos~\cite{norton}, un manipulado
 
 \subsection{Movilidad}
 
-El número de grados de libertad globales de un manipulador determinan su \textbf{movilidad}. Es el número de variables de posición \textbf{independientes} que deben especificarse para conocer la posición de todos los eslabones de la cadena cinemática. La \textbf{condición de Gruebler} considera estos factores para un mecanismo plano~\cite{norton}. Sin embargo, cuando se tiene más de un eslabón conectado a tierra, el efecto que se obtiene es el de un eslabón más grande y de mayor orden. Además, se debe considerar que las semijuntas únicamente eliminan un grado de libertad en el plano. El resultado es la \textbf{modificación de Kutzbach}~\cite{norton}, mostrada en la ecuación~\ref{ec:kutzbach}.
+El número de grados de libertad globales de un manipulador determinan su movilidad. Es el número de variables de posición independientes que deben especificarse para conocer la posición de todos los eslabones de la cadena cinemática. La condición de Gruebler considera estos factores para un mecanismo plano~\cite{norton}. Sin embargo, cuando se tiene más de un eslabón conectado a tierra, el efecto que se obtiene es el de un eslabón más grande y de mayor orden. Además, se debe considerar que las semijuntas únicamente eliminan un grado de libertad en el plano. El resultado es la modificación de Kutzbach~\cite{norton}, mostrada en la ecuación~\ref{ec:kutzbach}.
 
 \begin{equation}
 \label{ec:kutzbach}
@@ -106,14 +106,14 @@ Finalmente, para mecanismos espaciales, la modificación de Kurtzbach se puede e
 % Criterio de Grashof
 \subsection{Criterio de Grashof}
 
-Para el diseño de mecanismos de cuatro barras es necesario determinar qué configuraciones permiten obtener el movimiento requerido. En este sentido, la \textbf{ley de Grashof} establece que para que algún eslabón tenga rotación continua \textit{``la suma de las longitudes del eslabón más corto (s) y más largo (l) no puede ser más grande que la suma de las longitudes de los eslabones restantes (p y q)''}~\cite{shigley}, tal como se expresa en la inecuación \ref{ec:grashof}. 
+Para el diseño de mecanismos de cuatro barras es necesario determinar qué configuraciones permiten obtener el movimiento requerido. En este sentido, la ley de Grashof establece que para que algún eslabón tenga rotación continua \textit{``la suma de las longitudes del eslabón más corto (s) y más largo (l) no puede ser más grande que la suma de las longitudes de los eslabones restantes (p y q)''}~\cite{shigley}, tal como se expresa en la inecuación \ref{ec:grashof}. 
 
 \begin{equation}
 \label{ec:grashof}
     s+l \leq p+q
 \end{equation}
 
-Derivado de la condición de Grashof se puede agrupar a las cadenas cinemáticas de cuatro barras planas en tres clases, según se muestra en la figura \ref{fig:grashof}. La \textbf{Clase I} cumple con la desigualdad \ref{ec:grashof} y sus inversiones\footnote{Es la variante de una cadena cinemática dependiendo del eslabón que se designe como ``fijo'' o de referencia. Esto no cambia el movimiento relativo entre los eslabones, pero sí el movimiento absoluto generado~\cite{shigley}.} serán la manivela-balancín, la doble manivela y un doble balancín de Grashof, donde el eslabón acoplador hace una revolución completa. La \textbf{Clase II} no cumple con la condición de Grashof y todas sus inversiones serán balancines triples. La \textbf{Clase III}, o caso especial de Grashof, es cuando se cumple la igualdad~\cite{norton}. 
+Derivado de la condición de Grashof se puede agrupar a las cadenas cinemáticas de cuatro barras planas en tres clases, según se muestra en la figura \ref{fig:grashof}. La Clase I cumple con la desigualdad \ref{ec:grashof} y sus inversiones\footnote{Es la variante de una cadena cinemática dependiendo del eslabón que se designe como ``fijo'' o de referencia. Esto no cambia el movimiento relativo entre los eslabones, pero sí el movimiento absoluto generado~\cite{shigley}.} serán la manivela-balancín, la doble manivela y un doble balancín de Grashof, donde el eslabón acoplador hace una revolución completa. La Clase II no cumple con la condición de Grashof y todas sus inversiones serán balancines triples. La Clase III, o caso especial de Grashof, es cuando se cumple la igualdad~\cite{norton}. 
 
 \begin{figure}[!ht]
     \centering
@@ -127,11 +127,11 @@ Este criterio constituye una condición preliminar para la síntesis dimensional
 % Síntesis
 \subsection{Síntesis cinemática}
 
-La síntesis de un mecanismo garantiza que, por ejemplo, un manipulador serial alcance los puntos de trabajo con las orientaciones deseadas del efector final~\cite{kivela_thesis}. Por esta razón, la síntesis cinemática se suele dividir en pasos: \textbf{síntesis de tipo o topológica}, \textbf{de número} y \textbf{dimensional}. Algunos autores suelen juntar la síntesis de tipo y de número en un solo paso, ya que la primera consiste en determinar el tipo de mecanismo que mejor resuelve el problema planteado y el segundo en determinar la cantidad de eslabones y tipo de juntas para obtener la mobilidad requerida. El último paso está dedicado a definir las dimensiones del mecanismo~\cite{kivela_thesis}.
+La síntesis de un mecanismo garantiza que, por ejemplo, un manipulador serial alcance los puntos de trabajo con las orientaciones deseadas del efector final~\cite{kivela_thesis}. Por esta razón, la síntesis cinemática se suele dividir en pasos: síntesis de tipo o topológica, de número y dimensional. Algunos autores suelen juntar la síntesis de tipo y de número en un solo paso, ya que la primera consiste en determinar el tipo de mecanismo que mejor resuelve el problema planteado y el segundo en determinar la cantidad de eslabones y tipo de juntas para obtener la mobilidad requerida. El último paso está dedicado a definir las dimensiones del mecanismo~\cite{kivela_thesis}.
 
 De acuerdo con Norton~\cite{norton}, las dos grandes clases que engloban las técnicas existentes de síntesis dimensional son la gráfica o geométrica y la analítica. Los métodos gráficos se basan en principios básicos de geometría euclidiana y se centran en cadenas cinemáticas cerradas de cuatro barras. Varían en función de la cantidad de restricciones de diseño, tales como el número de posiciones, de pivotes móviles y fijos.
 
-Una vez que se encuentre una solución potencial se debe evaluar su calidad. El proceso se vuelve entonces un \textbf{diseño cualitativo mediante análisis sucesivo}~\cite{norton}.
+Una vez que se encuentre una solución potencial se debe evaluar su calidad. El proceso se vuelve entonces un diseño cualitativo mediante análisis sucesivo~\cite{norton}.
 
 \subsection{Análisis cinemático}
 % Análisis
@@ -175,7 +175,7 @@ Para el análisis de posición de un mecanismo plano restringido, éste se repre
 \end{figure}
 
 % Robótica (Cinemática, jacobiano y modelo dinámico)
-El mismo procedimiento puede aplicarse al análisis cinemático de un robot serial. Para un manipulador con $n$ grados de libertad, cuando se conocen las variables articulares $\mathbf{q}$ y los parámetros geométricos de los eslabones, es posible resolver el problema de la \textbf{cinemática directa}, mediante el cual se determina la postura del efector final $\mathbf{x}$ con respecto al eslabón base. Esta relación puede expresarse mediante la matriz de transformación homogénea ${}^{0}\mathbf{T}_n$, resultado de la composición de las transformaciones asociadas a cada junta~\cite{handbook_kinematics}. Por el contrario, cuando se conoce la pose deseada del efector final, el problema de la \textbf{cinemática inversa} permite determinar las variables articulares correspondientes~\cite{handbook_kinematics}.
+El mismo procedimiento puede aplicarse al análisis cinemático de un robot serial. Para un manipulador con $n$ grados de libertad, cuando se conocen las variables articulares $\mathbf{q}$ y los parámetros geométricos de los eslabones, es posible resolver el problema de la cinemática directa, mediante el cual se determina la postura del efector final $\mathbf{x}$ con respecto al eslabón base. Esta relación puede expresarse mediante la matriz de transformación homogénea ${}^{0}\mathbf{T}_n$, resultado de la composición de las transformaciones asociadas a cada junta~\cite{handbook_kinematics}. Por el contrario, cuando se conoce la pose deseada del efector final, el problema de la cinemática inversa permite determinar las variables articulares correspondientes~\cite{handbook_kinematics}.
 
 A partir de la relación de cinemática directa, su derivada con respecto al tiempo permite establecer la relación entre las velocidades articulares y las velocidades lineal y angular del efector final~\cite{handbook_kinematics}. Esta relación se expresa mediante el jacobiano, una transformación que relaciona el espacio de juntas con el espacio cartesiano~\cite{craig}, como se muestra en la ecuación \ref{ec:fwd_speed}.
 
