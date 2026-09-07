@@ -68,35 +68,18 @@ Adicionalmente, mediante una red Ethernet, \emph{Justina} distribuye el cómputo
 
 \section{Diseño de manipuladores robóticos}
 % Robótica
-La ingeniería mecánica proporciona un conjunto de metodologías para definir y estudiar el movimiento en el diseño de manipuladores robóticos, y de máquinas en general, en situaciones estáticas y dinámicas. Las ramas predominantes encargadas de ese análisis son la cinemática y la dinámica~\cite{craig}. La \textbf{cinemática} trata el estudio del movimiento sin considerar las fuerzas que lo ocasionan. La \textbf{dinámica}, por otro lado, se encarga del estudio de las fuerzas sobre sistemas en movimiento. Permite definir los esfuerzos a los que estarán sometidos los elementos del sistema, como función de la aceleración y las fuerzas inerciales~\cite{norton}.
+La ingeniería mecánica proporciona un conjunto de metodologías para definir y estudiar el movimiento en el diseño de manipuladores robóticos, y de máquinas en general. Las ramas predominantes encargadas de ese análisis son la cinemática y la dinámica~\cite{craig}. La \textbf{cinemática} trata el estudio del movimiento sin considerar las fuerzas que lo ocasionan. La \textbf{dinámica}, por otro lado, se encarga del estudio de las fuerzas sobre sistemas en movimiento. Permite definir los esfuerzos a los que estarán sometidos los elementos del sistema, como función de la aceleración y las fuerzas inerciales~\cite{norton}.
 
 \subsection{Definición}
 % Definición
-Un \textbf{manipulador robótico se define como una cadena cinemática que puede programarse para realizar una amplia variedad de tareas}~\cite{craig}. Una \textbf{cadena cinemática} es un conjunto de eslabones\footnote{Cuerpo rígido con al menos dos nodos o puntos de conexión. Se clasifican en binarios, ternarios y cuaternarios, dependiendo del número de nodos que posean~\cite{norton}.}, conectados por pares cinemáticos\footnote{Unión de dos o más eslabones en sus nodos, permitiendo movimiento relativo. Se clasifican por sus grados de libertad (GDL) y las más comunes son las juntas completas (1 GDL) y las semijuntas (2 GDL)~\cite{norton}.}, que producen movimientos relativos sincronizados con un propósito determinado~\cite{craig}.
+Un \textbf{manipulador robótico se define como una cadena cinemática que puede programarse para realizar una amplia variedad de tareas}~\cite{craig}. Una \textbf{cadena cinemática} es un conjunto de eslabones\footnote{Cuerpo rígido con al menos dos nodos o puntos de conexión. Se clasifican en binarios, ternarios y cuaternarios, dependiendo del número de nodos que posean~\cite{norton}.} conectados por pares cinemáticos\footnote{Unión de dos o más eslabones en sus nodos, permitiendo movimiento relativo. Se clasifican por sus grados de libertad (GDL) y las más comunes son las juntas completas (1 GDL) y las semijuntas (2 GDL)~\cite{norton}.}, para producir movimientos relativos sincronizados con un propósito determinado~\cite{craig}.
 
-%% Clasificación de cadenas cinemáticas
-Si cada eslabón en la cadena está conectado a al menos otros dos, la cadena cinemática forma uno o más bucles cerrados y se clasifica como una cadena cinemática \textbf{cerrada}. En caso contrario, se conoce como cadena cinemática \textbf{abierta} y constituye la base de los manipuladores robóticos seriales. Si la cadena consiste exclusivamente de eslabones binarios, se le conoce como \textbf{cerrada simple}~\cite{shigley}.
+% Mecanismos
+Desde el punto de vista de la teoría de mecanismos~\cite{norton}, un manipulador robótico puede considerarse un mecanismo de varios grados de libertad. A pesar de la definición de Reuleaux~\cite{reuleaux}, que limita un mecanismo a cadenas cinemáticas cerradas y de un grado de libertad, para Norton~\cite{norton}, un mecanismo es una cadena cinemática donde al menos uno de sus eslabones se ha ``aterrizado'' o fijado al sistema de referencia.
 
 \subsection{Movilidad}
-% Mecanismos
-La cinemática de los manipuladores robóticos se estudia como un mecanismo de varios grados de libertad~\cite{norton}. Según Norton, un mecanismo es una cadena cinemática donde al menos uno de sus eslabones se ha``aterrizado'' o fijado al sistema de referencia~\cite{norton}. Reuleaux~\cite{reuleaux} limita su definición a cadenas cinemáticas cerradas y de un grado de libertad, a los cuales se les conoce como ``restringidos''.
 
-El número de grados de libertad globales de un manipulador determinan su \textbf{movilidad}. Es el número de variables de posición \textbf{independientes} que deben especificarse para conocer la posición de todos los eslabones de la cadena cinemática. Dicho de otra forma, es el número de entradas que se deben proporcionar para generar una salida predecible. Para determinarlo se debe de considerar el número de eslabones, el número de juntas y las interacciones entre ellos. La \textbf{condición de Gruebler} considera estos factores para un mecanismo plano resumidos en la ecuación \ref{ec:gruebler}~\cite{norton}.
-
-\begin{equation}
-\label{ec:gruebler}
-    M = 3L-2J-3G
-\end{equation}
-
-donde:
-\begin{description}
-    \item[$M$] es el número de grados de libertad del mecanismo.
-    \item[$L$] es el número total de eslabones, incluido el eslabón fijo.
-    \item[$J$] es el número de pares cinemáticos.
-    \item[$G$] es el número de eslabones conectados a tierra.
-\end{description}
-
-Sin embargo, es importante destacar que cuando se tiene más de un eslabón conectado a tierra, el efecto que se obtiene es el de un eslabón más grande y de mayor orden. Por lo tanto, el término $G$ en la ecuación de Gruebler~\ref{ec:gruebler} siempre será unitario. Además, dado que las semijuntas únicamente eliminan un grado de libertad en el plano, se consideran como $1/2$. El resultado es la \textbf{modificación de Kutzbach} mostrada en la ecuación~\ref{ec:kutzbach}.
+El número de grados de libertad globales de un manipulador determinan su \textbf{movilidad}. Es el número de variables de posición \textbf{independientes} que deben especificarse para conocer la posición de todos los eslabones de la cadena cinemática. La \textbf{condición de Gruebler} considera estos factores para un mecanismo plano~\cite{norton}. Sin embargo, cuando se tiene más de un eslabón conectado a tierra, el efecto que se obtiene es el de un eslabón más grande y de mayor orden. Además, se debe considerar que las semijuntas únicamente eliminan un grado de libertad en el plano. El resultado es la \textbf{modificación de Kutzbach}~\cite{norton}, mostrada en la ecuación~\ref{ec:kutzbach}.
 
 \begin{equation}
 \label{ec:kutzbach}
@@ -137,12 +120,12 @@ Derivado de la condición de Grashof se puede agrupar a las cadenas cinemáticas
     \label{fig:grashof}
 \end{figure}
 
-Este criterio constituye, por tanto, una condición preliminar para la síntesis dimensional del mecanismo.
+Este criterio constituye una condición preliminar para la síntesis dimensional del mecanismo.
 
 % Síntesis
 \subsection{Síntesis cinemática}
 
-La síntesis de un mecanismo no es una tarea trivial. Garantiza que, por ejemplo, un manipulador serial alcance los puntos de trabajo con las orientaciones deseadas del efector final~\cite{kivela_thesis}. Por esta razón, la síntesis cinemática se suele dividir en pasos: \textbf{síntesis de tipo o topológica}, \textbf{de número} y \textbf{dimensional}. Algunos autores suelen juntar la síntesis de tipo y de número en un solo paso, ya que la primera consiste en determinar el tipo de mecanismo que mejor resuelve el problema planteado, en un proceso puramente cualitativo basado en la experiencia y en la intuición~\cite{norton}, y el segundo consiste en determinar la cantidad de eslabones y tipo de juntas para obtener la mobilidad requerida. El último paso está dedicado a definir las dimensiones del mecanismo~\cite{kivela_thesis}.
+La síntesis de un mecanismo garantiza que, por ejemplo, un manipulador serial alcance los puntos de trabajo con las orientaciones deseadas del efector final~\cite{kivela_thesis}. Por esta razón, la síntesis cinemática se suele dividir en pasos: \textbf{síntesis de tipo o topológica}, \textbf{de número} y \textbf{dimensional}. Algunos autores suelen juntar la síntesis de tipo y de número en un solo paso, ya que la primera consiste en determinar el tipo de mecanismo que mejor resuelve el problema planteado y el segundo en determinar la cantidad de eslabones y tipo de juntas para obtener la mobilidad requerida. El último paso está dedicado a definir las dimensiones del mecanismo~\cite{kivela_thesis}.
 
 De acuerdo con Norton~\cite{norton}, las dos grandes clases que engloban las técnicas existentes de síntesis dimensional son la gráfica o geométrica y la analítica. Los métodos gráficos se basan en principios básicos de geometría euclidiana y se centran en cadenas cinemáticas cerradas de cuatro barras. Varían en función de la cantidad de restricciones de diseño, tales como el número de posiciones, de pivotes móviles y fijos.
 
@@ -165,7 +148,7 @@ Al considerar el movimiento de un cuerpo rígido se debe partir de la postura o 
 \end{equation}
 
 % Mecanismos
-Para el análisis de posición de un mecanismo plano restringido, éste se representa mediante un lazo vectorial. Los eslabones se representan mediante vectores de posición, cuya suma es igual a cero, como se muestra en la figura \ref{fig:lazo}. La notación compleja permite expandir estos vectores mediante la identidad de Euler. De esta forma, se obtiene un sistema de dos ecuaciones, con los ángulos $\theta_3$ y $\theta_4$ como incógnitas, como se expresa en la ecuación \ref{ec:lazo}~\cite{norton}. Una vez obtenida la configuración del mecanismo, las ecuaciones de velocidad se obtienen mediante la diferenciación con respecto al tiempo de las ecuaciones de posición. Una segunda diferenciación permite obtener las ecuaciones de aceleración, utilizando los valores de posición y velocidad correspondientes al instante analizado.
+Para el análisis de posición de un mecanismo plano restringido, éste se representa mediante un lazo vectorial. Los eslabones se representan mediante vectores de posición, cuya suma es igual a cero, como se muestra en la figura \ref{fig:lazo}. La notación compleja permite expandir estos vectores mediante la identidad de Euler. De esta forma, se obtiene el sistema de ecuaciones \ref{ec:lazo}, con los ángulos $\theta_3$ y $\theta_4$ como incógnitas~\cite{norton}. Una vez obtenida la configuración del mecanismo, las ecuaciones de velocidad se obtienen mediante la diferenciación con respecto al tiempo de las ecuaciones de posición. Una segunda diferenciación permite obtener las ecuaciones de aceleración, utilizando los valores de posición y velocidad correspondientes al instante analizado.
 
 \begin{figure}[!ht]
     \centering
@@ -192,12 +175,14 @@ Para el análisis de posición de un mecanismo plano restringido, éste se repre
 % Robótica (Cinemática, jacobiano y modelo dinámico)
 El mismo procedimiento puede aplicarse al análisis cinemático de un robot serial. Para un manipulador con $n$ grados de libertad, cuando se conocen las variables articulares $\mathbf{q}$ y los parámetros geométricos de los eslabones, es posible resolver el problema de la \textbf{cinemática directa}, mediante el cual se determina la postura del efector final $\mathbf{x}$ con respecto al eslabón base. Esta relación puede expresarse mediante la matriz de transformación homogénea ${}^{0}\mathbf{T}_n$, resultado de la composición de las transformaciones asociadas a cada junta~\cite{handbook_kinematics}. Por el contrario, cuando se conoce la pose deseada del efector final, el problema de la \textbf{cinemática inversa} permite determinar las variables articulares correspondientes~\cite{handbook_kinematics}.
 
-A partir de la relación de cinemática directa, la diferenciación temporal permite establecer la relación entre las velocidades articulares y las velocidades lineal y angular del efector final~\cite{handbook_kinematics}. Esta relación se expresa mediante el jacobiano, una transformación que relaciona el espacio de juntas con el espacio cartesiano~\cite{craig}, como se muestra en la ecuación \ref{ec:fwd_speed}. Una segunda diferenciación permite obtener la relación entre las aceleraciones articulares y las aceleraciones lineal y angular del efector final. Al derivar temporalmente la ecuación \ref{ec:fwd_speed}, se obtiene la ecuación \ref{ec:fwd_acc}~\cite{haviland}.
+A partir de la relación de cinemática directa, su derivada con respecto al tiempo permite establecer la relación entre las velocidades articulares y las velocidades lineal y angular del efector final~\cite{handbook_kinematics}. Esta relación se expresa mediante el jacobiano, una transformación que relaciona el espacio de juntas con el espacio cartesiano~\cite{craig}, como se muestra en la ecuación \ref{ec:fwd_speed}.
 
 \begin{equation}
 \label{ec:fwd_speed}
 \dot{\mathbf{x}} = \mathbf{J}(\mathbf{q})\dot{\mathbf{q}}
 \end{equation}
+
+Una segunda diferenciación de la ecuación \ref{ec:fwd_speed} permite obtener la relación entre las aceleraciones articulares y las aceleraciones lineal y angular del efector final, expresado en la ecuación \ref{ec:fwd_acc}~\cite{haviland}.
 
 \begin{equation}
 \label{ec:fwd_acc}
@@ -207,7 +192,7 @@ A partir de la relación de cinemática directa, la diferenciación temporal per
 \dot{\mathbf{J}}(\mathbf{q},\dot{\mathbf{q}})\dot{\mathbf{q}}
 \end{equation}
 
-Las relaciones presentadas permiten establecer qué magnitudes deben conocerse durante la operación del sistema. En consecuencia, la selección de las variables de interés y de los elementos necesarios para su medición constituye el siguiente paso para llevar el modelo cinemático a una implementación física.
+Las relaciones presentadas permiten establecer qué magnitudes deben conocerse durante la operación del sistema. En consecuencia, la selección de los elementos necesarios para su medición constituye el siguiente paso para llevar el modelo cinemático a una implementación física.
 
 \section{Variables de interés e instrumentación}
 
