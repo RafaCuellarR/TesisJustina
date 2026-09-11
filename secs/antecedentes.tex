@@ -26,7 +26,7 @@ La integración del hardware con el software se fundamenta en la arquitectura Vi
     \caption{Arquitectura base del robot \emph{Justina}}
 \end{figure}
 
-Para desempeñar sus tareas, un robot de servicio basado en la arquitectura ViRbot percibe el entorno mediante sus sensores, actualiza su representación del mundo, planifica sus acciones y transmite comandos de control a sus actuadores~\cite{Negrete2019}. En la implementación actual de \emph{Justina}, este modelo conceptual se materializa empleando \emph{Robot Operating System} (ROS), un ecosistema de código abierto cuyo \emph{framework} proporciona herramientas que facilitan la comunicación y sincronización de los procesos encargados del funcionamiento del robot~\cite{ros_about}. 
+Para desempeñar sus tareas, un robot de servicio basado en la arquitectura ViRbot percibe el entorno mediante sus sensores, actualiza su representación del mundo, planifica sus acciones y transmite comandos de control a sus actuadores~\cite{Negrete2019}. En la implementación actual de \emph{Justina}, este modelo conceptual se materializa empleando \emph{Robot Operating System} (ROS), un ecosistema de código abierto cuyo \emph{framework} proporciona herramientas que facilitan la comunicación y sincronización de procesos en el robot~\cite{ros_about}.
 
 En ROS, las responsabilidades del sistema se estructuran en \emph{nodos}, unidades básicas de cómputo encargadas de realizar una función específica. Los nodos pueden comunicarse entre sí utilizando diversos mecanismos, lo que permite construir sistemas distribuidos en los que sus componentes pueden ejecutarse en distintas arquitecturas de hardware e incluso en diferentes sistemas operativos~\cite{ros_nodos}.
 
@@ -64,4 +64,4 @@ A partir de este punto, la ejecución se distribuye en módulos especializados q
     \label{fig:justina_architecture}
 \end{figure}
 
-Adicionalmente, mediante una red Ethernet, \emph{Justina} distribuye el cómputo entre una computadora portátil, dedicada al comportamiento autónomo de alto nivel, y la computadora embebida en la base móvil, encargada del control de los componentes de bajo nivel.
+El desempeño de los módulos \emph{Manipulation} y \emph{Hardware} depende de la fidelidad con la que se representen la geometría y las relaciones cinemáticas del robot. Puesto que los brazos constituyen la interfaz principal con la que \emph{Justina} modifica su entorno, su estudio formal resulta indispensable para traducir acciones de manipulación, como tomar y dejar objetos, en trayectorias concretas.
