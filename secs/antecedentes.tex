@@ -65,3 +65,138 @@ A partir de este punto, la ejecución se distribuye en módulos especializados q
 \end{figure}
 
 El desempeño de los módulos \emph{Manipulation} y \emph{Hardware} depende de la fidelidad con la que se representen la geometría y las relaciones cinemáticas del robot. Puesto que los brazos constituyen la interfaz principal con la que \emph{Justina} modifica su entorno, su estudio formal resulta indispensable para traducir acciones de manipulación, como tomar y dejar objetos, en trayectorias concretas.
+
+\section{Diseño de manipuladores robóticos}
+% Robótica
+La ingeniería mecánica proporciona un conjunto de metodologías para el diseño de manipuladores robóticos, y de máquinas en general. Las ramas predominantes encargadas de ese análisis son la cinemática y la dinámica~\cite{craig}. La cinemática trata el estudio del movimiento sin considerar las fuerzas que lo ocasionan. La dinámica, por otro lado, se encarga del estudio de las fuerzas sobre sistemas en movimiento. Permite definir los esfuerzos a los que estarán sometidos los elementos del sistema, como función de la aceleración y las fuerzas inerciales~\cite{norton}.
+
+\subsection{Definición}
+% Definición
+Un manipulador robótico se define como una cadena cinemática que puede programarse para realizar una amplia variedad de tareas~\cite{craig}. Una cadena cinemática es un conjunto de eslabones\footnote{Cuerpo rígido con al menos dos nodos o puntos de conexión. Se clasifican en binarios, ternarios y cuaternarios, dependiendo del número de nodos que posean~\cite{norton}.} conectados por pares cinemáticos\footnote{Unión de dos o más eslabones en sus nodos, permitiendo movimiento relativo. Se clasifican por sus grados de libertad (GDL) y las más comunes son las juntas completas (1 GDL) y las semijuntas (2 GDL)~\cite{norton}.}, para producir movimientos relativos sincronizados con un propósito determinado~\cite{craig}.
+
+% Mecanismos
+Desde el punto de vista de la teoría de mecanismos~\cite{norton}, un manipulador robótico puede considerarse un mecanismo de varios grados de libertad. A pesar de la definición de Reuleaux~\cite{reuleaux}, que limita un mecanismo a cadenas cinemáticas cerradas y de un grado de libertad, para Norton~\cite{norton}, un mecanismo es una cadena cinemática donde al menos uno de sus eslabones se ha ``aterrizado'' o fijado al sistema de referencia.
+
+\subsection{Movilidad}
+
+El número de grados de libertad globales de un manipulador determinan su movilidad. Es el número de variables de posición independientes que deben especificarse para conocer la posición de todos los eslabones de la cadena cinemática. La condición de Gruebler considera estos factores para un mecanismo plano~\cite{norton}. Sin embargo, cuando se tiene más de un eslabón conectado a tierra, el efecto que se obtiene es el de un eslabón más grande y de mayor orden. Además, se debe considerar que las semijuntas únicamente eliminan un grado de libertad en el plano. El resultado es la modificación de Kutzbach~\cite{norton}, mostrada en la ecuación~\ref{ec:kutzbach}.
+
+\begin{equation}
+\label{ec:kutzbach}
+    M = 3(L-1)-2J_1-J_2
+\end{equation}
+
+donde:
+\begin{description}
+    \item[$M$] es el número de grados de libertad del mecanismo.
+    \item[$L$] es el número total de eslabones, incluido el eslabón fijo.
+    \item[$J_1$] es el número de pares cinemáticos de un grado de libertad.
+    \item[$J_2$] es el número de pares cinemáticos de dos grados de libertad.
+\end{description}
+
+Finalmente, para mecanismos espaciales, la modificación de Kutzbach se puede extender a eslabones con 6 GDL. De esta forma, se considera que las juntas completas anulan 5 GDL y las de orden inferior van restringiendo 1 GDL a la vez. Tomando en cuenta todos sus efectos se obtiene la ecuación~\ref{ec:kutzbach_espacial}, donde el subíndice indica el orden de cada tipo de junta.
+
+\begin{equation}
+\label{ec:kutzbach_espacial}
+    M = 6(L-1)-5J_1-4J_2-3J_3-2J_4-J_5
+\end{equation}
+
+% Criterio de Grashof
+\subsection{Criterio de Grashof}
+
+Para el diseño de mecanismos de cuatro barras es necesario determinar qué configuraciones permiten obtener el movimiento requerido. En este sentido, la ley de Grashof establece que para que algún eslabón tenga rotación continua \textit{``la suma de las longitudes del eslabón más corto (s) y más largo (l) no puede ser más grande que la suma de las longitudes de los eslabones restantes (p y q)''}~\cite{shigley}, tal como se expresa en la inecuación \ref{ec:grashof}. 
+
+\begin{equation}
+\label{ec:grashof}
+    s+l \leq p+q
+\end{equation}
+
+Derivado de la condición de Grashof se puede agrupar a las cadenas cinemáticas de cuatro barras planas en tres clases, según se muestra en la figura \ref{fig:grashof}. La Clase I cumple con la desigualdad \ref{ec:grashof} y sus inversiones\footnote{Es la variante de una cadena cinemática dependiendo del eslabón que se designe como ``fijo'' o de referencia. Esto no cambia el movimiento relativo entre los eslabones, pero sí el movimiento absoluto generado~\cite{shigley}.} serán la manivela-balancín, la doble manivela y un doble balancín de Grashof, donde el eslabón acoplador hace una revolución completa. La Clase II no cumple con la condición de Grashof y todas sus inversiones serán balancines triples. La Clase III, o caso especial de Grashof, es cuando se cumple la igualdad~\cite{norton}. 
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{img/antecedentes/grashof.png}
+    \caption{Casos del criterio de Grashof~\cite{kivela_thesis}.}
+    \label{fig:grashof}
+\end{figure}
+
+Este criterio constituye una condición preliminar para la síntesis dimensional del mecanismo.
+
+% Síntesis
+\subsection{Síntesis cinemática}
+
+La síntesis de un mecanismo garantiza que, por ejemplo, un manipulador serial alcance los puntos de trabajo con las orientaciones deseadas del efector final~\cite{kivela_thesis}. Por esta razón, la síntesis cinemática se suele dividir en pasos: síntesis de tipo o topológica, de número y dimensional. Algunos autores suelen juntar la síntesis de tipo y de número en un solo paso, ya que la primera consiste en determinar el tipo de mecanismo que mejor resuelve el problema planteado y el segundo en determinar la cantidad de eslabones y tipo de juntas para obtener la mobilidad requerida. El último paso está dedicado a definir las dimensiones del mecanismo~\cite{kivela_thesis}.
+
+De acuerdo con Norton~\cite{norton}, las dos grandes clases que engloban las técnicas existentes de síntesis dimensional son la gráfica o geométrica y la analítica. Los métodos gráficos se basan en principios básicos de geometría euclidiana y se centran en cadenas cinemáticas cerradas de cuatro barras. Varían en función de la cantidad de restricciones de diseño, tales como el número de posiciones, de pivotes móviles y fijos.
+
+Una vez que se encuentre una solución potencial se debe evaluar su calidad. El proceso se vuelve entonces un diseño cualitativo mediante análisis sucesivo~\cite{norton}.
+
+\subsection{Análisis cinemático}
+% Análisis
+El análisis cinemático permite determinar la configuración, velocidad y aceleración de los elementos móviles de un mecanismo a partir de sus relaciones geométricas. Así se garantiza que no fallará en condiciones de operación~\cite{norton}.
+
+% Pose
+Al considerar el movimiento de un cuerpo rígido se debe partir de la postura o pose, que implica tanto la posición de un punto como la orientación de una línea sobre el eslabón~\cite{norton}, y se expresa con respecto a un marco de referencia\footnote{Consiste de un origen $O_i$ y una triada de vectores base $(\hat{x}_i, \hat{y}_i, \hat{z}_i)$.} asociado a otro eslabón~\cite{handbook_kinematics}. De esta forma, la pose puede describirse mediante un componente traslacional, dado por el vector de posición ${}^{j}\mathbf{p}_i$, y uno rotacional, dado por la matriz ${}^{j}\mathbf{R}_i$. Con las transformaciones homogéneas, ambos efectos son combinados en una sola representación, como se muestra en la ecuación \ref{ec:h_t}~\cite{handbook_kinematics}. Además de las matrices de rotación, la orientación puede representarse mediante cuaterniones~\cite{handbook_kinematics}. En particular, esta representación es utilizada por ROS 2 para describir la orientación tridimensional de los marcos de referencia empleados en sus sistemas de coordenadas~\cite{ros2_quaternion}.
+
+\begin{equation}
+\label{ec:h_t}
+    {}^{j}\mathbf{T}_i=
+    \begin{bmatrix}
+        {}^{j}\mathbf{R}_i & {}^{j}\mathbf{p}_i \\
+        \mathbf{0}^{T}     & 1
+    \end{bmatrix}
+\end{equation}
+
+% Mecanismos
+Para el análisis de posición de un mecanismo plano restringido, éste se representa mediante un lazo vectorial. Los eslabones se representan mediante vectores de posición, cuya suma es igual a cero, como se muestra en la figura \ref{fig:lazo}. La notación compleja permite expandir estos vectores mediante la identidad de Euler. De esta forma, se obtiene el sistema de ecuaciones \ref{ec:lazo}, con los ángulos $\theta_3$ y $\theta_4$ como incógnitas~\cite{norton}. Una vez obtenida la configuración del mecanismo, las ecuaciones de velocidad se obtienen mediante la diferenciación con respecto al tiempo de las ecuaciones de posición. Una segunda diferenciación permite obtener las ecuaciones de aceleración, utilizando los valores de posición y velocidad correspondientes al instante analizado.
+
+\begin{figure}[!ht]
+    \centering
+    \begin{minipage}[c]{0.55\textwidth}
+        \centering
+        \includegraphics[width=0.73\textwidth]{img/antecedentes/lazo_4barras.png}
+        \caption{Lazo vectorial de posición de un mecanismo de 4 barras~\cite{norton}.}
+        \label{fig:lazo}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[c]{0.4\textwidth}
+        \begin{equation}
+        \label{ec:lazo}
+        \begin{cases}
+            a \cos{\theta_2} + b \cos{\theta_3}
+            - c \cos{\theta_4} - d = 0 \\[4pt]
+            a \sen{\theta_2} + b \sen{\theta_3}
+            - c \sen{\theta_4} = 0
+        \end{cases}
+        \end{equation}
+    \end{minipage}
+\end{figure}
+
+% Robótica (Cinemática, jacobiano y modelo dinámico)
+El mismo procedimiento puede aplicarse al análisis cinemático de un robot serial. Para un manipulador con $n$ grados de libertad, cuando se conocen las variables articulares $\mathbf{q}$ y los parámetros geométricos de los eslabones, es posible resolver el problema de la cinemática directa, mediante el cual se determina la postura del efector final $\mathbf{x}$ con respecto al eslabón base. Esta relación puede expresarse mediante la matriz de transformación homogénea ${}^{0}\mathbf{T}_n$, resultado de la composición de las transformaciones asociadas a cada junta~\cite{handbook_kinematics}. Por el contrario, cuando se conoce la pose deseada del efector final, el problema de la cinemática inversa permite determinar las variables articulares correspondientes~\cite{handbook_kinematics}.
+
+A partir de la relación de cinemática directa, su derivada con respecto al tiempo permite establecer la relación entre las velocidades articulares y las velocidades lineal y angular del efector final~\cite{handbook_kinematics}. Esta relación se expresa mediante el jacobiano, una transformación que relaciona el espacio de juntas con el espacio cartesiano~\cite{craig}, como se muestra en la ecuación \ref{ec:fwd_speed}.
+
+\begin{equation}
+\label{ec:fwd_speed}
+\dot{\mathbf{x}} = \mathbf{J}(\mathbf{q})\dot{\mathbf{q}}
+\end{equation}
+
+Una segunda diferenciación de la ecuación \ref{ec:fwd_speed} permite obtener la relación entre las aceleraciones articulares y las aceleraciones lineal y angular del efector final, expresado en la ecuación \ref{ec:fwd_acc}~\cite{haviland}.
+
+\begin{equation}
+\label{ec:fwd_acc}
+\ddot{\mathbf{x}} =
+\mathbf{J}(\mathbf{q})\ddot{\mathbf{q}}
++
+\dot{\mathbf{J}}(\mathbf{q},\dot{\mathbf{q}})\dot{\mathbf{q}}
+\end{equation}
+
+Las relaciones presentadas permiten establecer qué magnitudes deben conocerse durante la operación del sistema. En consecuencia, la selección de los elementos necesarios para su medición constituye el siguiente paso para llevar el modelo cinemático a una implementación física.
+
+\section{Variables de interés e instrumentación}
+
+
+\section{Control de manipuladores robóticos}
+
+La teoría de control proporciona herramientas para diseñar y evaluar algortimos para realizar los movimientos deseados o las aplicaciones de fuerza.
