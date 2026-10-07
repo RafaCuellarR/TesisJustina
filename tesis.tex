@@ -1,6 +1,6 @@
 \documentclass[12pt,twoside]{report}
 \usepackage[utf8]{inputenc}
-\usepackage[spanish]{babel}
+\usepackage[spanish,es-tabla,es-noshorthands]{babel}
 \usepackage{csquotes}
 \usepackage[T1]{fontenc}
 \usepackage{graphicx}
@@ -11,6 +11,21 @@
 \usepackage{hyperref}
 \usepackage{subcaption}
 \usepackage{amssymb, amsmath}
+\usepackage{lmodern}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{needspace}
+\usepackage[table]{xcolor}
+\usepackage{caption}
+
+\captionsetup{labelfont=bf,labelsep=period,font=small}
+\setlength{\LTpre}{12pt}
+\setlength{\LTpost}{12pt}
+\renewcommand{\arraystretch}{1.25}
+
+\definecolor{nprim}{RGB}{190,208,232}
+\definecolor{nsec}{RGB}{229,236,247}
 
 \renewcommand{\appendixname}{Apéndice}
 \DeclareMathOperator{\sen}{sen}
@@ -123,6 +138,9 @@
 
 \chapter{Carta de consentimiento informado}
 \input{appendix/consentimiento}
+
+\chapter{Necesidades identificadas}
+\input{appendix/necesidades_identificadas}
 
 \bibliographystyle{ieeetr}
 \bibliography{bib/introduccion, bib/antecedentes, bib/metodologia}

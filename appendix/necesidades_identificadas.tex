@@ -1,0 +1,578 @@
+\label{app:protocolo}
+
+Este anexo reúne las necesidades identificadas a partir de las entrevistas. Las 690 menciones individuales se agruparon por similitud en 122 necesidades estandarizadas; la frecuencia de cada una es el número de menciones que engloba, por lo que la suma de las 122 frecuencias es 690. La Tabla~\ref{tab:frecuencias} presenta estas necesidades estandarizadas. Posteriormente se organizaron jerárquicamente en 14 necesidades primarias, con sus necesidades secundarias y terciarias, cada una en su propia tabla (Tablas~\ref{tab:np01} a~\ref{tab:np14}). Las necesidades terciarias son las necesidades estandarizadas de la Tabla~\ref{tab:frecuencias}, y la frecuencia de cada nivel superior es la suma de las frecuencias de los niveles que agrupa. Cuando fue posible, cada grupo se nombró con el enunciado más representativo o general que contiene, por lo que algunos enunciados se repiten entre niveles. La última columna de la Tabla~\ref{tab:frecuencias} indica el código (por ejemplo, 1.2.3) con el que se localiza cada necesidad en la jerarquía.
+
+
+\begin{longtable}{@{}r >{\raggedright\arraybackslash}p{0.66\textwidth} c l@{}}
+\caption{Frecuencia de las 122 necesidades estandarizadas.}\label{tab:frecuencias}\\
+\toprule
+\textbf{N.º} & \textbf{Necesidad estandarizada} & \textbf{Frec.} & \textbf{Código} \\
+\midrule
+\endfirsthead
+\caption[]{Frecuencia de las 122 necesidades estandarizadas (continuación).}\\
+\toprule
+\textbf{N.º} & \textbf{Necesidad estandarizada} & \textbf{Frec.} & \textbf{Código} \\
+\midrule
+\endhead
+\midrule
+\multicolumn{4}{r}{\small\emph{Continúa en la siguiente página}}\\
+\endfoot
+\midrule
+ & \textbf{Total} & \textbf{690} & \\
+\bottomrule
+\endlastfoot
+
+1 & El robot entrega artículos domésticos. & 6 & 1.1.1 \\
+2 & El robot sirve alimentos y bebidas. & 4 & 3.3.1 \\
+3 & El robot interactúa con puertas y cajones. & 4 & 1.5.1 \\
+4 & El robot ordena artículos domésticos fuera de lugar. & 3 & 3.1.2 \\
+5 & El robot atiende las órdenes del usuario. & 3 & 2.2.1 \\
+6 & El robot cuida del jardín. & 8 & 3.1.3 \\
+7 & El robot limpia entornos domésticos. & 6 & 3.1.1 \\
+8 & El robot brinda asistencia en emergencias domésticas. & 4 & 7.2.3 \\
+9 & El robot lava utensilios domésticos. & 4 & 3.1.4 \\
+10 & El robot aspira pisos. & 3 & 3.1.5 \\
+11 & El robot lava ropa. & 2 & 3.2.3 \\
+12 & El robot pinta muebles y paredes. & 2 & 3.2.1 \\
+13 & El robot prepara alimentos. & 2 & 3.3.2 \\
+14 & El robot manipula equipo para realizar tareas domésticas. & 2 & 1.5.2 \\
+15 & El robot ayuda al usuario a organizar sus actividades. & 1 & 7.1.4 \\
+16 & El robot asiste al usuario mientras nada. & 1 & 3.4.1 \\
+17 & El robot reproduce música indicada por el usuario. & 1 & 2.4.1 \\
+18 & El robot cuida de las mascotas. & 1 & 3.2.2 \\
+19 & El robot advierte al usuario de visitantes desconocidos. & 1 & 6.2.2 \\
+20 & El robot talla muebles tapizados. & 1 & 3.1.6 \\
+21 & El robot modifica su plan de forma dinámica. & 7 & 7.1.1 \\
+22 & El robot genera un plan conforme a una meta establecida. & 2 & 7.1.2 \\
+23 & El robot sigue un plan sin órdenes explícitas. & 2 & 7.2.1 \\
+24 & El robot agenda la ejecución de sus tareas. & 2 & 7.1.3 \\
+25 & El robot identifica artículos en el entorno. & 25 & 6.1.1 \\
+26 & El robot percibe profundidad. & 16 & 14.1.1 \\
+27 & El robot determina la posición exacta de los artículos en el entorno. & 8 & 6.1.2 \\
+28 & El robot identifica rostros en el entorno. & 5 & 6.2.1 \\
+29 & El robot captura imágenes nítidas del entorno. & 3 & 6.1.8 \\
+30 & El robot identifica artículos transparentes. & 2 & 6.1.3 \\
+31 & El robot construye modelos digitales de los artículos que identifica. & 1 & 6.1.4 \\
+32 & El robot distingue los artículos de la superficie que los soporta. & 1 & 6.1.5 \\
+33 & El robot distingue superficies adyacentes. & 1 & 6.1.7 \\
+34 & El robot navega evadiendo obstáculos. & 15 & 9.1.2 \\
+35 & El robot identifica obstáculos en el entorno. & 8 & 9.1.3 \\
+36 & El robot navega en entornos domésticos. & 8 & 9.1.1 \\
+37 & El robot llega a su destino con exactitud. & 4 & 9.1.4 \\
+38 & El robot determina su posición en el entorno sin intervención del usuario. & 1 & 7.2.2 \\
+39 & El robot facilita la interacción con el usuario. & 14 & 2.1.1 \\
+40 & El robot complementa las indicaciones verbales con apoyos visuales. & 8 & 2.1.2 \\
+41 & El robot guía al usuario mediante indicaciones verbales. & 8 & 2.1.3 \\
+42 & El robot genera confianza en el usuario. & 7 & 2.3.1 \\
+43 & El robot enfoca la atención del usuario. & 5 & 2.1.7 \\
+44 & El robot interpreta comandos verbales. & 4 & 2.2.2 \\
+45 & El robot interpreta comandos visuales. & 3 & 2.2.3 \\
+46 & El robot registra sonido. & 3 & 12.1.1 \\
+47 & El robot interpreta comandos físicos. & 2 & 2.2.4 \\
+48 & El robot identifica la voz del usuario. & 2 & 12.1.2 \\
+49 & El robot mantiene un estilo de comunicación uniforme. & 1 & 2.1.5 \\
+50 & El robot emite sonido. & 1 & 2.1.4 \\
+51 & El robot identifica y reporta fallas en sus sistemas. & 11 & 4.2.1 \\
+52 & El robot interrumpe sus sistemas ante situaciones de riesgo. & 10 & 4.2.2 \\
+53 & El robot supervisa el estado de sus sistemas. & 10 & 4.2.3 \\
+54 & El robot evita trayectorias de riesgo para el usuario. & 8 & 1.2.10 \\
+55 & El robot restablece sus sistemas ante fallas. & 6 & 4.2.4 \\
+56 & El robot optimiza el consumo de energía. & 5 & 10.1.1 \\
+57 & El robot reporta el progreso y resultado de sus tareas. & 4 & 2.1.6 \\
+58 & El robot tiene sensores exactos y precisos. & 1 & 11.1.1 \\
+59 & El robot optimiza el tiempo de ejecución de sus tareas. & 1 & 13.1.1 \\
+60 & El robot presenta características antropomórficas. & 13 & 2.3.2 \\
+61 & El robot protege sus componentes contra agua. & 12 & 4.1.1 \\
+62 & El robot protege sus componentes contra impactos. & 12 & 4.1.2 \\
+63 & El robot opera de forma continua por periodos prolongados. & 9 & 10.1.2 \\
+64 & El robot protege sus conexiones eléctricas. & 8 & 4.1.3 \\
+65 & El robot mantiene el equilibrio en todas sus poses. & 8 & 1.3.3 \\
+66 & El robot facilita su operación. & 8 & 5.1.1 \\
+67 & El robot facilita el inicio de sus sistemas. & 7 & 5.1.2 \\
+68 & El robot opera sus componentes de forma independiente. & 7 & 5.2.5 \\
+69 & El robot es ligero. & 7 & 8.1.1 \\
+70 & El robot opera bajo condiciones de iluminación variables. & 7 & 11.1.3 \\
+71 & El robot facilita su transporte como equipaje personal. & 6 & 8.1.2 \\
+72 & El robot facilita su mantenimiento. & 6 & 5.2.1 \\
+73 & El robot mantiene sus componentes ordenados e identificados. & 5 & 5.2.2 \\
+74 & El robot protege sus conexiones mecánicas. & 5 & 4.1.4 \\
+75 & El robot integra sus sistemas de forma coherente. & 4 & 5.1.3 \\
+76 & El robot sigue un esquema claro de diseño. & 4 & 5.2.3 \\
+77 & El robot tiene dimensiones compatibles con entornos domésticos. & 3 & 8.2.1 \\
+78 & El robot facilita el desmontaje de sus componentes. & 3 & 5.2.4 \\
+79 & El robot facilita el transporte individual de sus componentes. & 3 & 8.1.3 \\
+80 & El robot incluye documentación técnica completa. & 3 & 5.2.6 \\
+81 & El robot protege sus componentes contra altas temperaturas. & 2 & 4.1.5 \\
+82 & El robot facilita su configuración. & 2 & 5.1.4 \\
+83 & El robot integra todos sus componentes de hardware. & 2 & 5.1.5 \\
+84 & El robot previene desconexiones mientras opera. & 2 & 4.1.6 \\
+85 & El robot facilita su envío por servicios de paquetería. & 2 & 8.1.4 \\
+86 & El robot facilita su almacenamiento. & 1 & 8.2.2 \\
+87 & El robot opera de forma silenciosa. & 1 & 2.1.8 \\
+88 & El robot facilita el montaje de sus componentes. & 1 & 5.1.6 \\
+89 & El robot controla su hardware con el stack de software existente. & 1 & 5.1.7 \\
+90 & El robot requiere poco mantenimiento. & 1 & 10.1.3 \\
+91 & El robot manipula artículos ubicados por encima de su plano medio. & 18 & 1.1.2 \\
+92 & El robot toma artículos con firmeza. & 15 & 1.4.1 \\
+93 & El robot manipula artículos domésticos. & 15 & 1.1.3 \\
+94 & El robot manipula artículos ubicados en zonas inaccesibles para el usuario. & 14 & 1.1.4 \\
+95 & El robot dispone sus manipuladores en poses compatibles con otros sistemas. & 13 & 1.2.1 \\
+96 & El robot verifica que los artículos hayan sido tomados con éxito. & 12 & 4.2.6 \\
+97 & El robot manipula artículos ubicados por debajo de su plano medio. & 12 & 1.1.5 \\
+98 & El robot manipula artículos con exactitud. & 11 & 1.1.6 \\
+99 & El robot ajusta la estrategia de manipulación de los artículos conforme al entorno. & 10 & 1.2.2 \\
+100 & El robot posiciona sus manipuladores con exactitud. & 10 & 11.1.2 \\
+101 & El robot manipula artículos pequeños. & 10 & 1.1.7 \\
+102 & El robot manipula artículos pesados. & 9 & 1.1.8 \\
+103 & El robot toma artículos con suavidad. & 9 & 1.4.2 \\
+104 & El robot extiende el alcance efectivo de sus manipuladores. & 8 & 1.3.1 \\
+105 & El robot ajusta de forma dinámica la trayectoria de sus manipuladores conforme a la posición de los artículos. & 8 & 1.2.3 \\
+106 & El robot ajusta la estrategia de manipulación conforme a las características de los artículos. & 8 & 1.2.4 \\
+107 & El robot manipula artículos delgados. & 7 & 1.1.9 \\
+108 & El robot ajusta la velocidad de manipulación para optimizar la ejecución de cada tarea. & 6 & 1.2.5 \\
+109 & El robot coordina sus manipuladores para realizar tareas colaborativas. & 6 & 1.2.6 \\
+110 & El robot manipula artículos con formas diversas. & 6 & 1.1.10 \\
+111 & El robot manipula artículos grandes. & 6 & 1.1.11 \\
+112 & El robot soporta las cargas previstas. & 6 & 4.1.7 \\
+113 & El robot dispone sus manipuladores en un amplio rango de poses. & 5 & 1.3.2 \\
+114 & El robot sigue trayectorias suaves y controladas con sus manipuladores. & 5 & 1.2.7 \\
+115 & El robot permite definir y utilizar poses preestablecidas para sus manipuladores. & 4 & 1.2.8 \\
+116 & El robot registra la tasa de éxito en la manipulación de artículos. & 3 & 4.2.5 \\
+117 & El robot manipula varios artículos de manera simultánea. & 3 & 1.1.12 \\
+118 & El robot identifica zonas de manipulación óptimas en los artículos. & 3 & 6.1.6 \\
+119 & El robot manipula artículos en diferentes orientaciones. & 3 & 1.1.13 \\
+120 & El robot manipula artículos deformables. & 2 & 1.1.14 \\
+121 & El robot manipula artículos con superficies lisas. & 2 & 1.1.15 \\
+122 & El robot planifica trayectorias óptimas para manipular artículos. & 2 & 1.2.9 \\
+\end{longtable}
+
+\Needspace{14\baselineskip}
+\begin{longtable}{@{}l >{\raggedright\arraybackslash}p{0.72\textwidth} r@{}}
+\caption{Jerarquía de la necesidad primaria~1: \emph{El robot manipula artículos domésticos.}}\label{tab:np01}\\
+\toprule
+\textbf{Código} & \textbf{Necesidad} & \textbf{Frec.} \\
+\midrule
+\endfirsthead
+\caption[]{Jerarquía de la necesidad primaria~1 (continuación).}\\
+\toprule
+\textbf{Código} & \textbf{Necesidad} & \textbf{Frec.} \\
+\midrule
+\endhead
+\midrule
+\multicolumn{3}{r}{\small\emph{Continúa en la siguiente página}}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\rowcolor{nprim} \textbf{1} & \textbf{El robot manipula artículos domésticos.} & \textbf{245} \\
+\rowcolor{nsec} \textbf{1.1} & \textbf{El robot manipula artículos domésticos.} & \textbf{124} \\
+1.1.1 & El robot entrega artículos domésticos. & 6 \\
+1.1.2 & El robot manipula artículos ubicados por encima de su plano medio. & 18 \\
+1.1.3 & El robot manipula artículos domésticos. & 15 \\
+1.1.4 & El robot manipula artículos ubicados en zonas inaccesibles para el usuario. & 14 \\
+1.1.5 & El robot manipula artículos ubicados por debajo de su plano medio. & 12 \\
+1.1.6 & El robot manipula artículos con exactitud. & 11 \\
+1.1.7 & El robot manipula artículos pequeños. & 10 \\
+1.1.8 & El robot manipula artículos pesados. & 9 \\
+1.1.9 & El robot manipula artículos delgados. & 7 \\
+1.1.10 & El robot manipula artículos con formas diversas. & 6 \\
+1.1.11 & El robot manipula artículos grandes. & 6 \\
+1.1.12 & El robot manipula varios artículos de manera simultánea. & 3 \\
+1.1.13 & El robot manipula artículos en diferentes orientaciones. & 3 \\
+1.1.14 & El robot manipula artículos deformables. & 2 \\
+1.1.15 & El robot manipula artículos con superficies lisas. & 2 \\
+\rowcolor{nsec} \textbf{1.2} & \textbf{El robot planea trayectorias del manipulador.} & \textbf{70} \\
+1.2.1 & El robot dispone sus manipuladores en poses compatibles con otros sistemas. & 13 \\
+1.2.2 & El robot ajusta la estrategia de manipulación de los artículos conforme al entorno. & 10 \\
+1.2.3 & El robot ajusta de forma dinámica la trayectoria de sus manipuladores conforme a la posición de los artículos. & 8 \\
+1.2.4 & El robot ajusta la estrategia de manipulación conforme a las características de los artículos. & 8 \\
+1.2.5 & El robot ajusta la velocidad de manipulación para optimizar la ejecución de cada tarea. & 6 \\
+1.2.6 & El robot coordina sus manipuladores para realizar tareas colaborativas. & 6 \\
+1.2.7 & El robot sigue trayectorias suaves y controladas con sus manipuladores. & 5 \\
+1.2.8 & El robot permite definir y utilizar poses preestablecidas para sus manipuladores. & 4 \\
+1.2.9 & El robot planifica trayectorias óptimas para manipular artículos. & 2 \\
+1.2.10 & El robot evita trayectorias de riesgo para el usuario. & 8 \\
+\rowcolor{nsec} \textbf{1.3} & \textbf{El robot extiende el alcance efectivo de sus manipuladores.} & \textbf{21} \\
+1.3.1 & El robot extiende el alcance efectivo de sus manipuladores. & 8 \\
+1.3.2 & El robot dispone sus manipuladores en un amplio rango de poses. & 5 \\
+1.3.3 & El robot mantiene el equilibrio en todas sus poses. & 8 \\
+\rowcolor{nsec} \textbf{1.4} & \textbf{El robot toma artículos con la fuerza necesaria.} & \textbf{24} \\
+1.4.1 & El robot toma artículos con firmeza. & 15 \\
+1.4.2 & El robot toma artículos con suavidad. & 9 \\
+\rowcolor{nsec} \textbf{1.5} & \textbf{El robot manipula equipo para realizar tareas domésticas.} & \textbf{6} \\
+1.5.1 & El robot interactúa con puertas y cajones. & 4 \\
+1.5.2 & El robot manipula equipo para realizar tareas domésticas. & 2 \\
+\end{longtable}
+
+\Needspace{14\baselineskip}
+\begin{longtable}{@{}l >{\raggedright\arraybackslash}p{0.72\textwidth} r@{}}
+\caption{Jerarquía de la necesidad primaria~2: \emph{El robot atiende las órdenes del usuario.}}\label{tab:np02}\\
+\toprule
+\textbf{Código} & \textbf{Necesidad} & \textbf{Frec.} \\
+\midrule
+\endfirsthead
+\caption[]{Jerarquía de la necesidad primaria~2 (continuación).}\\
+\toprule
+\textbf{Código} & \textbf{Necesidad} & \textbf{Frec.} \\
+\midrule
+\endhead
+\midrule
+\multicolumn{3}{r}{\small\emph{Continúa en la siguiente página}}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\rowcolor{nprim} \textbf{2} & \textbf{El robot atiende las órdenes del usuario.} & \textbf{75} \\
+\rowcolor{nsec} \textbf{2.1} & \textbf{El robot facilita la interacción con el usuario.} & \textbf{42} \\
+2.1.1 & El robot facilita la interacción con el usuario. & 14 \\
+2.1.2 & El robot complementa las indicaciones verbales con apoyos visuales. & 8 \\
+2.1.3 & El robot guía al usuario mediante indicaciones verbales. & 8 \\
+2.1.4 & El robot emite sonido. & 1 \\
+2.1.5 & El robot mantiene un estilo de comunicación uniforme. & 1 \\
+2.1.6 & El robot reporta el progreso y resultado de sus tareas. & 4 \\
+2.1.7 & El robot enfoca la atención del usuario. & 5 \\
+2.1.8 & El robot opera de forma silenciosa. & 1 \\
+\rowcolor{nsec} \textbf{2.2} & \textbf{El robot atiende las órdenes del usuario.} & \textbf{12} \\
+2.2.1 & El robot atiende las órdenes del usuario. & 3 \\
+2.2.2 & El robot interpreta comandos verbales. & 4 \\
+2.2.3 & El robot interpreta comandos visuales. & 3 \\
+2.2.4 & El robot interpreta comandos físicos. & 2 \\
+\rowcolor{nsec} \textbf{2.3} & \textbf{El robot genera confianza en el usuario.} & \textbf{20} \\
+2.3.1 & El robot genera confianza en el usuario. & 7 \\
+2.3.2 & El robot presenta características antropomórficas. & 13 \\
+\rowcolor{nsec} \textbf{2.4} & \textbf{El robot reproduce música indicada por el usuario.} & \textbf{1} \\
+2.4.1 & El robot reproduce música indicada por el usuario. & 1 \\
+\end{longtable}
+
+\Needspace{14\baselineskip}
+\begin{longtable}{@{}l >{\raggedright\arraybackslash}p{0.72\textwidth} r@{}}
+\caption{Jerarquía de la necesidad primaria~3: \emph{El robot realiza tareas domésticas.}}\label{tab:np03}\\
+\toprule
+\textbf{Código} & \textbf{Necesidad} & \textbf{Frec.} \\
+\midrule
+\endfirsthead
+\caption[]{Jerarquía de la necesidad primaria~3 (continuación).}\\
+\toprule
+\textbf{Código} & \textbf{Necesidad} & \textbf{Frec.} \\
+\midrule
+\endhead
+\midrule
+\multicolumn{3}{r}{\small\emph{Continúa en la siguiente página}}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\rowcolor{nprim} \textbf{3} & \textbf{El robot realiza tareas domésticas.} & \textbf{37} \\
+\rowcolor{nsec} \textbf{3.1} & \textbf{El robot limpia entornos domésticos.} & \textbf{25} \\
+3.1.1 & El robot limpia entornos domésticos. & 6 \\
+3.1.2 & El robot ordena artículos domésticos fuera de lugar. & 3 \\
+3.1.3 & El robot cuida del jardín. & 8 \\
+3.1.4 & El robot lava utensilios domésticos. & 4 \\
+3.1.5 & El robot aspira pisos. & 3 \\
+3.1.6 & El robot talla muebles tapizados. & 1 \\
+\rowcolor{nsec} \textbf{3.2} & \textbf{El robot realiza tareas domésticas.} & \textbf{5} \\
+3.2.1 & El robot pinta muebles y paredes. & 2 \\
+3.2.2 & El robot cuida de las mascotas. & 1 \\
+3.2.3 & El robot lava ropa. & 2 \\
+\rowcolor{nsec} \textbf{3.3} & \textbf{El robot prepara alimentos.} & \textbf{6} \\
+3.3.1 & El robot sirve alimentos y bebidas. & 4 \\
+3.3.2 & El robot prepara alimentos. & 2 \\
+\rowcolor{nsec} \textbf{3.4} & \textbf{El robot asiste al usuario mientras nada.} & \textbf{1} \\
+3.4.1 & El robot asiste al usuario mientras nada. & 1 \\
+\end{longtable}
+
+\Needspace{14\baselineskip}
+\begin{longtable}{@{}l >{\raggedright\arraybackslash}p{0.72\textwidth} r@{}}
+\caption{Jerarquía de la necesidad primaria~4: \emph{El robot es robusto.}}\label{tab:np04}\\
+\toprule
+\textbf{Código} & \textbf{Necesidad} & \textbf{Frec.} \\
+\midrule
+\endfirsthead
+\caption[]{Jerarquía de la necesidad primaria~4 (continuación).}\\
+\toprule
+\textbf{Código} & \textbf{Necesidad} & \textbf{Frec.} \\
+\midrule
+\endhead
+\midrule
+\multicolumn{3}{r}{\small\emph{Continúa en la siguiente página}}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\rowcolor{nprim} \textbf{4} & \textbf{El robot es robusto.} & \textbf{99} \\
+\rowcolor{nsec} \textbf{4.1} & \textbf{El robot protege sus componentes.} & \textbf{47} \\
+4.1.1 & El robot protege sus componentes contra agua. & 12 \\
+4.1.2 & El robot protege sus componentes contra impactos. & 12 \\
+4.1.3 & El robot protege sus conexiones eléctricas. & 8 \\
+4.1.4 & El robot protege sus conexiones mecánicas. & 5 \\
+4.1.5 & El robot protege sus componentes contra altas temperaturas. & 2 \\
+4.1.6 & El robot previene desconexiones mientras opera. & 2 \\
+4.1.7 & El robot soporta las cargas previstas. & 6 \\
+\rowcolor{nsec} \textbf{4.2} & \textbf{El robot supervisa el estado de sus sistemas.} & \textbf{52} \\
+4.2.1 & El robot identifica y reporta fallas en sus sistemas. & 11 \\
+4.2.2 & El robot interrumpe sus sistemas ante situaciones de riesgo. & 10 \\
+4.2.3 & El robot supervisa el estado de sus sistemas. & 10 \\
+4.2.4 & El robot restablece sus sistemas ante fallas. & 6 \\
+4.2.5 & El robot registra la tasa de éxito en la manipulación de artículos. & 3 \\
+4.2.6 & El robot verifica que los artículos hayan sido tomados con éxito. & 12 \\
+\end{longtable}
+
+\Needspace{14\baselineskip}
+\begin{longtable}{@{}l >{\raggedright\arraybackslash}p{0.72\textwidth} r@{}}
+\caption{Jerarquía de la necesidad primaria~5: \emph{El robot tiene un diseño intuitivo.}}\label{tab:np05}\\
+\toprule
+\textbf{Código} & \textbf{Necesidad} & \textbf{Frec.} \\
+\midrule
+\endfirsthead
+\caption[]{Jerarquía de la necesidad primaria~5 (continuación).}\\
+\toprule
+\textbf{Código} & \textbf{Necesidad} & \textbf{Frec.} \\
+\midrule
+\endhead
+\midrule
+\multicolumn{3}{r}{\small\emph{Continúa en la siguiente página}}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\rowcolor{nprim} \textbf{5} & \textbf{El robot tiene un diseño intuitivo.} & \textbf{53} \\
+\rowcolor{nsec} \textbf{5.1} & \textbf{El robot facilita su operación.} & \textbf{25} \\
+5.1.1 & El robot facilita su operación. & 8 \\
+5.1.2 & El robot facilita el inicio de sus sistemas. & 7 \\
+5.1.3 & El robot integra sus sistemas de forma coherente. & 4 \\
+5.1.4 & El robot facilita su configuración. & 2 \\
+5.1.5 & El robot integra todos sus componentes de hardware. & 2 \\
+5.1.6 & El robot facilita el montaje de sus componentes. & 1 \\
+5.1.7 & El robot controla su hardware con el stack de software existente. & 1 \\
+\rowcolor{nsec} \textbf{5.2} & \textbf{El robot facilita su mantenimiento.} & \textbf{28} \\
+5.2.1 & El robot facilita su mantenimiento. & 6 \\
+5.2.2 & El robot mantiene sus componentes ordenados e identificados. & 5 \\
+5.2.3 & El robot sigue un esquema claro de diseño. & 4 \\
+5.2.4 & El robot facilita el desmontaje de sus componentes. & 3 \\
+5.2.5 & El robot opera sus componentes de forma independiente. & 7 \\
+5.2.6 & El robot incluye documentación técnica completa. & 3 \\
+\end{longtable}
+
+\Needspace{14\baselineskip}
+\begin{longtable}{@{}l >{\raggedright\arraybackslash}p{0.72\textwidth} r@{}}
+\caption{Jerarquía de la necesidad primaria~6: \emph{El robot identifica formas en el entorno.}}\label{tab:np06}\\
+\toprule
+\textbf{Código} & \textbf{Necesidad} & \textbf{Frec.} \\
+\midrule
+\endfirsthead
+\caption[]{Jerarquía de la necesidad primaria~6 (continuación).}\\
+\toprule
+\textbf{Código} & \textbf{Necesidad} & \textbf{Frec.} \\
+\midrule
+\endhead
+\midrule
+\multicolumn{3}{r}{\small\emph{Continúa en la siguiente página}}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\rowcolor{nprim} \textbf{6} & \textbf{El robot identifica formas en el entorno.} & \textbf{50} \\
+\rowcolor{nsec} \textbf{6.1} & \textbf{El robot identifica artículos en el entorno.} & \textbf{44} \\
+6.1.1 & El robot identifica artículos en el entorno. & 25 \\
+6.1.2 & El robot determina la posición exacta de los artículos en el entorno. & 8 \\
+6.1.3 & El robot identifica artículos transparentes. & 2 \\
+6.1.4 & El robot construye modelos digitales de los artículos que identifica. & 1 \\
+6.1.5 & El robot distingue los artículos de la superficie que los soporta. & 1 \\
+6.1.6 & El robot identifica zonas de manipulación óptimas en los artículos. & 3 \\
+6.1.7 & El robot distingue superficies adyacentes. & 1 \\
+6.1.8 & El robot captura imágenes nítidas del entorno. & 3 \\
+\rowcolor{nsec} \textbf{6.2} & \textbf{El robot identifica rostros en el entorno.} & \textbf{6} \\
+6.2.1 & El robot identifica rostros en el entorno. & 5 \\
+6.2.2 & El robot advierte al usuario de visitantes desconocidos. & 1 \\
+\end{longtable}
+
+\Needspace{14\baselineskip}
+\begin{longtable}{@{}l >{\raggedright\arraybackslash}p{0.72\textwidth} r@{}}
+\caption{Jerarquía de la necesidad primaria~7: \emph{El robot es autónomo.}}\label{tab:np07}\\
+\toprule
+\textbf{Código} & \textbf{Necesidad} & \textbf{Frec.} \\
+\midrule
+\endfirsthead
+\caption[]{Jerarquía de la necesidad primaria~7 (continuación).}\\
+\toprule
+\textbf{Código} & \textbf{Necesidad} & \textbf{Frec.} \\
+\midrule
+\endhead
+\midrule
+\multicolumn{3}{r}{\small\emph{Continúa en la siguiente página}}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\rowcolor{nprim} \textbf{7} & \textbf{El robot es autónomo.} & \textbf{19} \\
+\rowcolor{nsec} \textbf{7.1} & \textbf{El robot planea tareas.} & \textbf{12} \\
+7.1.1 & El robot modifica su plan de forma dinámica. & 7 \\
+7.1.2 & El robot genera un plan conforme a una meta establecida. & 2 \\
+7.1.3 & El robot agenda la ejecución de sus tareas. & 2 \\
+7.1.4 & El robot ayuda al usuario a organizar sus actividades. & 1 \\
+\rowcolor{nsec} \textbf{7.2} & \textbf{El robot opera sin intervención del usuario.} & \textbf{7} \\
+7.2.1 & El robot sigue un plan sin órdenes explícitas. & 2 \\
+7.2.2 & El robot determina su posición en el entorno sin intervención del usuario. & 1 \\
+7.2.3 & El robot brinda asistencia en emergencias domésticas. & 4 \\
+\end{longtable}
+
+\Needspace{13\baselineskip}
+\begin{longtable}{@{}l >{\raggedright\arraybackslash}p{0.72\textwidth} r@{}}
+\caption{Jerarquía de la necesidad primaria~8: \emph{El robot es portátil.}}\label{tab:np08}\\
+\toprule
+\textbf{Código} & \textbf{Necesidad} & \textbf{Frec.} \\
+\midrule
+\endfirsthead
+\caption[]{Jerarquía de la necesidad primaria~8 (continuación).}\\
+\toprule
+\textbf{Código} & \textbf{Necesidad} & \textbf{Frec.} \\
+\midrule
+\endhead
+\midrule
+\multicolumn{3}{r}{\small\emph{Continúa en la siguiente página}}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\rowcolor{nprim} \textbf{8} & \textbf{El robot es portátil.} & \textbf{22} \\
+\rowcolor{nsec} \textbf{8.1} & \textbf{El robot facilita su transporte.} & \textbf{18} \\
+8.1.1 & El robot es ligero. & 7 \\
+8.1.2 & El robot facilita su transporte como equipaje personal. & 6 \\
+8.1.3 & El robot facilita el transporte individual de sus componentes. & 3 \\
+8.1.4 & El robot facilita su envío por servicios de paquetería. & 2 \\
+\rowcolor{nsec} \textbf{8.2} & \textbf{El robot tiene dimensiones compatibles con entornos domésticos.} & \textbf{4} \\
+8.2.1 & El robot tiene dimensiones compatibles con entornos domésticos. & 3 \\
+8.2.2 & El robot facilita su almacenamiento. & 1 \\
+\end{longtable}
+
+\Needspace{10\baselineskip}
+\begin{longtable}{@{}l >{\raggedright\arraybackslash}p{0.72\textwidth} r@{}}
+\caption{Jerarquía de la necesidad primaria~9: \emph{El robot navega en entornos domésticos.}}\label{tab:np09}\\
+\toprule
+\textbf{Código} & \textbf{Necesidad} & \textbf{Frec.} \\
+\midrule
+\endfirsthead
+\caption[]{Jerarquía de la necesidad primaria~9 (continuación).}\\
+\toprule
+\textbf{Código} & \textbf{Necesidad} & \textbf{Frec.} \\
+\midrule
+\endhead
+\midrule
+\multicolumn{3}{r}{\small\emph{Continúa en la siguiente página}}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\rowcolor{nprim} \textbf{9} & \textbf{El robot navega en entornos domésticos.} & \textbf{35} \\
+\rowcolor{nsec} \textbf{9.1} & \textbf{El robot navega en entornos domésticos.} & \textbf{35} \\
+9.1.1 & El robot navega en entornos domésticos. & 8 \\
+9.1.2 & El robot navega evadiendo obstáculos. & 15 \\
+9.1.3 & El robot identifica obstáculos en el entorno. & 8 \\
+9.1.4 & El robot llega a su destino con exactitud. & 4 \\
+\end{longtable}
+
+\Needspace{9\baselineskip}
+\begin{longtable}{@{}l >{\raggedright\arraybackslash}p{0.72\textwidth} r@{}}
+\caption{Jerarquía de la necesidad primaria~10: \emph{El robot opera de forma continua por periodos prolongados.}}\label{tab:np10}\\
+\toprule
+\textbf{Código} & \textbf{Necesidad} & \textbf{Frec.} \\
+\midrule
+\endfirsthead
+\caption[]{Jerarquía de la necesidad primaria~10 (continuación).}\\
+\toprule
+\textbf{Código} & \textbf{Necesidad} & \textbf{Frec.} \\
+\midrule
+\endhead
+\midrule
+\multicolumn{3}{r}{\small\emph{Continúa en la siguiente página}}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\rowcolor{nprim} \textbf{10} & \textbf{El robot opera de forma continua por periodos prolongados.} & \textbf{15} \\
+\rowcolor{nsec} \textbf{10.1} & \textbf{El robot opera de forma continua por periodos prolongados.} & \textbf{15} \\
+10.1.1 & El robot optimiza el consumo de energía. & 5 \\
+10.1.2 & El robot opera de forma continua por periodos prolongados. & 9 \\
+10.1.3 & El robot requiere poco mantenimiento. & 1 \\
+\end{longtable}
+
+\Needspace{9\baselineskip}
+\begin{longtable}{@{}l >{\raggedright\arraybackslash}p{0.72\textwidth} r@{}}
+\caption{Jerarquía de la necesidad primaria~11: \emph{El robot tiene sensores confiables.}}\label{tab:np11}\\
+\toprule
+\textbf{Código} & \textbf{Necesidad} & \textbf{Frec.} \\
+\midrule
+\endfirsthead
+\caption[]{Jerarquía de la necesidad primaria~11 (continuación).}\\
+\toprule
+\textbf{Código} & \textbf{Necesidad} & \textbf{Frec.} \\
+\midrule
+\endhead
+\midrule
+\multicolumn{3}{r}{\small\emph{Continúa en la siguiente página}}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\rowcolor{nprim} \textbf{11} & \textbf{El robot tiene sensores confiables.} & \textbf{18} \\
+\rowcolor{nsec} \textbf{11.1} & \textbf{El robot tiene sensores confiables.} & \textbf{18} \\
+11.1.1 & El robot tiene sensores exactos y precisos. & 1 \\
+11.1.2 & El robot posiciona sus manipuladores con exactitud. & 10 \\
+11.1.3 & El robot opera bajo condiciones de iluminación variables. & 7 \\
+\end{longtable}
+
+\Needspace{8\baselineskip}
+\begin{longtable}{@{}l >{\raggedright\arraybackslash}p{0.72\textwidth} r@{}}
+\caption{Jerarquía de la necesidad primaria~12: \emph{El robot identifica la voz del usuario.}}\label{tab:np12}\\
+\toprule
+\textbf{Código} & \textbf{Necesidad} & \textbf{Frec.} \\
+\midrule
+\endfirsthead
+\caption[]{Jerarquía de la necesidad primaria~12 (continuación).}\\
+\toprule
+\textbf{Código} & \textbf{Necesidad} & \textbf{Frec.} \\
+\midrule
+\endhead
+\midrule
+\multicolumn{3}{r}{\small\emph{Continúa en la siguiente página}}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\rowcolor{nprim} \textbf{12} & \textbf{El robot identifica la voz del usuario.} & \textbf{5} \\
+\rowcolor{nsec} \textbf{12.1} & \textbf{El robot identifica la voz del usuario.} & \textbf{5} \\
+12.1.1 & El robot registra sonido. & 3 \\
+12.1.2 & El robot identifica la voz del usuario. & 2 \\
+\end{longtable}
+
+\Needspace{7\baselineskip}
+\begin{longtable}{@{}l >{\raggedright\arraybackslash}p{0.72\textwidth} r@{}}
+\caption{Jerarquía de la necesidad primaria~13: \emph{El robot optimiza el tiempo de ejecución de sus tareas.}}\label{tab:np13}\\
+\toprule
+\textbf{Código} & \textbf{Necesidad} & \textbf{Frec.} \\
+\midrule
+\endfirsthead
+\caption[]{Jerarquía de la necesidad primaria~13 (continuación).}\\
+\toprule
+\textbf{Código} & \textbf{Necesidad} & \textbf{Frec.} \\
+\midrule
+\endhead
+\midrule
+\multicolumn{3}{r}{\small\emph{Continúa en la siguiente página}}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\rowcolor{nprim} \textbf{13} & \textbf{El robot optimiza el tiempo de ejecución de sus tareas.} & \textbf{1} \\
+\rowcolor{nsec} \textbf{13.1} & \textbf{El robot optimiza el tiempo de ejecución de sus tareas.} & \textbf{1} \\
+13.1.1 & El robot optimiza el tiempo de ejecución de sus tareas. & 1 \\
+\end{longtable}
+
+\Needspace{7\baselineskip}
+\begin{longtable}{@{}l >{\raggedright\arraybackslash}p{0.72\textwidth} r@{}}
+\caption{Jerarquía de la necesidad primaria~14: \emph{El robot percibe profundidad.}}\label{tab:np14}\\
+\toprule
+\textbf{Código} & \textbf{Necesidad} & \textbf{Frec.} \\
+\midrule
+\endfirsthead
+\caption[]{Jerarquía de la necesidad primaria~14 (continuación).}\\
+\toprule
+\textbf{Código} & \textbf{Necesidad} & \textbf{Frec.} \\
+\midrule
+\endhead
+\midrule
+\multicolumn{3}{r}{\small\emph{Continúa en la siguiente página}}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\rowcolor{nprim} \textbf{14} & \textbf{El robot percibe profundidad.} & \textbf{16} \\
+\rowcolor{nsec} \textbf{14.1} & \textbf{El robot percibe profundidad.} & \textbf{16} \\
+14.1.1 & El robot percibe profundidad. & 16 \\
+\end{longtable}
