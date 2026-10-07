@@ -10,27 +10,20 @@ Este capítulo abarca únicamente las fases de desarrollo del concepto y diseño
 
 \section{Identificación de necesidades}
 
-La identificación de necesidades del cliente es la fase fundacional del proceso. Su objetivo es capturar de manera sistemática y exhaustiva las necesidades, expectativas y restricciones de los usuarios potenciales, transformando información cualitativa en un conjunto estructurado de requerimientos. Ulrich y Eppinger~\cite{Ulrich-Eppinger} definen una necesidad del cliente como una descripción, en las propias palabras del usuario, de los beneficios que un producto debe proporcionar, y distinguen con claridad entre necesidades ---que describen \emph{qué} debe lograr el producto--- y soluciones ---que especifican \emph{cómo} lograrlo---. El proceso se estructura en cinco pasos: recopilación de datos sin procesar mediante entrevistas, interpretación de esos datos en términos de necesidades, organización jerárquica, establecimiento de importancia relativa y reflexión sobre los resultados.
-
-\subsection{Perfiles de usuario}
-
-Para la implementación del proceso de identificación de necesidades se definieron dos perfiles de participantes mediante muestreo intencional~(\autoref{app:protocolo}).
-
-El primero es el \textbf{usuario final}: personas que requieren asistencia doméstica constante debido a edad avanzada o alguna condición que limite su autonomía en actividades cotidianas del hogar, con capacidad cognitiva para participar en una entrevista y proporcionar consentimiento informado~(\autoref{app:protocolo}). Sus necesidades se relacionan con la utilidad práctica del robot, la facilidad de interacción, la confiabilidad y la seguridad durante el uso.
-
-El segundo perfil corresponde a \textbf{desarrolladores de software con experiencia en robótica de servicio}: miembros activos o previos del equipo de desarrollo de Justina con experiencia de participación en RoboCup@HOME y conocimiento técnico sobre el diseño, programación o implementación de funcionalidades del robot~(\autoref{app:protocolo}). Este perfil aporta una perspectiva complementaria: han trabajado directamente con robots de servicio en condiciones desafiantes, han observado y comparado múltiples plataformas en competencia, y constituyen también un tipo de usuario del sistema al ser quienes realizan el mantenimiento y la programación del robot.
-
-Dentro de este segundo perfil se distinguió entre quienes trabajan con \textbf{plataformas experimentales} de diseño propio y quienes utilizan \textbf{plataformas comerciales}, específicamente el \textit{Toyota Human Support Robot} (Takeshi) del Laboratorio de Bio-Robótica~(\autoref{app:protocolo}). Esta distinción motivó el diseño de variantes específicas en los instrumentos de recolección.
+La identificación de necesidades constituye el punto de partida en la fase de desarrollo del concepto, pues permite definir, de forma independiente a la solución, \emph{qué} satisface el producto y no \emph{cómo} debe hacerlo. En este proceso se obtienen tanto las necesidades explícitas, manifestadas directamente, como las necesidades latentes, aquellas que el usuario no logra articular con facilidad pero que representan las mayores oportunidades de innovación~\cite{Ulrich-Eppinger}. Esta información justifica las especificaciones del producto, haciendo del levantamiento de necesidades el pilar de la metodología.
 
 \subsection{Recopilación de datos}
 
-El proyecto contó con la aprobación del Comité de Ética en Investigación y Docencia de la Facultad de Ingeniería de la UNAM~(\autoref{app:consentimiento}). Todos los participantes firmaron una carta de consentimiento informado antes de su participación, bajo la cual se garantizó la confidencialidad de la información mediante codificación de datos, almacenamiento seguro y acceso restringido al equipo investigador~(\autoref{app:consentimiento}).
+Para recopilar datos, Ulrich y Eppinger recomiendan las entrevistas, los grupos de enfoque y la observación del producto en uso, desestimando las encuestas escritas en las etapas iniciales de la identificación de necesidades por no aportar información suficiente sobre el usuario~\cite{Ulrich-Eppinger}. Entre estos métodos, se optó por realizar entrevistas, al considerarse la estrategia más efectiva para conocer la experiencia de interacción con un robot de servicio y las dinámicas del entorno doméstico, sin sesgar la investigación a tareas preconcebidas de manipulación. De esta manera, mediante un muestreo intencional, se concretaron cinco entrevistas individuales y una sesión grupal con cuatro participantes, utilizando guías diferenciadas que se detallan en el Anexo~\ref{app:protocolo}, orientadas a dos perfiles de usuario:
 
-Siguiendo las recomendaciones de Ulrich y Eppinger~\cite{Ulrich-Eppinger}, se seleccionaron las entrevistas como método principal de recopilación. Se diseñaron cuatro guiones semiestructurados diferenciados según perfil: uno para el usuario final, uno de aplicación general para desarrolladores, y dos variantes específicas para desarrolladores de plataformas experimentales y comerciales, respectivamente~(\autoref{app:protocolo}). Los guiones completos se documentan en el Anexo~[X].
+\begin{enumerate}
+    \item \textbf{Desarrolladores de software en robótica de servicio:} Miembros del Laboratorio de Bio-Robótica con experiencia en la competencia RoboCup@Home.
+	\item \textbf{Usuarios finales potenciales:} Personas que requieren asistencia doméstica por autonomía limitada e integrantes de su núcleo familiar.
+\end{enumerate}
 
-Se realizaron nueve entrevistas en total: cinco con desarrolladores con experiencia en RoboCup@HOME y cuatro con usuarios finales potenciales. Todas fueron grabadas en audio con consentimiento explícito de los participantes~(\autoref{app:consentimiento}). Los fragmentos relevantes se transcribieron y organizaron en tablas estructuradas que vinculan cada declaración con su participante, el contexto de la pregunta y anotaciones sobre necesidades implícitas.
+Las sesiones, aprobadas por el Comité de Ética en Investigación y Docencia de la Facultad de Ingeniería de la UNAM, fueron grabadas en audio y transcritas para su análisis, garantizando la confidencialidad de los participantes conforme al consentimiento informado del Anexo~\ref{app:consentimiento}.
 
-\subsection{Interpretación y organización jerárquica}
+\subsection{Interpretación y organización de necesidades}
 
 Siguiendo las directrices de Ulrich y Eppinger~\cite{Ulrich-Eppinger}, cada necesidad se expresó como un atributo del producto ---sujeto, verbo que describe la acción o capacidad deseada y, cuando es necesario, objeto o contexto de aplicación--- capturando el \textit{qué} sin anticipar el \textit{cómo}. Se adoptó un enfoque holístico que abarcó el robot de servicio doméstico en su totalidad, reconociendo que las necesidades de manipulación no existen de manera aislada sino interrelacionadas con navegación, percepción e interacción. Como resultado, se identificaron \textbf{122 necesidades distintas}, mencionadas colectivamente \textbf{690 veces} a lo largo de todas las entrevistas.
 
