@@ -196,8 +196,93 @@ Las relaciones presentadas permiten establecer qué magnitudes deben conocerse d
 
 \section{Variables de interés e instrumentación}
 
-Para el control de un manipulador robótico son necesarias tanto una representación interna del sistema, como del entorno en el que se encuentra. Lamentablemente, en la mayoría de los casos ninguna versión lo suficientemente completa o precisa de ambos modelos están disponibles. Además, los sistemas de control tampoco son perfectos, por lo que no es realista asumir una respuesta perfecta a la entrada aplicada.
+Llevar el modelo cinemático a una implementación física requiere que el sistema de control conozca el estado del manipulador y el de su entorno durante la operación. Para ello son necesarias tanto una representación interna del sistema, como del entorno en el que se encuentra. Lamentablemente, en la mayoría de los casos ninguna versión lo suficientemente completa o precisa de ambos modelos está disponible. Además, los sistemas de control tampoco son perfectos, por lo que no es realista asumir una respuesta perfecta a la entrada aplicada. Ante esta incertidumbre, el robot debe medir su propio estado y el de su entorno, lo que exige identificar qué variables son relevantes y con qué instrumentos se obtienen.
+
+% Variables de interés
+De las relaciones de cinemática directa (ecs.~\ref{ec:fwd_speed} y~\ref{ec:fwd_acc}) se desprende que las variables de interés de un manipulador son las posiciones, velocidades y aceleraciones articulares ($\mathbf{q}$, $\dot{\mathbf{q}}$, $\ddot{\mathbf{q}}$), a partir de las cuales se obtienen la pose y la velocidad del efector final. A éstas se suman las fuerzas y pares que el manipulador ejerce o recibe, ya que los pares articulares $\boldsymbol{\tau}$ se relacionan con la fuerza y el momento $\mathbf{F}$ en el efector final mediante la transpuesta del jacobiano, como se muestra en la ecuación~\ref{ec:fuerzas}~\cite{craig,siciliano2009,spong2020}.
+
+\begin{equation}
+\label{ec:fuerzas}
+    \boldsymbol{\tau} = \mathbf{J}^{T}(\mathbf{q})\,\mathbf{F}
+\end{equation}
+
+% Clasificación de sensores
+Cada una de estas variables se obtiene mediante sensores, dispositivos que convierten una magnitud física en una señal eléctrica procesable. De acuerdo con la magnitud que miden, se clasifican en dos grandes grupos~\cite{handbook_sensing,siciliano2009,spong2020}:
+
+\begin{itemize}
+    \item \emph{Propioceptivos}: Miden el estado interno del robot, como la posición y velocidad de sus articulaciones, su aceleración o los pares en sus juntas.
+    \item \emph{Exteroceptivos}: Miden el estado del entorno, como la distancia a los obstáculos o la posición de los objetos, a través de cámaras, telémetros láser o sensores de contacto.
+\end{itemize}
+
+% Posición y velocidad
+Para el control de un manipulador, el sensor propioceptivo más empleado es el codificador (\emph{encoder}) óptico o magnético, que mide la posición angular de una junta~\cite{craig,siciliano2009}. Un codificador incremental entrega $N$ pulsos por revolución, por lo que su resolución angular es $\Delta\theta = 2\pi/N$, mientras que uno absoluto asocia una posición única a cada ángulo y conserva la medición sin necesidad de un punto de referencia al encender el sistema~\cite{craig,siciliano2009}. Por su parte, la velocidad articular puede medirse directamente con un tacómetro o estimarse numéricamente derivando la posición medida~\cite{craig,siciliano2009}. Esta última opción amplifica el ruido de la medición, por lo que suele requerir un filtrado posterior. La aceleración, en cambio, rara vez se obtiene derivando dos veces, y se mide con acelerómetros o unidades de medición inercial (IMU)~\cite{handbook_sensing}.
+
+% Fuerza
+La medición de fuerzas y pares se realiza con sensores de fuerza/par ubicados en la muñeca del manipulador, o bien con sensores de par en cada articulación~\cite{craig,siciliano2009,spong2020}. Estos dispositivos suelen basarse en galgas extensométricas, que transforman la deformación de un elemento elástico en una señal eléctrica~\cite{siciliano2009}. Esta información es indispensable en tareas donde el robot interactúa con su entorno, como sujetar un objeto sin dañarlo.
+
+% Exteroceptivos
+Por otro lado, los sensores exteroceptivos permiten ubicar los objetos de interés con respecto a un marco de referencia del robot. Las cámaras RGB-D y los LiDAR de \emph{Justina} entregan nubes de puntos e imágenes, a partir de las cuales se estima la pose de los objetos por manipular~\cite{handbook_sensing,spong2020}. Con ello, la pose objetivo del efector final queda definida como entrada al problema de cinemática inversa.
+
+% Modelo del sensor, ruido, calibración
+Sin importar su tipo, ningún sensor entrega una medición exacta. Su salida se describe mediante un modelo de medición $\mathbf{z} = h(\mathbf{x}) + \mathbf{v}$, donde $h$ relaciona el estado real con la magnitud observada y $\mathbf{v}$ representa el ruido~\cite{handbook_sensing}. Además de este ruido aleatorio, existen errores sistemáticos, como desfases y factores de escala incorrectos, que se corrigen mediante calibración~\cite{handbook_sensing}. Cuando se dispone de varias fuentes de información, como las mediciones de distintos sensores y las predicciones del modelo del sistema, técnicas de estimación como el filtro de Kalman permiten combinarlas para obtener una mejor estimación del estado~\cite{handbook_sensing}.
+
+Las magnitudes medidas y estimadas constituyen la retroalimentación del sistema. Con ellas, el controlador compara el estado real del manipulador con el deseado y ajusta la señal aplicada a los actuadores, lo cual se aborda en la siguiente sección.
 
 \section{Control de manipuladores robóticos}
 
-La teoría de control proporciona herramientas para diseñar y evaluar algortimos para realizar los movimientos deseados o las aplicaciones de fuerza.
+La teoría de control proporciona herramientas para diseñar y evaluar algoritmos para realizar los movimientos deseados o las aplicaciones de fuerza. En un manipulador, el problema consiste en determinar los pares que deben aplicar los actuadores para que las variables medidas sigan a las deseadas~\cite{craig}. Dada una trayectoria articular deseada $\mathbf{q}_d(t)$, el desempeño del sistema se evalúa mediante el error de seguimiento de la ecuación~\ref{ec:error}. Un esquema de lazo abierto no puede corregir las perturbaciones ni las imprecisiones del modelo señaladas en la sección anterior, por lo que se recurre a la retroalimentación de las magnitudes medidas, de modo que el controlador ajuste la acción de control en función del error~\cite{craig,handbook_motion}.
+
+\begin{equation}
+\label{ec:error}
+    \mathbf{e} = \mathbf{q}_d - \mathbf{q}
+\end{equation}
+
+% Modelo dinámico
+Para diseñar el controlador es necesario conocer cómo responde el manipulador a los pares aplicados. Esta relación está dada por su modelo dinámico, que para un robot serial de eslabones rígidos se expresa mediante la ecuación~\ref{ec:dinamica}~\cite{craig,handbook_motion}.
+
+\begin{equation}
+\label{ec:dinamica}
+    \boldsymbol{\tau} = \mathbf{M}(\mathbf{q})\ddot{\mathbf{q}} + \mathbf{C}(\mathbf{q},\dot{\mathbf{q}})\dot{\mathbf{q}} + \mathbf{g}(\mathbf{q})
+\end{equation}
+
+donde:
+\begin{description}
+    \item[$\mathbf{M}(\mathbf{q})$] es la matriz de inercia, simétrica y definida positiva.
+    \item[$\mathbf{C}(\mathbf{q},\dot{\mathbf{q}})\dot{\mathbf{q}}$] agrupa los términos de fuerzas centrífugas y de Coriolis.
+    \item[$\mathbf{g}(\mathbf{q})$] es el vector de pares gravitacionales.
+\end{description}
+
+Esta ecuación evidencia la principal dificultad del control de manipuladores: la dinámica es no lineal y acopla el movimiento de todas las articulaciones, además de depender de la configuración~\cite{handbook_motion}.
+
+% Espacio articular vs operacional
+El control puede formularse en dos espacios distintos. En el espacio articular, la trayectoria deseada del efector final se convierte previamente a variables articulares mediante la cinemática inversa, y el error se regula directamente sobre $\mathbf{q}$. En el espacio operacional, el error se define sobre la pose del efector final y se transforma al espacio de juntas mediante el jacobiano~\cite{craig,handbook_motion}. La primera opción es más sencilla y se apoya en sensores que miden directamente $\mathbf{q}$. La segunda regula directamente la variable de interés de la tarea, pero exige calcular la cinemática y el jacobiano en cada ciclo de control, y es sensible a las configuraciones singulares, donde éste pierde rango~\cite{craig}.
+
+% Control independiente por junta
+La estrategia más simple consiste en controlar cada articulación de manera independiente, tratando los efectos de las demás como perturbaciones. Para ello se emplea un controlador proporcional-integral-derivativo (PID) por junta, definido en la ecuación~\ref{ec:pid}~\cite{craig,spong2020}.
+
+\begin{equation}
+\label{ec:pid}
+    \boldsymbol{\tau} = \mathbf{K}_p\,\mathbf{e} + \mathbf{K}_d\,\dot{\mathbf{e}} + \mathbf{K}_i\int_{0}^{t}\mathbf{e}\,d\tau
+\end{equation}
+
+donde $\mathbf{K}_p$, $\mathbf{K}_d$ y $\mathbf{K}_i$ son matrices diagonales de ganancias proporcional, derivativa e integral, respectivamente. Cuando la articulación se modela como un sistema de segundo orden con inercia efectiva $I_{ef}$, la respuesta es críticamente amortiguada si $k_d = 2\sqrt{k_p I_{ef}}$~\cite{craig}. La acción integral elimina el error en estado estable producido por perturbaciones constantes, como la gravedad, aunque puede deteriorar la respuesta transitoria~\cite{craig}. Este esquema funciona razonablemente cuando las relaciones de reducción son altas, ya que éstas atenúan el acoplamiento y la variación de la inercia. Sin embargo, el desempeño se degrada ante movimientos rápidos o cargas variables, porque ignora el modelo de la ecuación~\ref{ec:dinamica}. Una mejora sencilla es sumar la compensación de gravedad $\mathbf{g}(\mathbf{q})$ a un control proporcional-derivativo, con lo que se logra llevar el manipulador a una posición deseada constante~\cite{handbook_motion,spong2020}.
+
+% Par calculado
+Para el seguimiento de trayectorias se emplea el control por dinámica inversa o de par calculado. Esta estrategia utiliza el modelo del manipulador para cancelar los términos no lineales y desacoplar las articulaciones, como se muestra en la ecuación~\ref{ec:par_calculado}~\cite{craig,handbook_motion}.
+
+\begin{equation}
+\label{ec:par_calculado}
+    \boldsymbol{\tau} = \mathbf{M}(\mathbf{q})\left(\ddot{\mathbf{q}}_d + \mathbf{K}_d\dot{\mathbf{e}} + \mathbf{K}_p\mathbf{e}\right) + \mathbf{C}(\mathbf{q},\dot{\mathbf{q}})\dot{\mathbf{q}} + \mathbf{g}(\mathbf{q})
+\end{equation}
+
+Si el modelo es exacto, al sustituir la ecuación~\ref{ec:par_calculado} en la ecuación~\ref{ec:dinamica} se obtiene $\ddot{\mathbf{e}} + \mathbf{K}_d\dot{\mathbf{e}} + \mathbf{K}_p\mathbf{e} = \mathbf{0}$, un sistema lineal cuyo comportamiento se define eligiendo las ganancias~\cite{craig,handbook_motion}. Esta ley requiere medir $\mathbf{q}$ y $\dot{\mathbf{q}}$, y depende de la fidelidad del modelo, que en la práctica contiene errores en las masas, inercias y fricción. Para reducir esta sensibilidad existen estrategias de control robusto, adaptable y de aprendizaje~\cite{handbook_motion,siciliano2009}.
+
+% Control de fuerza
+Las estrategias anteriores controlan el movimiento del manipulador, lo cual es adecuado mientras éste se desplaza libremente. Cuando el efector final entra en contacto con el entorno, como al tomar o dejar un objeto, el control puramente de posición resulta inadecuado, pues pequeños errores de posición producen grandes fuerzas de contacto, sobre todo en entornos rígidos~\cite{handbook_force,craig}. En estos casos es necesario controlar la interacción mediante la retroalimentación de los sensores de fuerza descritos en la sección anterior. Las estrategias principales se agrupan en~\cite{handbook_force}:
+
+\begin{itemize}
+    \item \emph{Control indirecto}: Regula la relación dinámica entre la desviación de la pose del efector final y la fuerza de contacto, mediante control de rigidez o de impedancia, de modo que el manipulador se comporte de forma compliante sin requerir un modelo preciso del entorno~\cite{hogan1985}.
+    \item \emph{Control híbrido de posición/fuerza}: Divide los grados de libertad de la tarea según sus restricciones, de forma que se controla la posición en las direcciones libres y la fuerza en las direcciones restringidas por el entorno~\cite{craig,raibert1981}.
+\end{itemize}
+
+% TODO (opcional): describir el controlador de bajo nivel que ejecutan los actuadores de los brazos de Justina y cómo el módulo Hardware recibe las trayectorias articulares del módulo Manipulation.
