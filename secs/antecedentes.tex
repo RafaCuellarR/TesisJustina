@@ -38,7 +38,7 @@ A medida que las necesidades de la comunidad superaron el enfoque inicial de ROS
 	\item \emph{Acciones}: Implementan un patrón de meta/retroalimentación/resultado para tareas asíncronas de larga duración, donde un cliente puede enviar una meta, recibir retroalimentación periódica, cancelar la ejecución y obtener un resultado.
 \end{itemize}
 
-Estas primitivas de comunicación cimentan la arquitectura actual de \emph{Justina}, permitiendo desacoplar el sistema en módulos orquestadores y módulos especializados, cuyos paquetes, nodos e interfaces se documentan detalladamente en el anexo~\ref{app:justina}. Desde una perspectiva operativa, las tareas del robot provienen de rutinas preprogramadas, como las pruebas de la competencia RoboCup@Home, o de peticiones libres derivadas de comandos de voz. En ambos casos, el procesamiento de la solicitud (fig.~\ref{fig:justina_architecture}) recae en los módulos orquestadores:
+Estas primitivas de comunicación cimentan la arquitectura actual de \emph{Justina}, permitiendo desacoplar el sistema en módulos orquestadores y módulos especializados, cuyos paquetes se documentan en el anexo~\ref{app:justina}. Desde una perspectiva operativa, las tareas del robot provienen de rutinas preprogramadas, como las pruebas de la competencia RoboCup@Home, o de peticiones libres derivadas de comandos de voz. En ambos casos, el procesamiento de la solicitud (fig.~\ref{fig:justina_architecture}) recae en los módulos orquestadores:
 
 \begin{enumerate}
 	\item \emph{Planning}: Descompone la petición en una secuencia coherente de acciones.
