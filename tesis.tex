@@ -14,10 +14,13 @@
 \usepackage{lmodern}
 \usepackage{longtable}
 \usepackage{booktabs}
+\usepackage{multirow}
 \usepackage{array}
+\usepackage{tabularx}
 \usepackage{needspace}
 \usepackage[table]{xcolor}
 \usepackage{caption}
+\usepackage{adjustbox}
 
 \captionsetup{labelfont=bf,labelsep=period,font=small}
 \setlength{\LTpre}{12pt}
@@ -29,6 +32,9 @@
 
 \renewcommand{\appendixname}{Apéndice}
 \DeclareMathOperator{\sen}{sen}
+
+\newlength{\rotw}
+\newcommand{\rot}[1]{\rotatebox{90}{\hspace{0.3em}\begin{tabular}{@{}l@{}}#1\end{tabular}\hspace{0.6em}}}
 
 \hypersetup{
   colorlinks=true,

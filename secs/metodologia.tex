@@ -52,46 +52,67 @@ Las necesidades identificadas, aunque útiles para comprender los problemas de i
 
 \subsection{Traducción de necesidades a métricas}
 
-Para cada necesidad del cliente se identificó la característica precisa y medible del producto que mejor refleja el grado en que esa necesidad queda satisfecha. La relación entre necesidades y métricas se documentó en una matriz de correlación (Cuadro~\ref{tab:correlacion}) que evidencia qué métricas cubren cada necesidad y permite identificar aquellas que requieren múltiples indicadores. A partir de las necesidades identificadas se definieron las ocho métricas presentadas en el Cuadro~\ref{tab:metricas}.
+La metodología de Ulrich y Eppinger asume que las necesidades pueden traducirse en especificaciones cuyo cumplimiento refleja fielmente el grado de satisfacción del usuario; sin embargo, al no existir una correspondencia unívoca en la práctica, una necesidad suele requerir múltiples métricas o una métrica atender varias necesidades~\cite{Ulrich-Eppinger}.
+
+Las métricas deben ser completas, dependientes y prácticas, contemplando criterios populares de comparación en el mercado así como evaluaciones subjetivas ante atributos no cuantificables~\cite{Ulrich-Eppinger}. Bajo estos lineamientos, la Tabla~\ref{tab:metricas} presenta las métricas y las necesidades que estas atienden, cuyas unidades e importancia fueron establecidas por el equipo de diseño.
 
 \begin{table}[htbp]
 \centering
-\caption{Lista de métricas derivadas de las necesidades del cliente.}
+\caption{Lista de métricas.}
 \label{tab:metricas}
-\begin{tabular}{clccc}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabularx}{\textwidth}{cc>{\centering\arraybackslash}Xcc}
 \hline
-\textbf{\#} & \textbf{Métrica} & \textbf{Nec. relacionadas} & \textbf{Importancia} & \textbf{Unidad} \\
+\textbf{\# Métrica} & \textbf{\# Necesidad} & \textbf{Métrica} & \textbf{Importancia} & \textbf{Unidad} \\
 \hline
-1 & Capacidad de carga     & 1, 5, 6 & 5 & {[}kg{]} \\
-2 & Fuerza de agarre       & 1, 3, 5 & 5 & {[}N{]}  \\
-3 & Alcance                & 2, 4, 5 & 5 & {[}mm{]} \\
-4 & Apertura               & 1, 5    & 4 & {[}mm{]} \\
-5 & Grados de libertad     & 4, 5    & 4 & {[}1{]}  \\
-6 & Repetibilidad          & 2, 5, 6 & 4 & {[}mm{]} \\
-7 & Grado de protección IP & 5, 6    & 3 & {[}1{]}  \\
-8 & Mapa de desensamble    & 6, 7    & 3 & {[}s{]}  \\
+1 & 1, 5, 6 & Capacidad de carga.     & 5 & {[}kg{]} \\
+2 & 1, 3, 5 & Fuerza de agarre.       & 5 & {[}N{]}  \\
+3 & 2, 4, 5 & Alcance.                & 5 & {[}mm{]} \\
+4 & 1, 5    & Apertura.               & 4 & {[}mm{]} \\
+5 & 4, 5    & Grados de libertad.     & 4 & {[}1{]}  \\
+6 & 2, 6    & Repetibilidad.          & 4 & {[}mm{]} \\
+7 & 5, 6    & Grado de protección IP. & 3 & {[}1{]}  \\
 \hline
-\end{tabular}
+\end{tabularx}
 \end{table}
 
+Para evidenciar la correlación entre las necesidades seleccionadas y las métricas definidas, se presenta la matriz de la Tabla~\ref{tab:correlacion}.
+
 \begin{table}[htbp]
 \centering
-\caption{Matriz de correlación entre necesidades del cliente y métricas.}
+\caption{Matriz de correlación.}
 \label{tab:correlacion}
-\small
-\begin{tabular}{lcccccccc}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\textwidth}{|@{\hspace{7pt}}c@{\hspace{7pt}}|@{\hspace{6pt}}>{\raggedright\arraybackslash}X@{\hspace{6pt}}|*{7}{c}|}
+\cline{3-9}
+\multicolumn{2}{c}{} & \multicolumn{7}{|c|}{\rule[-1.5ex]{0pt}{4.5ex}\textbf{Métricas}} \\
+\cline{3-9}
+\multicolumn{2}{c}{} &
+  \multicolumn{1}{|c}{\rot{Capacidad de carga.}} &
+  \rot{Fuerza de agarre.} &
+  \rot{Alcance.} &
+  \rot{Apertura.} &
+  \rot{Grados de libertad.} &
+  \rot{Repetibilidad.} &
+  \multicolumn{1}{c|}{\rot{Grado de protección IP.}} \\
 \hline
-\textbf{Necesidad} & \textbf{M1} & \textbf{M2} & \textbf{M3} & \textbf{M4} & \textbf{M5} & \textbf{M6} & \textbf{M7} & \textbf{M8} \\
+\multirow{6}{*}{\rotatebox{90}{\textbf{Necesidades}}}
+ & El robot manipula artículos domésticos.
+ & \textbf{X} & \textbf{X} &            & \textbf{X} &            &            &            \\
+ & El robot planea trayectorias del manipulador.
+ &            &            & \textbf{X} &            &            & \textbf{X} &            \\
+ & El robot toma artículos con la fuerza necesaria.
+ &            & \textbf{X} &            &            &            &            &            \\
+ & El robot extiende el alcance efectivo de sus manipuladores.
+ &            &            & \textbf{X} &            & \textbf{X} &            &            \\
+ & El robot manipula equipo para realizar tareas domésticas.
+ & \textbf{X} & \textbf{X} & \textbf{X} & \textbf{X} & \textbf{X} &            & \textbf{X} \\
+ & El robot es robusto.
+ & \textbf{X} &            &            &            &            & \textbf{X} & \textbf{X} \\
 \hline
-El robot manipula artículos domésticos        & $\times$ & $\times$ &          & $\times$ &          &          &          &          \\
-El robot planea trayectorias del manipulador  &          &          & $\times$ &          &          & $\times$ &          &          \\
-El robot toma artículos con la fuerza nec.    &          & $\times$ &          &          &          &          &          &          \\
-El robot extiende el alcance efectivo         &          &          & $\times$ &          & $\times$ &          &          &          \\
-El robot manipula equipo para tareas dom.     & $\times$ & $\times$ & $\times$ & $\times$ & $\times$ & $\times$ & $\times$ &          \\
-El robot es robusto                           & $\times$ &          &          &          &          & $\times$ & $\times$ & $\times$ \\
-El robot tiene un diseño intuitivo            &          &          &          &          &          &          &          & $\times$ \\
-\hline
-\end{tabular}
+\end{tabularx}
 \end{table}
 
 \subsection{Benchmarking y análisis competitivo}
