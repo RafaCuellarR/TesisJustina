@@ -1,6 +1,6 @@
 En la Universidad Nacional Autónoma de México (UNAM), el Laboratorio de Bio-Robótica de la Facultad de Ingeniería realiza investigación en áreas como robótica móvil, realidad virtual, reconocimiento de patrones, inteligencia artificial e interfaces hombre-máquina~\cite{justina_uv}. Fundado en 1996 por Jesús Savage Carmona, el laboratorio comenzó su trayectoria con la adquisición de un robot comercial estadounidense y, desde entonces, ha conformado equipos de estudiantes de licenciatura, maestría y doctorado para desarrollar prototipos propios, tales como TX8, TPR8, PAC-ITO y AL-ITA~\cite{robots_ia_unam}. Cada plataforma ha sido fruto de una línea de trabajo orientada a la creación de robots de servicio para apoyar a las personas en sus actividades cotidianas en entornos como casas, escuelas, oficinas u hospitales~\cite{justina_uv}.
 
-Actualmente, el robot \emph{Justina} se ha consolidado como la insignia del laboratorio y su referente en la competencia internacional RoboCup@Home. Al constituir el sistema de validación de este trabajo, en el presente capítulo se aborda su arquitectura de hardware y software, para posteriormente exponer la teoría general de manipuladores robóticos, en particular sus variables de interés, instrumentación y estrategias de control.
+Actualmente, el robot \emph{Justina} se ha consolidado como la insignia del laboratorio y su referente en la competencia internacional RoboCup@Home. Al constituir el sistema de validación de este trabajo, en el presente capítulo se aborda su arquitectura de hardware y software, para posteriormente exponer la teoría general de diseño de manipuladores robóticos, su instrumentación y teoría de control.
 
 \section{\emph{Justina}}
 
@@ -196,10 +196,10 @@ Las relaciones presentadas permiten establecer qué magnitudes deben conocerse d
 
 \section{Variables de interés e instrumentación}
 
-Llevar el modelo cinemático a una implementación física requiere que el sistema de control conozca el estado del manipulador y el de su entorno durante la operación. Para ello son necesarias tanto una representación interna del sistema, como del entorno en el que se encuentra. Lamentablemente, en la mayoría de los casos ninguna versión lo suficientemente completa o precisa de ambos modelos está disponible. Además, los sistemas de control tampoco son perfectos, por lo que no es realista asumir una respuesta perfecta a la entrada aplicada. Ante esta incertidumbre, el robot debe medir su propio estado y el de su entorno, lo que exige identificar qué variables son relevantes y con qué instrumentos se obtienen.
+Llevar el modelo cinemático a una implementación física exige seleccionar los instrumentos para medir las variables relevantes, con el fin de generar tanto una representación interna del sistema como del entorno en el que se encuentra.
 
 % Variables de interés
-De las relaciones de cinemática directa (ecs.~\ref{ec:fwd_speed} y~\ref{ec:fwd_acc}) se desprende que las variables de interés de un manipulador son las posiciones, velocidades y aceleraciones articulares ($\mathbf{q}$, $\dot{\mathbf{q}}$, $\ddot{\mathbf{q}}$), a partir de las cuales se obtienen la pose y la velocidad del efector final. A éstas se suman las fuerzas y pares que el manipulador ejerce o recibe, ya que los pares articulares $\boldsymbol{\tau}$ se relacionan con la fuerza y el momento $\mathbf{F}$ en el efector final mediante la transpuesta del jacobiano, como se muestra en la ecuación~\ref{ec:fuerzas}~\cite{craig,siciliano2009,spong2020}.
+De los modelos de cinemática directa (ecs.~\ref{ec:fwd_speed} y~\ref{ec:fwd_acc}) se desprende que las variables de interés de un manipulador son las posiciones, velocidades y aceleraciones articulares ($\mathbf{q}$, $\dot{\mathbf{q}}$, $\ddot{\mathbf{q}}$), a partir de las cuales se obtienen la pose y la velocidad del efector final. A éstas se suman los pares articulares $\boldsymbol{\tau}$ que el manipulador ejerce o recibe, de los que se obtienen la fuerza y el momento $\mathbf{F}$ en el efector final mediante la transpuesta del jacobiano, como se muestra en la ecuación~\ref{ec:fuerzas}~\cite{craig,siciliano2009,spong2020}.
 
 \begin{equation}
 \label{ec:fuerzas}
@@ -207,7 +207,7 @@ De las relaciones de cinemática directa (ecs.~\ref{ec:fwd_speed} y~\ref{ec:fwd_
 \end{equation}
 
 % Clasificación de sensores
-Cada una de estas variables se obtiene mediante sensores, dispositivos que convierten una magnitud física en una señal eléctrica procesable. De acuerdo con la magnitud que miden, se clasifican en dos grandes grupos~\cite{handbook_sensing,siciliano2009,spong2020}:
+Cada una de estas variables se obtiene mediante sensores\footnote{Dispositivos que convierten una magnitud física en una señal eléctrica procesable.}. De acuerdo con la magnitud que miden, se clasifican en dos grandes grupos~\cite{handbook_sensing,siciliano2009,spong2020}:
 
 \begin{itemize}
     \item \emph{Propioceptivos}: Miden el estado interno del robot, como la posición y velocidad de sus articulaciones, su aceleración o los pares en sus juntas.
@@ -215,10 +215,10 @@ Cada una de estas variables se obtiene mediante sensores, dispositivos que convi
 \end{itemize}
 
 % Posición y velocidad
-Para el control de un manipulador, el sensor propioceptivo más empleado es el codificador (\emph{encoder}) óptico o magnético, que mide la posición angular de una junta~\cite{craig,siciliano2009}. Un codificador incremental entrega $N$ pulsos por revolución, por lo que su resolución angular es $\Delta\theta = 2\pi/N$, mientras que uno absoluto asocia una posición única a cada ángulo y conserva la medición sin necesidad de un punto de referencia al encender el sistema~\cite{craig,siciliano2009}. Por su parte, la velocidad articular puede medirse directamente con un tacómetro o estimarse numéricamente derivando la posición medida~\cite{craig,siciliano2009}. Esta última opción amplifica el ruido de la medición, por lo que suele requerir un filtrado posterior. La aceleración, en cambio, rara vez se obtiene derivando dos veces, y se mide con acelerómetros o unidades de medición inercial (IMU)~\cite{handbook_sensing}.
+Para el control de un manipulador, el sensor propioceptivo más empleado es el codificador (\emph{encoder}) óptico o magnético, que mide la posición angular de una junta~\cite{craig,siciliano2009}. Un codificador incremental entrega $N$ pulsos por revolución, por lo que su resolución angular es $\Delta\theta = 2\pi/N$, mientras que uno absoluto asocia una posición única a cada ángulo y conserva la medición sin necesidad de un punto de referencia al encender el sistema~\cite{craig,siciliano2009}. Por su parte, la velocidad articular puede medirse directamente con un tacómetro o estimarse numéricamente derivando la posición medida~\cite{craig,siciliano2009}. Esta última opción amplifica el ruido de la medición, por lo que suele requerir un filtrado posterior. La aceleración, en cambio, se mide con acelerómetros o unidades de medición inercial (IMU)~\cite{handbook_sensing}.
 
 % Fuerza
-La medición de fuerzas y pares se realiza con sensores de fuerza/par ubicados en la muñeca del manipulador, o bien con sensores de par en cada articulación~\cite{craig,siciliano2009,spong2020}. Estos dispositivos suelen basarse en galgas extensométricas, que transforman la deformación de un elemento elástico en una señal eléctrica~\cite{siciliano2009}. Esta información es indispensable en tareas donde el robot interactúa con su entorno, como sujetar un objeto sin dañarlo.
+La medición de fuerzas y pares se realiza con sensores de fuerza/par ubicados en la muñeca del manipulador, o bien con sensores de par en cada articulación~\cite{craig,siciliano2009,spong2020}. Estos dispositivos suelen basarse en galgas extensométricas, que transforman la deformación de un elemento elástico en una señal eléctrica~\cite{siciliano2009}. Esta información es indispensable en tareas donde el robot interactúa con su entorno, como sujetar un objeto sin dañarlo, para no dañar los objetos o a sí mismo.
 
 % Exteroceptivos
 Por otro lado, los sensores exteroceptivos permiten ubicar los objetos de interés con respecto a un marco de referencia del robot. Las cámaras RGB-D y los LiDAR de \emph{Justina} entregan nubes de puntos e imágenes, a partir de las cuales se estima la pose de los objetos por manipular~\cite{handbook_sensing,spong2020}. Con ello, la pose objetivo del efector final queda definida como entrada al problema de cinemática inversa.
@@ -226,7 +226,7 @@ Por otro lado, los sensores exteroceptivos permiten ubicar los objetos de inter�
 % Modelo del sensor, ruido, calibración
 Sin importar su tipo, ningún sensor entrega una medición exacta. Su salida se describe mediante un modelo de medición $\mathbf{z} = h(\mathbf{x}) + \mathbf{v}$, donde $h$ relaciona el estado real con la magnitud observada y $\mathbf{v}$ representa el ruido~\cite{handbook_sensing}. Además de este ruido aleatorio, existen errores sistemáticos, como desfases y factores de escala incorrectos, que se corrigen mediante calibración~\cite{handbook_sensing}. Cuando se dispone de varias fuentes de información, como las mediciones de distintos sensores y las predicciones del modelo del sistema, técnicas de estimación como el filtro de Kalman permiten combinarlas para obtener una mejor estimación del estado~\cite{handbook_sensing}.
 
-Las magnitudes medidas y estimadas constituyen la retroalimentación del sistema. Con ellas, el controlador compara el estado real del manipulador con el deseado y ajusta la señal aplicada a los actuadores, lo cual se aborda en la siguiente sección.
+Las magnitudes medidas y estimadas constituyen la retroalimentación del sistema. Con ellas, el controlador compara el estado real del manipulador con el deseado y ajusta la señal aplicada a los actuadores dentro de un sistema de control de lazo cerrado.
 
 \section{Control de manipuladores robóticos}
 
