@@ -1,17 +1,17 @@
 \label{app:benchmarking_pinzas}
 
-En este documento se reportan los resultados del análisis comparativo (\emph{benchmarking}) de efectores finales (pinzas) realizado para establecer valores de referencia en el diseño de los efectores finales de \emph{Justina}. Se consideraron ocho sistemas representativos de dos tipos, pinzas de dos dedos y pinzas de tres dedos, listados en la Tabla~\ref{tab:bm_pinzas_sistemas}.
+El análisis comparativo de efectores finales comerciales realizado para establecer valores de referencia en el diseño de las manos de \emph{Justina} considera ocho modelos representativos divididos en dos categorías: pinzas de dos dedos y pinzas de tres dedos, listados en la Tabla~\ref{tab:bm_pinzas_sistemas}.
 
 \Needspace{14\baselineskip}
-\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.3\textwidth} >{\raggedright\arraybackslash}p{0.3\textwidth}@{}}
-\caption{Efectores finales considerados en el análisis comparativo}\label{tab:bm_pinzas_sistemas}\\
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.35\textwidth} >{\raggedright\arraybackslash}p{0.35\textwidth}@{}}
+\caption{Efectores finales considerados en el análisis comparativo.}\label{tab:bm_pinzas_sistemas}\\
 \toprule
-\textbf{Sistema} & \textbf{Fabricante o institución} \\
+\textbf{Sistema} & \textbf{Marca} \\
 \midrule
 \endfirsthead
-\caption[]{Efectores finales considerados en el análisis comparativo (continuación)}\\
+\caption[]{Efectores finales considerados en el análisis comparativo, continuación.}\\
 \toprule
-\textbf{Sistema} & \textbf{Fabricante o institución} \\
+\textbf{Sistema} & \textbf{Marca} \\
 \midrule
 \endhead
 \midrule
@@ -20,29 +20,29 @@ En este documento se reportan los resultados del análisis comparativo (\emph{be
 \bottomrule
 \endlastfoot
 \rowcolor{nprim} \multicolumn{2}{@{}l}{\textbf{Pinzas de dos dedos}} \\
-Franka Hand & Franka Emika \\
-2F-85 & Robotiq \\
-2F-140 & Robotiq \\
-HSR & Toyota \\
+Franka Hand~\cite{franka_hand} & Franka Emika \\
+2F-85~\cite{robotiq_2f} & Robotiq \\
+2F-140~\cite{robotiq_2f} & Robotiq \\
+HSR~\cite{toyota_hsr_gripper} & Toyota \\
 \rowcolor{nprim} \multicolumn{2}{@{}l}{\textbf{Pinzas de tres dedos}} \\
-Dex3s & Unitree \\
-3F-155 & Robotiq \\
-3F-AR & UW-Milwaukee \\
-DG-3F-B & Tesollo \\
+Dex3s~\cite{unitree_dex3s} & Unitree \\
+3F-155~\cite{robotiq_3f_155} & Robotiq \\
+3F-AR~\cite{uwm_3far} & UW-Milwaukee \\
+DG-3F-B~\cite{tesollo_dg3fb} & Tesollo \\
 \end{longtable}
 
 Las métricas de comparación responden a las necesidades seleccionadas para el diseño de los manipuladores, enumeradas en la Tabla~\ref{tab:bm_pinzas_necesidades}.
 
 \Needspace{12\baselineskip}
 \begin{longtable}{@{}>{\centering\arraybackslash}p{0.08\textwidth} >{\raggedright\arraybackslash}p{0.7\textwidth}@{}}
-\caption{Necesidades seleccionadas para el diseño de los manipuladores}\label{tab:bm_pinzas_necesidades}\\
+\caption{Necesidades seleccionadas para el diseño de las pinzas.}\label{tab:bm_pinzas_necesidades}\\
 \toprule
-\textbf{No.} & \textbf{Necesidad} \\
+\textbf{\#} & \textbf{Necesidad} \\
 \midrule
 \endfirsthead
-\caption[]{Necesidades seleccionadas para el diseño de los manipuladores (continuación)}\\
+\caption[]{Necesidades seleccionadas para el diseño de las pinzas, continuación.}\\
 \toprule
-\textbf{No.} & \textbf{Necesidad} \\
+\textbf{\#} & \textbf{Necesidad} \\
 \midrule
 \endhead
 \midrule
@@ -58,44 +58,38 @@ Las métricas de comparación responden a las necesidades seleccionadas para el 
 6 & El robot es robusto. \\
 \end{longtable}
 
-La Tabla~\ref{tab:bm_pinzas_metricas} define las seis métricas empleadas para comparar los efectores finales, e indica para cada una las necesidades a las que responde, su importancia en una escala de 1 a 5 y su unidad.
+La Tabla~\ref{tab:bm_pinzas_metricas} presenta las seis métricas empleadas en la comparación, junto con sus necesidades asociadas, unidades e importancia en una escala del 1 al 5.
 
-\Needspace{12\baselineskip}
-\begin{longtable}{@{}>{\centering\arraybackslash}p{0.07\textwidth} >{\centering\arraybackslash}p{0.17\textwidth} >{\raggedright\arraybackslash}p{0.3\textwidth} >{\centering\arraybackslash}p{0.16\textwidth} >{\centering\arraybackslash}p{0.1\textwidth}@{}}
-\caption{Métricas de comparación de los efectores finales}\label{tab:bm_pinzas_metricas}\\
-\toprule
-\textbf{No.} & \textbf{Necesidades} & \textbf{Métrica} & \textbf{Importancia} & \textbf{Unidad} \\
-\midrule
-\endfirsthead
-\caption[]{Métricas de comparación de los efectores finales (continuación)}\\
-\toprule
-\textbf{No.} & \textbf{Necesidades} & \textbf{Métrica} & \textbf{Importancia} & \textbf{Unidad} \\
-\midrule
-\endhead
-\midrule
-\multicolumn{5}{r}{\small\emph{Continúa en la siguiente página}}\\
-\endfoot
-\bottomrule
-\endlastfoot
-1 & 1, 5, 6 & Capacidad de carga & 5 & [kg] \\
-2 & 1, 3, 5 & Fuerza de agarre & 5 & [N] \\
-4 & 1, 5 & Apertura & 4 & [mm] \\
-5 & 4, 5 & Grados de libertad & 4 & [1] \\
-6 & 2, 6 & Repetibilidad & 4 & [mm] \\
-7 & 5, 6 & Grado de protección IP & 3 & [1] \\
-\end{longtable}
+\begin{table}[htbp]
+\centering
+\caption{Métricas de comparación de los efectores finales.}
+\label{tab:bm_pinzas_metricas}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabularx}{\textwidth}{cc>{\centering\arraybackslash}Xcc}
+\hline
+\textbf{\# Métrica} & \textbf{\# Necesidad} & \textbf{Métrica} & \textbf{Importancia} & \textbf{Unidad} \\
+\hline
+1 & 1, 5, 6 & Capacidad de carga.     & 5 & {[}kg{]} \\
+2 & 1, 3, 5 & Fuerza de agarre.       & 5 & {[}N{]}  \\
+4 & 1, 5    & Apertura.               & 4 & {[}mm{]} \\
+5 & 4, 5    & Grados de libertad.     & 4 & {[}1{]}  \\
+6 & 2, 6    & Repetibilidad.          & 4 & {[}mm{]} \\
+7 & 5, 6    & Grado de protección IP. & 3 & {[}1{]}  \\
+\hline
+\end{tabularx}
+\end{table}
 
-La Tabla~\ref{tab:bm_pinzas_especificaciones} reúne los valores de estas métricas para cada sistema. Un guion (---) indica que el dato no está disponible.
+La Tabla~\ref{tab:bm_pinzas_especificaciones} reúne los valores de estas métricas extraídos de las hojas de especificaciones disponibles para cada sistema.
 
 \Needspace{18\baselineskip}
 \begingroup\small\setlength{\tabcolsep}{3pt}
 \begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.13\textwidth} >{\centering\arraybackslash}p{0.125\textwidth} >{\centering\arraybackslash}p{0.125\textwidth} >{\centering\arraybackslash}p{0.125\textwidth} >{\centering\arraybackslash}p{0.125\textwidth} >{\centering\arraybackslash}p{0.125\textwidth} >{\centering\arraybackslash}p{0.125\textwidth}@{}}
-\caption{Especificaciones de los efectores finales}\label{tab:bm_pinzas_especificaciones}\\
+\caption{Especificaciones de los efectores finales comerciales.}\label{tab:bm_pinzas_especificaciones}\\
 \toprule
 \textbf{Sistema} & \textbf{Capacidad de carga [kg]} & \textbf{Fuerza de agarre [N]} & \textbf{Apertura [mm]} & \textbf{Grados de libertad [1]} & \textbf{Repeti\-bilidad [mm]} & \textbf{Grado de protección IP [1]} \\
 \midrule
 \endfirsthead
-\caption[]{Especificaciones de los efectores finales (continuación)}\\
+\caption[]{Especificaciones de los efectores finales comerciales, continuación.}\\
 \toprule
 \textbf{Sistema} & \textbf{Capacidad de carga [kg]} & \textbf{Fuerza de agarre [N]} & \textbf{Apertura [mm]} & \textbf{Grados de libertad [1]} & \textbf{Repeti\-bilidad [mm]} & \textbf{Grado de protección IP [1]} \\
 \midrule
@@ -118,58 +112,60 @@ DG-3F-B & 2.5 & 57 & 160 & 12 & --- & --- \\
 \end{longtable}
 \endgroup
 
-Con base en estos valores se realizó una evaluación mediante el despliegue de la función de calidad (QFD, por sus siglas en inglés) sobre los sistemas 2F-85, 2F-140, 3F-155, DG-3F-B, 3F-AR y Dex3s. % NOTA: la hoja de QFD solo incluye 6 de los 8 sistemas (no incluye Franka Hand ni HSR); conviene justificar aquí el criterio de selección.
-Las métricas se agruparon según las necesidades a las que responden: manipulación, fuerza, tareas domésticas y robustez. Para cada grupo, la Tabla~\ref{tab:bm_pinzas_qfd} presenta la importancia $w_j$ de cada métrica $j$ dentro del grupo, la calificación normalizada $c_{ij} \in [0,1]$ de cada sistema $i$ ---donde 1 corresponde al mejor valor del conjunto evaluado--- y el puntaje total $T_i$ del grupo, expresado en una escala de 0 a 5 mediante la relación
+Con base en estos valores se elaboró una matriz de comparación en la que se evaluaron los ocho sistemas considerados. Las métricas se agruparon según las necesidades a las que responden: manipulación, fuerza, tareas domésticas y robustez. Para cada grupo, la Tabla~\ref{tab:bm_pinzas_qfd} presenta la importancia $w_j$ de cada métrica $j$ definida en la Tabla~\ref{tab:bm_pinzas_metricas}, la calificación normalizada $c_{ij} \in [0,1]$ de cada sistema $i$, donde 1 corresponde al mejor valor del conjunto evaluado, y el puntaje total $T_i$ del grupo. Este puntaje se expresa en una escala de 0 a 5, redondeado al entero más cercano, mediante la relación:
 
 \[
-T_i = 5 \, \frac{\sum_j w_j \, c_{ij}}{\sum_j w_j},
+T_i = 5 \, \frac{\sum_j w_j \, c_{ij}}{\sum_j w_j}.
 \]
 
-redondeada al entero más cercano.
-
 \Needspace{20\baselineskip}
-\begingroup\small\setlength{\tabcolsep}{4pt}
-\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.31\textwidth} >{\centering\arraybackslash}p{0.06\textwidth} >{\centering\arraybackslash}p{0.075\textwidth} >{\centering\arraybackslash}p{0.075\textwidth} >{\centering\arraybackslash}p{0.075\textwidth} >{\centering\arraybackslash}p{0.075\textwidth} >{\centering\arraybackslash}p{0.075\textwidth} >{\centering\arraybackslash}p{0.075\textwidth}@{}}
-\caption{Evaluación QFD de los efectores finales. Imp.: importancia de la métrica dentro del grupo}\label{tab:bm_pinzas_qfd}\\
+\begingroup\scriptsize\setlength{\tabcolsep}{1pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash\leftskip=1.2em\hyphenpenalty=10000\exhyphenpenalty=10000}p{0.16\textwidth} >{\centering\arraybackslash}p{0.05\textwidth} >{\centering\arraybackslash}p{0.088\textwidth} >{\centering\arraybackslash}p{0.088\textwidth} >{\centering\arraybackslash}p{0.088\textwidth} >{\centering\arraybackslash}p{0.088\textwidth} >{\centering\arraybackslash}p{0.088\textwidth} >{\centering\arraybackslash}p{0.088\textwidth} >{\centering\arraybackslash}p{0.088\textwidth} >{\centering\arraybackslash}p{0.088\textwidth}@{}}
+\caption{Matriz de comparación de los efectores finales comerciales.}\label{tab:bm_pinzas_qfd}\\
 \toprule
-\textbf{Métrica} & \textbf{Imp.} & \textbf{2F-85} & \textbf{2F-140} & \textbf{3F-155} & \textbf{DG-3F-B} & \textbf{3F-AR} & \textbf{Dex3s} \\
+{\leftskip=0pt\scriptsize\textbf{Métrica}} & {\scriptsize\textbf{Imp.}} & {\scriptsize\textbf{Franka Hand}} & {\scriptsize\textbf{2F-85}} & {\scriptsize\textbf{2F-140}} & {\scriptsize\textbf{HSR}} & {\scriptsize\textbf{Dex3s}} & {\scriptsize\textbf{3F-155}} & {\scriptsize\textbf{3F-AR}} & {\scriptsize\textbf{DG-3F-B}} \\
 \midrule
 \endfirsthead
-\caption[]{Evaluación QFD de los efectores finales (continuación)}\\
+\caption[]{Matriz de comparación de los efectores finales comerciales, continuación.}\\
 \toprule
-\textbf{Métrica} & \textbf{Imp.} & \textbf{2F-85} & \textbf{2F-140} & \textbf{3F-155} & \textbf{DG-3F-B} & \textbf{3F-AR} & \textbf{Dex3s} \\
+{\leftskip=0pt\scriptsize\textbf{Métrica}} & {\scriptsize\textbf{Imp.}} & {\scriptsize\textbf{Franka Hand}} & {\scriptsize\textbf{2F-85}} & {\scriptsize\textbf{2F-140}} & {\scriptsize\textbf{HSR}} & {\scriptsize\textbf{Dex3s}} & {\scriptsize\textbf{3F-155}} & {\scriptsize\textbf{3F-AR}} & {\scriptsize\textbf{DG-3F-B}} \\
 \midrule
 \endhead
 \midrule
-\multicolumn{8}{r}{\small\emph{Continúa en la siguiente página}}\\
+\multicolumn{10}{r}{\small\emph{Continúa en la siguiente página}}\\
 \endfoot
 \bottomrule
 \endlastfoot
-\rowcolor{nprim} \multicolumn{8}{@{}l}{\textbf{Manipulación}} \\*
-\hspace*{1.2em}Capacidad de carga & 5 & 1.0 & 0.6 & 0.6 & 0.6 & 0.8 & 0.4 \\*
-\hspace*{1.2em}Fuerza de agarre & 5 & 1.0 & 0.6 & 0.2 & 0.0 & 0.4 & 0.8 \\*
-\hspace*{1.2em}Apertura & 5 & 0.4 & 0.6 & 0.8 & 1.0 & 0.2 & 0.0 \\*
-\hspace*{1.2em}Grados de libertad & 1 & 0.4 & 0.4 & 0.4 & 1.0 & 0.6 & 0.8 \\*
-\hspace*{1.2em}Repetibilidad & 3 & 1.0 & 0.8 & 1.0 & 0.0 & 0.0 & 0.6 \\*
-\rowcolor{nsec} \hspace*{1.2em}\textbf{Total} & & \textbf{4} & \textbf{3} & \textbf{3} & \textbf{2} & \textbf{2} & \textbf{2} \\
-\rowcolor{nprim} \multicolumn{8}{@{}l}{\textbf{Fuerza}} \\*
-\hspace*{1.2em}Capacidad de carga & 1 & 1.0 & 0.6 & 0.6 & 0.6 & 0.8 & 0.4 \\*
-\hspace*{1.2em}Fuerza de agarre & 5 & 1.0 & 0.6 & 0.2 & 0.0 & 0.4 & 0.8 \\*
-\hspace*{1.2em}Apertura & 1 & 0.4 & 0.6 & 0.8 & 1.0 & 0.2 & 0.0 \\*
-\rowcolor{nsec} \hspace*{1.2em}\textbf{Total} & & \textbf{5} & \textbf{3} & \textbf{2} & \textbf{1} & \textbf{2} & \textbf{3} \\
-\rowcolor{nprim} \multicolumn{8}{@{}l}{\textbf{Tareas domésticas}} \\*
-\hspace*{1.2em}Capacidad de carga & 3 & 1.0 & 0.6 & 0.6 & 0.6 & 0.8 & 0.4 \\*
-\hspace*{1.2em}Fuerza de agarre & 3 & 1.0 & 0.6 & 0.2 & 0.0 & 0.4 & 0.8 \\*
-\hspace*{1.2em}Apertura & 3 & 0.4 & 0.6 & 0.8 & 1.0 & 0.2 & 0.0 \\*
-\hspace*{1.2em}Grados de libertad & 5 & 0.4 & 0.4 & 0.4 & 1.0 & 0.6 & 0.8 \\*
-\hspace*{1.2em}Repetibilidad & 5 & 1.0 & 0.8 & 1.0 & 0.0 & 0.0 & 0.6 \\*
-\hspace*{1.2em}Grado de protección IP & 3 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 \\*
-\rowcolor{nsec} \hspace*{1.2em}\textbf{Total} & & \textbf{3} & \textbf{3} & \textbf{3} & \textbf{2} & \textbf{2} & \textbf{2} \\
-\rowcolor{nprim} \multicolumn{8}{@{}l}{\textbf{Robustez}} \\*
-\hspace*{1.2em}Capacidad de carga & 5 & 1.0 & 0.6 & 0.6 & 0.6 & 0.8 & 0.4 \\*
-\hspace*{1.2em}Repetibilidad & 3 & 1.0 & 0.8 & 1.0 & 0.0 & 0.0 & 0.6 \\*
-\hspace*{1.2em}Grado de protección IP & 5 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 \\*
-\hspace*{1.2em}\emph{Disassembly map} & 1 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 \\*
-\rowcolor{nsec} \hspace*{1.2em}\textbf{Total} & & \textbf{3} & \textbf{2} & \textbf{2} & \textbf{1} & \textbf{1} & \textbf{1} \\
+\rowcolor{nprim} \multicolumn{10}{@{}l}{\textbf{Manipulación}} \\*
+Capacidad de carga & 5 & 0.0 & 1.0 & 0.6 & 0.5 & 0.4 & 0.6 & 0.8 & 0.6 \\*
+Fuerza de agarre & 5 & 0.2 & 1.0 & 0.6 & 0.0 & 0.8 & 0.2 & 0.4 & 0.1 \\*
+Apertura & 4 & 0.5 & 0.4 & 0.6 & 0.6 & 0.0 & 0.8 & 0.2 & 1.0 \\*
+Grados de libertad & 4 & 0.4 & 0.4 & 0.4 & 0.4 & 0.8 & 0.0 & 0.6 & 1.0 \\*
+Repetibilidad & 4 & 0.0 & 1.0 & 0.8 & 0.0 & 0.4 & 1.0 & 0.0 & 0.0 \\*
+\rowcolor{nsec} \textbf{Total} & & \textbf{1} & \textbf{4} & \textbf{3} & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{2} & \textbf{3} \\
+\rowcolor{nprim} \multicolumn{10}{@{}l}{\textbf{Fuerza}} \\*
+Capacidad de carga & 5 & 0.0 & 1.0 & 0.6 & 0.5 & 0.4 & 0.6 & 0.8 & 0.6 \\*
+Fuerza de agarre & 5 & 0.2 & 1.0 & 0.6 & 0.0 & 0.8 & 0.2 & 0.4 & 0.1 \\*
+Apertura & 4 & 0.5 & 0.4 & 0.6 & 0.6 & 0.0 & 0.8 & 0.2 & 1.0 \\*
+\rowcolor{nsec} \textbf{Total} & & \textbf{1} & \textbf{4} & \textbf{3} & \textbf{2} & \textbf{2} & \textbf{3} & \textbf{2} & \textbf{3} \\
+\rowcolor{nprim} \multicolumn{10}{@{}l}{\textbf{Tareas domésticas}} \\*
+Capacidad de carga & 5 & 0.0 & 1.0 & 0.6 & 0.5 & 0.4 & 0.6 & 0.8 & 0.6 \\*
+Fuerza de agarre & 5 & 0.2 & 1.0 & 0.6 & 0.0 & 0.8 & 0.2 & 0.4 & 0.1 \\*
+Apertura & 4 & 0.5 & 0.4 & 0.6 & 0.6 & 0.0 & 0.8 & 0.2 & 1.0 \\*
+Grados de libertad & 4 & 0.4 & 0.4 & 0.4 & 0.4 & 0.8 & 0.0 & 0.6 & 1.0 \\*
+Repetibilidad & 4 & 0.0 & 1.0 & 0.8 & 0.0 & 0.4 & 1.0 & 0.0 & 0.0 \\*
+Grado de protección IP & 3 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 \\*
+\rowcolor{nsec} \textbf{Total} & & \textbf{1} & \textbf{3} & \textbf{3} & \textbf{1} & \textbf{2} & \textbf{2} & \textbf{2} & \textbf{2} \\
+\rowcolor{nprim} \multicolumn{10}{@{}l}{\textbf{Robustez}} \\*
+Capacidad de carga & 5 & 0.0 & 1.0 & 0.6 & 0.5 & 0.4 & 0.6 & 0.8 & 0.6 \\*
+Repetibilidad & 4 & 0.0 & 1.0 & 0.8 & 0.0 & 0.4 & 1.0 & 0.0 & 0.0 \\*
+Grado de protección IP & 3 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 \\*
+\rowcolor{nsec} \textbf{Total} & & \textbf{0} & \textbf{4} & \textbf{3} & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{2} & \textbf{1} \\
 \end{longtable}
 \endgroup
+
+Las pinzas de dos dedos destacan por su fuerza de agarre, capacidad de carga y repetibilidad. La 2F-85 alcanza 235~N y 5~kg, los valores más altos del conjunto, mientras las dos pinzas de Robotiq reportan repetibilidad de $\pm$0.05 y $\pm$0.08~mm. Cuentan con un solo grado de libertad y apertura de 85 a 140~mm, y tanto la Franka Hand como la pinza del HSR ofrecen fuerzas bajas de 70 y 40~N.
+
+Las pinzas de tres dedos destacan por su versatilidad de agarre, con seis a doce grados de libertad, aperturas máximas de 155 y 160~mm en la 3F-155 y la DG-3F-B, y capacidad de carga de 2.5 a 2.9~kg; solo la Dex3s rompe este patrón con 196.13~N de fuerza de agarre, 0.5~kg de carga y $\pm$2.00~mm de repetibilidad. Ningún modelo reporta grado de protección IP.
+
+La 2F-85 lidera la comparación con 4 puntos en manipulación, fuerza y robustez, y 3 en tareas domésticas, seguida por la 2F-140 con 3 puntos en los cuatro grupos. Entre las pinzas de tres dedos destacan la 3F-155, con 3 puntos en manipulación, fuerza y robustez y 2 en tareas domésticas, y la DG-3F-B, con 3 en manipulación y fuerza, 2 en tareas domésticas y 1 en robustez y grado de protección IP.
