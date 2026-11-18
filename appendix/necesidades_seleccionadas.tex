@@ -1,0 +1,150 @@
+\label{app:importancia_relativa}
+
+En este documento se detalla el procedimiento empleado para determinar la importancia relativa de las 14 necesidades primarias identificadas, así como el criterio de selección aplicado para orientar el diseño de los manipuladores de \emph{Justina}. La importancia relativa combina la frecuencia relativa de los enunciados con la valoración promedio de una encuesta estructurada, distribuida electrónicamente a los tres usuarios entrevistados con el mayor volumen y diversidad de aportaciones, identificados aquí como Encuestado~1, 2 y~3.
+
+La frecuencia relativa $f_i$ se define como la razón entre los enunciados interpretados $n_i$ correspondientes a la necesidad primaria $i$ y la totalidad de los 690 registros. En la encuesta, cada participante calificó la relevancia de las necesidades primarias mediante una escala ordinal de cinco niveles:
+
+\begin{itemize}
+    \item \textit{Imprescindible}: 1.0
+    \item \textit{Deseable}: 0.6
+    \item \textit{Indiferente}: 0.4
+    \item \textit{Preferiría que no la tuviera}: 0.2
+    \item \textit{No debería tenerla}: 0.0
+\end{itemize}
+
+Con el promedio $\bar{p}_i$ de las tres ponderaciones $p_{i,k}$, la importancia relativa $I_i$ se determina mediante la siguiente relación:
+
+\[
+f_i = \frac{n_i}{690}, \qquad \qquad
+\bar{p}_i = \frac{1}{3}\sum_{k=1}^{3} p_{i,k}, \qquad \qquad
+I_i = f_i \cdot \bar{p}_i .
+\]
+
+Dado el tamaño reducido de la muestra, los resultados de la encuesta se interpretan como indicadores cualitativos de tendencia, complementarios a los datos de frecuencia. Los valores se presentan redondeados, pero los cálculos se realizaron sin redondear.
+
+La Tabla~\ref{tab:encuesta_respuestas} reúne las respuestas de cada encuestado, en el orden jerárquico de las necesidades primarias.
+
+\Needspace{12\baselineskip}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.4\textwidth} >{\centering\arraybackslash}p{0.16\textwidth} >{\centering\arraybackslash}p{0.16\textwidth} >{\centering\arraybackslash}p{0.16\textwidth}@{}}
+\caption{Respuestas de la encuesta para las 14 necesidades primarias}\label{tab:encuesta_respuestas}\\
+\toprule
+\textbf{Necesidad primaria} & \textbf{Encuestado 1} & \textbf{Encuestado 2} & \textbf{Encuestado 3} \\
+\midrule
+\endfirsthead
+\caption[]{Respuestas de la encuesta para las 14 necesidades primarias (continuación)}\\
+\toprule
+\textbf{Necesidad primaria} & \textbf{Encuestado 1} & \textbf{Encuestado 2} & \textbf{Encuestado 3} \\
+\midrule
+\endhead
+\midrule
+\multicolumn{4}{r}{\small\emph{Continúa en la siguiente página}}\\
+\endfoot
+\bottomrule
+\endlastfoot
+El robot manipula artículos domésticos. & Imprescindible & Imprescindible & Deseable \\
+El robot atiende las órdenes del usuario. & Imprescindible & Deseable & Imprescindible \\
+El robot realiza tareas domésticas. & Deseable & Imprescindible & Deseable \\
+El robot es robusto. & Deseable & Imprescindible & Imprescindible \\
+El robot tiene un diseño intuitivo. & Deseable & Deseable & Deseable \\
+El robot identifica formas en el entorno. & Deseable & Deseable & Deseable \\
+El robot es autónomo. & Deseable & Imprescindible & Imprescindible \\
+El robot es portátil. & Deseable & Indiferente & Deseable \\
+El robot navega en entornos domésticos. & Imprescindible & Imprescindible & Deseable \\
+El robot opera de forma continua por periodos prolongados. & Deseable & Deseable & Deseable \\
+El robot tiene sensores confiables. & Deseable & Imprescindible & Imprescindible \\
+El robot identifica la voz del usuario. & Indiferente & Deseable & Imprescindible \\
+El robot optimiza el tiempo de ejecución de sus tareas. & Deseable & Deseable & Deseable \\
+El robot percibe profundidad. & Indiferente & Imprescindible & Deseable \\
+\end{longtable}
+
+La Tabla~\ref{tab:importancia_primarias} condensa el conteo de enunciados, la frecuencia relativa, la valoración promedio y la importancia relativa calculada para cada necesidad primaria. Al aplicar un umbral de corte del $10\%$ ($I_i > 0.10$), sobresalen únicamente dos necesidades: \textit{El robot manipula artículos domésticos}, con $0.308$, y \textit{El robot es robusto}, con $0.124$.
+
+\Needspace{14\baselineskip}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.33\textwidth} >{\centering\arraybackslash}p{0.09\textwidth} >{\centering\arraybackslash}p{0.12\textwidth} >{\centering\arraybackslash}p{0.155\textwidth} >{\centering\arraybackslash}p{0.155\textwidth}@{}}
+\caption{Importancia relativa de las 14 necesidades primarias}\label{tab:importancia_primarias}\\
+\toprule
+\textbf{Necesidad} & \textbf{Frec.} & \textbf{Frec. relativa} & \textbf{Promedio de evaluaciones} & \textbf{Importancia relativa} \\
+\midrule
+\endfirsthead
+\caption[]{Importancia relativa de las 14 necesidades primarias (continuación)}\\
+\toprule
+\textbf{Necesidad} & \textbf{Frec.} & \textbf{Frec. relativa} & \textbf{Promedio de evaluaciones} & \textbf{Importancia relativa} \\
+\midrule
+\endhead
+\midrule
+\multicolumn{5}{r}{\small\emph{Continúa en la siguiente página}}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\rowcolor{nsec} \textbf{El robot manipula artículos domésticos.} & \textbf{245} & \textbf{0.355} & \textbf{0.87} & \textbf{0.308} \\
+El robot atiende las órdenes del usuario. & 75 & 0.109 & 0.87 & 0.094 \\
+El robot realiza tareas domésticas. & 37 & 0.054 & 0.73 & 0.039 \\
+\rowcolor{nsec} \textbf{El robot es robusto.} & \textbf{99} & \textbf{0.143} & \textbf{0.87} & \textbf{0.124} \\
+El robot tiene un diseño intuitivo. & 53 & 0.077 & 0.60 & 0.046 \\
+El robot identifica formas en el entorno. & 50 & 0.072 & 0.60 & 0.043 \\
+El robot es autónomo. & 19 & 0.028 & 0.87 & 0.024 \\
+El robot es portátil. & 22 & 0.032 & 0.53 & 0.017 \\
+El robot navega en entornos domésticos. & 35 & 0.051 & 0.87 & 0.044 \\
+El robot opera de forma continua por periodos prolongados. & 15 & 0.022 & 0.60 & 0.013 \\
+El robot tiene sensores confiables. & 18 & 0.026 & 0.87 & 0.023 \\
+El robot identifica la voz del usuario. & 5 & 0.007 & 0.67 & 0.005 \\
+El robot optimiza el tiempo de ejecución de sus tareas. & 1 & 0.001 & 0.60 & 0.001 \\
+El robot percibe profundidad. & 16 & 0.023 & 0.67 & 0.015 \\
+\midrule
+\textbf{Total} & \textbf{690} & \textbf{1.000} & & \\
+\end{longtable}
+
+Al triplicar el umbral de corte, la necesidad \textit{El robot manipula artículos domésticos} se desglosó en sus secundarias, mostradas en la Tabla~\ref{tab:importancia_secundarias}, heredando la calificación promedio de la necesidad primaria.
+
+\Needspace{22\baselineskip}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.33\textwidth} >{\centering\arraybackslash}p{0.09\textwidth} >{\centering\arraybackslash}p{0.12\textwidth} >{\centering\arraybackslash}p{0.155\textwidth} >{\centering\arraybackslash}p{0.155\textwidth}@{}}
+\caption{Necesidades secundarias de \emph{El robot manipula artículos domésticos.}}\label{tab:importancia_secundarias}\\
+\toprule
+\textbf{Necesidad} & \textbf{Frec.} & \textbf{Frec. relativa} & \textbf{Promedio de evaluaciones} & \textbf{Importancia relativa} \\
+\midrule
+\endfirsthead
+\caption[]{Necesidades secundarias de \emph{El robot manipula artículos domésticos.} (continuación)}\\
+\toprule
+\textbf{Necesidad} & \textbf{Frec.} & \textbf{Frec. relativa} & \textbf{Promedio de evaluaciones} & \textbf{Importancia relativa} \\
+\midrule
+\endhead
+\midrule
+\multicolumn{5}{r}{\small\emph{Continúa en la siguiente página}}\\
+\endfoot
+\bottomrule
+\endlastfoot
+El robot manipula artículos domésticos. & 124 & 0.180 & 0.87 & 0.156 \\
+El robot planea trayectorias del manipulador. & 70 & 0.101 & 0.87 & 0.088 \\
+El robot extiende el alcance efectivo de sus manipuladores. & 21 & 0.030 & 0.87 & 0.026 \\
+El robot toma artículos con la fuerza necesaria. & 24 & 0.035 & 0.87 & 0.030 \\
+El robot manipula equipo para realizar tareas domésticas. & 6 & 0.009 & 0.87 & 0.008 \\
+\midrule
+\textbf{Total} & \textbf{245} & \textbf{0.355} & \textbf{0.87} & \textbf{0.308} \\
+\end{longtable}
+
+Finalmente, la Tabla~\ref{tab:necesidades_jerarquizadas} sintetiza el conjunto de necesidades a satisfacer mediante el diseño de los manipuladores. Este abarca las dos necesidades primarias seleccionadas junto con las cuatro secundarias que detallan aspectos específicos de la manipulación.
+
+\Needspace{14\baselineskip}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.68\textwidth} >{\centering\arraybackslash}p{0.15\textwidth}@{}}
+\caption{Necesidades seleccionadas para el diseño de los manipuladores}\label{tab:necesidades_jerarquizadas}\\
+\toprule
+\textbf{Necesidad} & \textbf{Importancia relativa} \\
+\midrule
+\endfirsthead
+\caption[]{Necesidades seleccionadas para el diseño de los manipuladores (continuación)}\\
+\toprule
+\textbf{Necesidad} & \textbf{Importancia relativa} \\
+\midrule
+\endhead
+\midrule
+\multicolumn{2}{r}{\small\emph{Continúa en la siguiente página}}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\rowcolor{nprim} \textbf{El robot manipula artículos domésticos.} & \textbf{0.308} \\
+\hspace*{1.2em}El robot planea trayectorias del manipulador. & 0.088 \\
+\hspace*{1.2em}El robot toma artículos con la fuerza necesaria. & 0.030 \\
+\hspace*{1.2em}El robot extiende el alcance efectivo de sus manipuladores. & 0.026 \\
+\hspace*{1.2em}El robot manipula equipo para realizar tareas domésticas. & 0.008 \\
+\rowcolor{nprim} \textbf{El robot es robusto.} & \textbf{0.124} \\
+\end{longtable}

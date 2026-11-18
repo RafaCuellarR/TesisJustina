@@ -1,46 +1,39 @@
-Históricamente, el conocimiento práctico y la experiencia acumulada constituyeron la base del diseño. Como señalan Pahl y Beitz, a partir de la segunda mitad del siglo XX, la importancia económica del desarrollo eficiente y oportuno de productos motivó la creación de procedimientos sistemáticos y flexibles que permitieran planificar, optimizar, verificar y enseñar el proceso de diseño. Tal evolución propició la formalización de metodologías para analizar y descomponer problemas, generar soluciones óptimas y evaluar alternativas bajo criterios técnicos y económicos~\cite{Pahl-Beitz}. Estas metodologías, sin embargo, partían de especificaciones y requisitos que no consideraban a quienes usarían los productos.  
+Históricamente, el aprendizaje empírico y la experiencia acumulada constituyeron la base del diseño. A partir de la segunda mitad del siglo XX, la importancia económica del desarrollo eficiente y oportuno de productos motivó la creación de procedimientos sistemáticos y flexibles que permitieran planificar, optimizar, verificar y enseñar el proceso de diseño. Tal evolución propició la formalización de metodologías para analizar y descomponer problemas, generar soluciones óptimas y evaluar alternativas bajo criterios técnicos y económicos~\cite{Pahl-Beitz}. Estas metodologías, sin embargo, partían de especificaciones y requisitos que no consideraban a quienes usarían los productos.
 
-El diseño centrado en el usuario (DCU) surgió en el laboratorio de Donald A. Norman en la Universidad de California San Diego como una filosofía que involucra al usuario en todas las fases del desarrollo de un producto, desde su conceptualización hasta su evaluación~\cite{Garreta-Mor}. Norman propuso en \textit{The Design of Everyday Things} un enfoque que parte de la comprensión profunda de las personas y de las necesidades que el diseño pretende satisfacer~\cite{Norman}. Este enfoque no es subjetivo, pues se fundamenta en disciplinas científicas como la ergonomía, la psicología y la antropología, y requiere que las decisiones de diseño estén respaldadas por datos obtenidos directamente de los usuarios~\cite{Lowdermilk}.
+El diseño centrado en el usuario (DCU) surgió en el laboratorio de Donald A. Norman en la Universidad de California San Diego como una filosofía que involucra al usuario en todas las fases del desarrollo de un producto, desde su conceptualización hasta su evaluación~\cite{Garreta-Mor}. Norman propuso en \textit{The Design of Everyday Things} un enfoque que parte de la comprensión profunda de las personas y de las necesidades que se pretenden satisfacer~\cite{Norman}. Este enfoque no es subjetivo, pues se fundamenta en disciplinas científicas como la ergonomía, la psicología y la antropología, y requiere que las decisiones de diseño estén respaldadas por datos obtenidos directamente de los usuarios~\cite{Lowdermilk}.
 
-En aplicaciones domésticas de robótica de servicio, el DCU resulta especialmente pertinente. Robots como \emph{Justina} demuestran capacidades de navegación, manipulación, visión e interacción humano-robot que les permiten operar en ambientes reales no estandarizados, adaptándose a los hogares y a sus habitantes~\cite{Rulebook@HOME}. Identificar sistemáticamente las necesidades de quienes conviven con estos sistemas es, por lo tanto, una condición necesaria para orientar el desarrollo de soluciones robóticas apropiadas.
+En la robótica de servicio doméstico, el DCU resulta ineludible. Para que \emph{Justina} se desenvuelva con éxito en un hogar, debe responder a la dinámica del entorno y de sus habitantes. Identificar sistemáticamente las necesidades de las personas con quienes interactúa es, por lo tanto, una condición fundamental para orientar su desarrollo.
 
-Bajo esta perspectiva, el rediseño de los manipuladores de \emph{Justina} adoptó la metodología de Karl T.\ Ulrich y Steven D.\ Eppinger, quienes presentan en \textit{Diseño y Desarrollo de Productos} un conjunto de métodos para el diseño de productos físicos, discretos e ingenieriles~\cite{Ulrich-Eppinger}. Su proceso genérico se divide en seis fases: planeación, desarrollo del concepto, diseño a nivel sistema, diseño de detalle, pruebas y refinamiento, e inicio de producción.
+Bajo esta perspectiva, para el rediseño de los manipuladores de \emph{Justina} se adoptó la metodología de Karl T.\ Ulrich y Steven D.\ Eppinger, quienes presentan en \textit{Diseño y Desarrollo de Productos} un conjunto de métodos para el diseño de productos físicos, discretos e ingenieriles~\cite{Ulrich-Eppinger}. Esta obra proporciona un proceso genérico dividido en seis fases: planeación, desarrollo del concepto, diseño a nivel sistema, diseño de detalle, pruebas y refinamiento, e inicio de producción.
 
-Este capítulo abarca las fases de desarrollo del concepto y diseño a nivel sistema, que comprenden la identificación de necesidades, el establecimiento de especificaciones, la descomposición funcional, la generación de conceptos y la selección del concepto que se llevará al diseño de detalle.
+Este capítulo abarca únicamente las fases de desarrollo del concepto y diseño a nivel sistema. En ellas se abordan la identificación de necesidades, el establecimiento de especificaciones, la descomposición funcional, la generación de conceptos y la selección de la propuesta que se llevará al diseño de detalle.
 
 \section{Identificación de necesidades}
 
-La identificación de necesidades del cliente es la fase fundacional del proceso. Su objetivo es capturar de manera sistemática y exhaustiva las necesidades, expectativas y restricciones de los usuarios potenciales, transformando información cualitativa en un conjunto estructurado de requerimientos. Ulrich y Eppinger~\cite{Ulrich-Eppinger} definen una necesidad del cliente como una descripción, en las propias palabras del usuario, de los beneficios que un producto debe proporcionar, y distinguen con claridad entre necesidades ---que describen \emph{qué} debe lograr el producto--- y soluciones ---que especifican \emph{cómo} lograrlo---. El proceso se estructura en cinco pasos: recopilación de datos sin procesar mediante entrevistas, interpretación de esos datos en términos de necesidades, organización jerárquica, establecimiento de importancia relativa y reflexión sobre los resultados.
-
-\subsection{Perfiles de usuario}
-
-Para la implementación del proceso de identificación de necesidades se definieron dos perfiles de participantes mediante muestreo intencional~(\autoref{app:protocolo}).
-
-El primero es el \textbf{usuario final}: personas que requieren asistencia doméstica constante debido a edad avanzada o alguna condición que limite su autonomía en actividades cotidianas del hogar, con capacidad cognitiva para participar en una entrevista y proporcionar consentimiento informado~(\autoref{app:protocolo}). Sus necesidades se relacionan con la utilidad práctica del robot, la facilidad de interacción, la confiabilidad y la seguridad durante el uso.
-
-El segundo perfil corresponde a \textbf{desarrolladores de software con experiencia en robótica de servicio}: miembros activos o previos del equipo de desarrollo de Justina con experiencia de participación en RoboCup@HOME y conocimiento técnico sobre el diseño, programación o implementación de funcionalidades del robot~(\autoref{app:protocolo}). Este perfil aporta una perspectiva complementaria: han trabajado directamente con robots de servicio en condiciones desafiantes, han observado y comparado múltiples plataformas en competencia, y constituyen también un tipo de usuario del sistema al ser quienes realizan el mantenimiento y la programación del robot.
-
-Dentro de este segundo perfil se distinguió entre quienes trabajan con \textbf{plataformas experimentales} de diseño propio y quienes utilizan \textbf{plataformas comerciales}, específicamente el \textit{Toyota Human Support Robot} (Takeshi) del Laboratorio de Bio-Robótica~(\autoref{app:protocolo}). Esta distinción motivó el diseño de variantes específicas en los instrumentos de recolección.
+La identificación de necesidades constituye el punto de partida en la fase de desarrollo del concepto, pues permite definir, de forma independiente a la solución, qué satisface el producto. En este proceso se obtienen tanto las necesidades explícitas, manifestadas directamente, como las necesidades latentes, aquellas que el usuario no logra articular con facilidad pero que representan las mayores oportunidades de innovación~\cite{Ulrich-Eppinger}. Esta información justifica las especificaciones del producto, haciendo del levantamiento de necesidades el pilar de la metodología.
 
 \subsection{Recopilación de datos}
 
-El proyecto contó con la aprobación del Comité de Ética en Investigación y Docencia de la Facultad de Ingeniería de la UNAM~(\autoref{app:consentimiento}). Todos los participantes firmaron una carta de consentimiento informado antes de su participación, bajo la cual se garantizó la confidencialidad de la información mediante codificación de datos, almacenamiento seguro y acceso restringido al equipo investigador~(\autoref{app:consentimiento}).
+Para recopilar datos, Ulrich y Eppinger recomiendan las entrevistas, los grupos de enfoque y la observación del producto en uso, desestimando las encuestas escritas en las etapas iniciales de la identificación de necesidades por no aportar información suficiente sobre el usuario~\cite{Ulrich-Eppinger}. Entre estos métodos, se optó por realizar entrevistas, al considerarse la estrategia más efectiva para conocer la experiencia de interacción con un robot de servicio y las dinámicas del entorno doméstico, sin sesgar la investigación a tareas preconcebidas de manipulación. De esta manera, mediante un muestreo intencional, se concretaron cinco entrevistas individuales y una sesión grupal con cuatro participantes, utilizando guías diferenciadas que se detallan en el Anexo~\ref{app:protocolo}, orientadas a dos perfiles de usuario:
 
-Siguiendo las recomendaciones de Ulrich y Eppinger~\cite{Ulrich-Eppinger}, se seleccionaron las entrevistas como método principal de recopilación. Se diseñaron cuatro guiones semiestructurados diferenciados según perfil: uno para el usuario final, uno de aplicación general para desarrolladores, y dos variantes específicas para desarrolladores de plataformas experimentales y comerciales, respectivamente~(\autoref{app:protocolo}). Los guiones completos se documentan en el Anexo~[X].
+\begin{enumerate}
+    \item \textbf{Desarrolladores de software en robótica de servicio:} Miembros del Laboratorio de Bio-Robótica con experiencia en la competencia RoboCup@Home.
+	\item \textbf{Usuarios finales potenciales:} Personas que requieren asistencia doméstica por autonomía limitada e integrantes de su núcleo familiar.
+\end{enumerate}
 
-Se realizaron nueve entrevistas en total: cinco con desarrolladores con experiencia en RoboCup@HOME y cuatro con usuarios finales potenciales. Todas fueron grabadas en audio con consentimiento explícito de los participantes~(\autoref{app:consentimiento}). Los fragmentos relevantes se transcribieron y organizaron en tablas estructuradas que vinculan cada declaración con su participante, el contexto de la pregunta y anotaciones sobre necesidades implícitas.
+Las sesiones, aprobadas por el Comité de Ética en Investigación y Docencia de la Facultad de Ingeniería de la UNAM, fueron grabadas en audio y transcritas para su análisis, garantizando la confidencialidad de los participantes conforme al consentimiento informado del Anexo~\ref{app:consentimiento}.
 
-\subsection{Interpretación y organización jerárquica}
+\subsection{Interpretación y organización de necesidades}
 
-Siguiendo las directrices de Ulrich y Eppinger~\cite{Ulrich-Eppinger}, cada necesidad se expresó como un atributo del producto ---sujeto, verbo que describe la acción o capacidad deseada y, cuando es necesario, objeto o contexto de aplicación--- capturando el \textit{qué} sin anticipar el \textit{cómo}. Se adoptó un enfoque holístico que abarcó el robot de servicio doméstico en su totalidad, reconociendo que las necesidades de manipulación no existen de manera aislada sino interrelacionadas con navegación, percepción e interacción. Como resultado, se identificaron \textbf{122 necesidades distintas}, mencionadas colectivamente \textbf{690 veces} a lo largo de todas las entrevistas.
+Al interpretar los datos recopilados en términos de necesidades del usuario, Ulrich y Eppinger establecen que los enunciados deben redactarse expresando \emph{qué} tiene que hacer el producto y no \emph{cómo} hacerlo, conservando el nivel de detalle de la información original, empleando formulaciones afirmativas, denotando atributos del producto o del usuario, y omitiendo términos como ``debe'' o ``debería'' para evitar asignar prioridades de forma prematura~\cite{Ulrich-Eppinger}. Bajo estas directrices, a partir de los datos obtenidos en las entrevistas se generaron \textbf{690 enunciados}.
 
-Las 122 necesidades se organizaron en una jerarquía de \textbf{14 necesidades primarias} con sus correspondientes necesidades secundarias y terciarias. El agrupamiento se realizó en una hoja de cálculo de Excel, lo que permitió reorganizar iterativamente los enunciados y mantener trazabilidad entre cada necesidad y su fuente original. La estructura jerárquica completa se documenta en el Anexo~[Y].
+Tras eliminar frases redundantes, los enunciados se sintetizaron en \textbf{122 necesidades estandarizadas}, cuya agrupación por similitud conceptual superó el umbral de 20 grupos sugerido por Ulrich y Eppinger~\cite{Ulrich-Eppinger} y se estructuró en tres niveles jerárquicos encabezados por \textbf{14 necesidades primarias}. La jerarquía completa y sus frecuencias se reportan en el Anexo~\ref{app:necesidades_identificadas}.
 
 \subsection{Importancia relativa y selección}
 
-Para determinar la importancia relativa de las 14 necesidades primarias se implementó una estrategia combinada. El primer componente fue la \textbf{frecuencia relativa de mención}: el cociente entre el número de menciones de cada necesidad primaria y sus derivadas sobre el total de 690 menciones. El segundo componente fue una \textbf{encuesta estructurada} distribuida electrónicamente a tres de los participantes entrevistados, cuyos resultados se interpretaron como indicadores cualitativos de tendencia complementarios a los datos de frecuencia, dado el tamaño reducido de la muestra. La escala utilizada constó de cinco niveles: \textit{Imprescindible} (1.0), \textit{Deseable} (0.6), \textit{Indiferente} (0.4), \textit{Preferiría que no la tuviera} (0.2) y \textit{No debería tenerla} (0.0). La importancia relativa final se calculó combinando el promedio de las evaluaciones directas con la frecuencia de mención de cada necesidad.
+Priorizando la precisión de la consulta directa frente a la velocidad que ofrece el consenso interno~\cite{Ulrich-Eppinger}, la importancia de las necesidades primarias se evaluó mediante una encuesta a los tres usuarios con la mayor riqueza de enunciados. Posteriormente, sus respuestas se integraron en un indicador ponderado, cuya formulación y tablas se presentan en el Anexo~\ref{app:importancia_relativa}.
 
-Aplicando un umbral de corte basado en la distribución de valores obtenidos, se seleccionaron seis necesidades primarias prioritarias. De estas, se retuvieron tres con implicación directa en el diseño de los manipuladores: \textit{el robot manipula artículos domésticos}, \textit{el robot es robusto} y \textit{el robot tiene un diseño intuitivo}. A la primera se le incorporaron cuatro necesidades secundarias que detallan aspectos específicos de la capacidad de manipulación. El conjunto final quedó conformado por:
+Para responder a las expectativas de los usuarios, se seleccionaron las necesidades primarias con una importancia relativa superior al $10\%$. Dado que la necesidad \textit{El robot manipula artículos domésticos} triplicó dicho umbral, se decidió trabajar también con sus necesidades secundarias, conformando el conjunto final:
 
 \begin{enumerate}
     \item \textbf{El robot manipula artículos domésticos.}
@@ -51,66 +44,86 @@ Aplicando un umbral de corte basado en la distribución de valores obtenidos, se
         \item El robot manipula equipo para realizar tareas domésticas.
     \end{itemize}
     \item \textbf{El robot es robusto.}
-    \item \textbf{El robot tiene un diseño intuitivo.}
 \end{enumerate}
-
-% ============================================================
-%  SECCIÓN 2: ESPECIFICACIONES DEL PRODUCTO
-% ============================================================
 
 \section{Establecimiento de especificaciones objetivo}
 
-La segunda fase de la metodología consiste en traducir las necesidades del cliente en especificaciones técnicas precisas y medibles. Ulrich y Eppinger~\cite{Ulrich-Eppinger} distinguen entre necesidades ---expresadas en el lenguaje subjetivo del usuario--- y especificaciones ---que describen con exactitud cuantificable qué debe ser el producto---. Una especificación consiste en una \textit{métrica} y un \textit{valor} acompañado de sus unidades. Las especificaciones se establecen en dos momentos: primero como \textbf{especificaciones objetivo}, antes de conocer las restricciones técnicas del concepto de diseño, y luego como \textbf{especificaciones finales}, una vez seleccionado el concepto. El proceso comprende cuatro pasos: elaborar la lista de métricas, recabar información de referencia mediante \textit{benchmarking}, establecer valores meta ideales y marginalmente aceptables, y reflexionar sobre los resultados.
+Las necesidades identificadas, aunque útiles para comprender los problemas de interés para el usuario, dejan margen a la interpretación. Las especificaciones, en cambio, explican lo que el producto tiene que hacer a través de una métrica y un valor con sus respectivas unidades. Estas se establecen en al menos dos ocasiones, inicialmente como especificaciones objetivo, formuladas antes de conocer las restricciones tecnológicas y económicas, y más adelante como especificaciones finales, refinadas tras la selección del concepto~\cite{Ulrich-Eppinger}.
 
 \subsection{Traducción de necesidades a métricas}
 
-Para cada necesidad del cliente se identificó la característica precisa y medible del producto que mejor refleja el grado en que esa necesidad queda satisfecha. La relación entre necesidades y métricas se documentó en una matriz de correlación (Cuadro~\ref{tab:correlacion}) que evidencia qué métricas cubren cada necesidad y permite identificar aquellas que requieren múltiples indicadores. A partir de las necesidades identificadas se definieron las ocho métricas presentadas en el Cuadro~\ref{tab:metricas}.
+La metodología de Ulrich y Eppinger asume que las necesidades pueden traducirse en especificaciones cuyo cumplimiento refleja fielmente el grado de satisfacción del usuario; sin embargo, al no existir una correspondencia unívoca en la práctica, una necesidad suele requerir múltiples métricas o una métrica atender varias necesidades~\cite{Ulrich-Eppinger}.
+
+Las métricas deben ser completas, dependientes y prácticas, contemplando criterios populares de comparación en el mercado así como evaluaciones subjetivas ante atributos no cuantificables~\cite{Ulrich-Eppinger}. Bajo estos lineamientos, la Tabla~\ref{tab:metricas} presenta las métricas y las necesidades que estas atienden, cuyas unidades e importancia fueron establecidas por el equipo de diseño.
 
 \begin{table}[htbp]
 \centering
-\caption{Lista de métricas derivadas de las necesidades del cliente.}
+\caption{Lista de métricas.}
 \label{tab:metricas}
-\begin{tabular}{clccc}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabularx}{\textwidth}{cc>{\centering\arraybackslash}Xcc}
 \hline
-\textbf{\#} & \textbf{Métrica} & \textbf{Nec. relacionadas} & \textbf{Importancia} & \textbf{Unidad} \\
+\textbf{\# Métrica} & \textbf{\# Necesidad} & \textbf{Métrica} & \textbf{Importancia} & \textbf{Unidad} \\
 \hline
-1 & Capacidad de carga     & 1, 5, 6 & 5 & {[}kg{]} \\
-2 & Fuerza de agarre       & 1, 3, 5 & 5 & {[}N{]}  \\
-3 & Alcance                & 2, 4, 5 & 5 & {[}mm{]} \\
-4 & Apertura               & 1, 5    & 4 & {[}mm{]} \\
-5 & Grados de libertad     & 4, 5    & 4 & {[}1{]}  \\
-6 & Repetibilidad          & 2, 5, 6 & 4 & {[}mm{]} \\
-7 & Grado de protección IP & 5, 6    & 3 & {[}1{]}  \\
-8 & Mapa de desensamble    & 6, 7    & 3 & {[}s{]}  \\
+1 & 1, 5, 6 & Capacidad de carga.     & 5 & {[}kg{]} \\
+2 & 1, 3, 5 & Fuerza de agarre.       & 5 & {[}N{]}  \\
+3 & 2, 4, 5 & Alcance.                & 5 & {[}mm{]} \\
+4 & 1, 5    & Apertura.               & 4 & {[}mm{]} \\
+5 & 4, 5    & Grados de libertad.     & 4 & {[}1{]}  \\
+6 & 2, 6    & Repetibilidad.          & 4 & {[}mm{]} \\
+7 & 5, 6    & Grado de protección IP. & 3 & {[}1{]}  \\
 \hline
-\end{tabular}
+\end{tabularx}
 \end{table}
 
+Para evidenciar la correlación entre las necesidades seleccionadas y las métricas definidas, se presenta la matriz de la Tabla~\ref{tab:correlacion}.
+
 \begin{table}[htbp]
 \centering
-\caption{Matriz de correlación entre necesidades del cliente y métricas.}
+\caption{Matriz de correlación.}
 \label{tab:correlacion}
-\small
-\begin{tabular}{lcccccccc}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\textwidth}{|@{\hspace{7pt}}c@{\hspace{7pt}}|@{\hspace{6pt}}>{\raggedright\arraybackslash}X@{\hspace{6pt}}|*{7}{c}|}
+\cline{3-9}
+\multicolumn{2}{c}{} & \multicolumn{7}{|c|}{\rule[-1.5ex]{0pt}{4.5ex}\textbf{Métricas}} \\
+\cline{3-9}
+\multicolumn{2}{c}{} &
+  \multicolumn{1}{|c}{\rot{Capacidad de carga.}} &
+  \rot{Fuerza de agarre.} &
+  \rot{Alcance.} &
+  \rot{Apertura.} &
+  \rot{Grados de libertad.} &
+  \rot{Repetibilidad.} &
+  \multicolumn{1}{c|}{\rot{Grado de protección IP.}} \\
 \hline
-\textbf{Necesidad} & \textbf{M1} & \textbf{M2} & \textbf{M3} & \textbf{M4} & \textbf{M5} & \textbf{M6} & \textbf{M7} & \textbf{M8} \\
+\multirow{6}{*}{\rotatebox{90}{\textbf{Necesidades}}}
+ & El robot manipula artículos domésticos.
+ & \textbf{X} & \textbf{X} &            & \textbf{X} &            &            &            \\
+ & El robot planea trayectorias del manipulador.
+ &            &            & \textbf{X} &            &            & \textbf{X} &            \\
+ & El robot toma artículos con la fuerza necesaria.
+ &            & \textbf{X} &            &            &            &            &            \\
+ & El robot extiende el alcance efectivo de sus manipuladores.
+ &            &            & \textbf{X} &            & \textbf{X} &            &            \\
+ & El robot manipula equipo para realizar tareas domésticas.
+ & \textbf{X} & \textbf{X} & \textbf{X} & \textbf{X} & \textbf{X} &            & \textbf{X} \\
+ & El robot es robusto.
+ & \textbf{X} &            &            &            &            & \textbf{X} & \textbf{X} \\
 \hline
-El robot manipula artículos domésticos        & $\times$ & $\times$ &          & $\times$ &          &          &          &          \\
-El robot planea trayectorias del manipulador  &          &          & $\times$ &          &          & $\times$ &          &          \\
-El robot toma artículos con la fuerza nec.    &          & $\times$ &          &          &          &          &          &          \\
-El robot extiende el alcance efectivo         &          &          & $\times$ &          & $\times$ &          &          &          \\
-El robot manipula equipo para tareas dom.     & $\times$ & $\times$ & $\times$ & $\times$ & $\times$ & $\times$ & $\times$ &          \\
-El robot es robusto                           & $\times$ &          &          &          &          & $\times$ & $\times$ & $\times$ \\
-El robot tiene un diseño intuitivo            &          &          &          &          &          &          &          & $\times$ \\
-\hline
-\end{tabular}
+\end{tabularx}
 \end{table}
 
 \subsection{Benchmarking y análisis competitivo}
 
-Para establecer valores de referencia se realizó un análisis comparativo de sistemas representativos de dos categorías: \textit{cobots} de uso industrial ---Panda/Franka~Emika, Gen3/Kinova, UR3e/Universal~Robots, EBLM/Ti5~Robot y OpenArm--- y manipuladores de robots de servicio ---Stretch~3/Hello~Robot, HSR/Toyota, TIAGo/PAL~Robotics y G1/Unitree---. Para los efectores finales se compararon grippers de dos dedos (Franka~Hand, 2F-85 y 2F-140/Robotiq, HSR) y de tres dedos (3F-155/Robotiq, 3F-AR/UW-Milwaukee, DG-3F-B/Tesollo, Dex3s/Unitree).
+Para establecer valores de referencia en el diseño de los manipuladores se realizó un análisis comparativo (\emph{benchmarking}) de sistemas representativos, tratando por separado el brazo y el efector final.
 
-La evaluación se realizó mediante un análisis de calidad de función (QFD) que ponderó cada métrica según su importancia relativa a las necesidades primarias identificadas. Para el brazo se evaluaron cuatro grupos de necesidades: planeación de trayectorias (alcance y repetibilidad), alcance efectivo (alcance y grados de libertad), tareas domésticas (capacidad de carga, alcance, grados de libertad, repetibilidad e IP) y robustez (capacidad de carga, repetibilidad e IP). Para el gripper se evaluaron las necesidades de manipulación (capacidad de carga, fuerza de agarre, apertura, grados de libertad y repetibilidad), control de fuerza, tareas domésticas y robustez.
+En el caso de los brazos se compararon nueve sistemas de dos categorías: \textit{cobots} de uso industrial ---Panda\slash Franka~Emika, Gen3\slash Kinova, UR3e\slash Universal~Robots, EBLM\slash Ti5~Robot y OpenArm--- y manipuladores de robots de servicio ---Stretch~3\slash Hello~Robot, HSR\slash Toyota, TIAGo\slash PAL~Robotics y G1\slash Unitree---. Para los efectores finales se compararon ocho pinzas de dos dedos (Franka~Hand, 2F-85 y 2F-140\slash Robotiq, y HSR) y de tres dedos (3F-155\slash Robotiq, 3F-AR\slash UW-Milwaukee, DG-3F-B\slash Tesollo y Dex3s\slash Unitree). Cada sistema se caracterizó mediante métricas derivadas de las necesidades seleccionadas: capacidad de carga, alcance, grados de libertad, repetibilidad y grado de protección IP para los brazos, y capacidad de carga, fuerza de agarre, apertura, grados de libertad, repetibilidad y grado de protección IP para las pinzas.
+
+La evaluación se realizó mediante un despliegue de la función de calidad (QFD, por sus siglas en inglés) que ponderó cada métrica según su importancia relativa a las necesidades seleccionadas. Para el brazo se evaluaron cuatro grupos de necesidades: planeación de trayectorias (alcance, grados de libertad y repetibilidad), alcance efectivo (alcance y grados de libertad), tareas domésticas (capacidad de carga, alcance, grados de libertad, repetibilidad e IP) y robustez (capacidad de carga, repetibilidad, IP y \textit{disassembly map}). Para la pinza se evaluaron las necesidades de manipulación (capacidad de carga, fuerza de agarre, apertura, grados de libertad y repetibilidad), fuerza (capacidad de carga, fuerza de agarre y apertura), tareas domésticas (capacidad de carga, fuerza de agarre, apertura, grados de libertad, repetibilidad e IP) y robustez (capacidad de carga, repetibilidad, IP y \textit{disassembly map}). El QFD se aplicó a seis brazos (Gen3, UR3e, EBLM, Stretch~3, TIAGo y G1) y a seis pinzas (2F-85, 2F-140, 3F-155, DG-3F-B, 3F-AR y Dex3s). % NOTA: justificar por qué Panda, HSR y OpenArm (brazos) y Franka Hand y HSR (pinzas) no entran al QFD.
+
+Las especificaciones de cada sistema y las evaluaciones completas se presentan en el Apéndice~\ref{app:benchmarking_manipuladores}, para los manipuladores, y en el Apéndice~\ref{app:benchmarking_pinzas}, para las pinzas.
 
 \subsection{Definición de valores objetivo}
 
