@@ -54,7 +54,7 @@ Las necesidades identificadas, aunque útiles para comprender los problemas de i
 
 La metodología de Ulrich y Eppinger asume que las necesidades pueden traducirse en especificaciones cuyo cumplimiento refleja fielmente el grado de satisfacción del usuario; sin embargo, al no existir una correspondencia unívoca en la práctica, una necesidad suele requerir múltiples métricas o una métrica atender varias necesidades~\cite{Ulrich-Eppinger}.
 
-Las métricas deben ser completas, dependientes y prácticas, contemplando criterios populares de comparación en el mercado así como evaluaciones subjetivas ante atributos no cuantificables~\cite{Ulrich-Eppinger}. Bajo estos lineamientos, la Tabla~\ref{tab:metricas} presenta las métricas y las necesidades que estas atienden, cuyas unidades e importancia fueron establecidas por el equipo de diseño.
+Las métricas deben ser completas, dependientes y prácticas, contemplando criterios populares de comparación en el mercado así como evaluaciones subjetivas ante atributos no cuantificables~\cite{Ulrich-Eppinger}. Bajo estos lineamientos, la Tabla~\ref{tab:metricas} presenta las métricas y las necesidades que estas atienden, cuyas unidades e importancia fueron asignadas por el equipo de diseño.
 
 \begin{table}[htbp]
 \centering
@@ -115,45 +115,36 @@ Para evidenciar la correlación entre las necesidades seleccionadas y las métri
 \end{tabularx}
 \end{table}
 
-\subsection{Benchmarking y análisis competitivo}
+\subsection{Benchmarking}
 
-Para establecer valores de referencia en el diseño de los manipuladores se realizó un análisis comparativo (\emph{benchmarking}) de sistemas representativos, tratando por separado el brazo y el efector final.
+El \emph{benchmarking} permite obtener valores de referencia fundamentados en las especificaciones de productos existentes, aun cuando la información comercial disponible no siempre es precisa~\cite{Ulrich-Eppinger}. En este estudio se analizaron diecisiete sistemas: nueve manipuladores y ocho efectores finales. En particular, se incluyeron cuatro \emph{cobots} industriales, cinco manipuladores de robots de servicio, cuatro pinzas de dos dedos y cuatro pinzas de tres dedos.
 
-En el caso de los brazos se compararon nueve sistemas de dos categorías: \textit{cobots} de uso industrial ---Panda\slash Franka~Emika, Gen3\slash Kinova, UR3e\slash Universal~Robots, EBLM\slash Ti5~Robot y OpenArm--- y manipuladores de robots de servicio ---Stretch~3\slash Hello~Robot, HSR\slash Toyota, TIAGo\slash PAL~Robotics y G1\slash Unitree---. Para los efectores finales se compararon ocho pinzas de dos dedos (Franka~Hand, 2F-85 y 2F-140\slash Robotiq, y HSR) y de tres dedos (3F-155\slash Robotiq, 3F-AR\slash UW-Milwaukee, DG-3F-B\slash Tesollo y Dex3s\slash Unitree). Cada sistema se caracterizó mediante métricas derivadas de las necesidades seleccionadas: capacidad de carga, alcance, grados de libertad, repetibilidad y grado de protección IP para los brazos, y capacidad de carga, fuerza de agarre, apertura, grados de libertad, repetibilidad y grado de protección IP para las pinzas.
-
-La evaluación se realizó mediante un despliegue de la función de calidad (QFD, por sus siglas en inglés) que ponderó cada métrica según su importancia relativa a las necesidades seleccionadas. Para el brazo se evaluaron cuatro grupos de necesidades: planeación de trayectorias (alcance, grados de libertad y repetibilidad), alcance efectivo (alcance y grados de libertad), tareas domésticas (capacidad de carga, alcance, grados de libertad, repetibilidad e IP) y robustez (capacidad de carga, repetibilidad, IP y \textit{disassembly map}). Para la pinza se evaluaron las necesidades de manipulación (capacidad de carga, fuerza de agarre, apertura, grados de libertad y repetibilidad), fuerza (capacidad de carga, fuerza de agarre y apertura), tareas domésticas (capacidad de carga, fuerza de agarre, apertura, grados de libertad, repetibilidad e IP) y robustez (capacidad de carga, repetibilidad, IP y \textit{disassembly map}). El QFD se aplicó a seis brazos (Gen3, UR3e, EBLM, Stretch~3, TIAGo y G1) y a seis pinzas (2F-85, 2F-140, 3F-155, DG-3F-B, 3F-AR y Dex3s). % NOTA: justificar por qué Panda, HSR y OpenArm (brazos) y Franka Hand y HSR (pinzas) no entran al QFD.
-
-Las especificaciones de cada sistema y las evaluaciones completas se presentan en el Apéndice~\ref{app:benchmarking_manipuladores}, para los manipuladores, y en el Apéndice~\ref{app:benchmarking_pinzas}, para las pinzas.
+El análisis comparativo reveló marcados contrastes de diseño. Entre los manipuladores, los \emph{cobots} industriales destacan en alcance, grados de libertad y precisión, y son los únicos que especifican repetibilidad y grado de protección IP. Los manipuladores de robots de servicio omiten estos datos, aunque algunos igualan el alcance de los \emph{cobots} e incluso superan su capacidad de carga. En cuanto a los efectores finales, las pinzas de dos dedos presentan mayor fuerza de agarre y capacidad de carga, además de mejor repetibilidad, mientras que las de tres dedos ofrecen más grados de libertad y mayor apertura para tareas complejas, pero no indican grado de protección IP. Las especificaciones y las matrices de comparación se reportan en el Anexo~\ref{app:benchmarking_manipuladores}, para los manipuladores, y en el Anexo~\ref{app:benchmarking_pinzas}, para los efectores finales.
 
 \subsection{Definición de valores objetivo}
 
-Con base en el análisis de referencia se establecieron valores objetivo para cada métrica en dos niveles: el \textbf{valor ideal}, que representa el mejor desempeño razonablemente alcanzable, y el \textbf{valor marginal}, que constituye el mínimo aceptable para que el diseño sea viable. El Cuadro~\ref{tab:especificaciones} presenta el conjunto completo de especificaciones objetivo.
+A partir de la información recabada, se establecen dos valores objetivo para cada métrica: un \emph{valor ideal}, que es el mejor resultado que se puede esperar, y un \emph{valor marginalmente aceptable}, que es el que apenas haría viable el producto desde el punto de vista comercial. Ambos guían la generación de conceptos, pero son preliminares, ya que muchas concesiones de diseño siguen siendo inciertas hasta seleccionar un concepto~\cite{Ulrich-Eppinger}.
+
+Cada valor se expresa con una de cinco formas: \emph{al menos X}, \emph{máximo X}, \emph{entre X y Y}, \emph{exactamente X} o un conjunto de valores discretos~\cite{Ulrich-Eppinger}. Con base en el \emph{benchmarking}, se definieron los valores de cada métrica, completando así las especificaciones objetivo de los manipuladores de \emph{Justina}, presentadas en la Tabla~\ref{tab:especificaciones}.
 
 \begin{table}[htbp]
 \centering
-\caption{Especificaciones objetivo para los manipuladores de Justina.}
+\caption{Especificaciones objetivo para los manipuladores de \emph{Justina}.}
 \label{tab:especificaciones}
 \begin{tabular}{clcccc}
 \hline
 \textbf{\#} & \textbf{Métrica} & \textbf{Imp.} & \textbf{Unidad} & \textbf{V. marginal} & \textbf{V. ideal} \\
 \hline
-1 & Capacidad de carga     & 5 & {[}kg{]}  & $>2$    & $>3$      \\
-2 & Fuerza de agarre       & 5 & {[}N{]}   & $>70$   & $>100$    \\
-3 & Alcance                & 5 & {[}mm{]}  & $>500$  & $>700$    \\
-4 & Apertura               & 4 & {[}mm{]}  & $>100$  & $>140$    \\
-5 & Grados de libertad     & 4 & {[}1{]}   & $\geq5$ & $\geq6$   \\
-6 & Repetibilidad          & 4 & {[}mm{]}  & $<\pm1$ & $<\pm0.1$ \\
-7 & Grado de protección IP & 3 & {[}1{]}   & IP44    & IP55      \\
-8 & Mapa de desensamble    & 3 & {[}s{]}   & ---     & ---       \\
+1 & Capacidad de carga       & 5 & {[}kg{]}  & $\ge 2$   & $\ge 3$     \\
+2 & Fuerza de agarre         & 5 & {[}N{]}   & $\ge 70$  & $\ge 100$   \\
+3 & Alcance                  & 5 & {[}mm{]}  & $\ge 500$ & $\ge 700$   \\
+4 & Apertura                 & 4 & {[}mm{]}  & $\ge 100$ & $\ge 140$   \\
+5 & Grados de libertad       & 4 & {[}1{]}   & $\ge 5$   & $\ge 6$     \\
+6 & Repetibilidad            & 4 & {[}mm{]}  & $\le \pm 1$ & $\le \pm 0.1$ \\
+7 & Grado de protección IP   & 3 & {[}1{]}   & IP44      & IP55        \\
 \hline
 \end{tabular}
 \end{table}
-
-La métrica M8 (mapa de desensamble), correspondiente a la necesidad de diseño intuitivo, se retiene en el conjunto como requerimiento cualitativo: su naturaleza no admite una cuantificación directa en esta etapa y su evaluación se formalizará durante la fase de selección de conceptos.
-
-% ============================================================
-%  SECCIÓN 3: GENERACIÓN DE CONCEPTOS
-% ============================================================
 
 \section{Generación de conceptos}
 
